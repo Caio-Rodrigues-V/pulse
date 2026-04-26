@@ -347,10 +347,49 @@ body::before{content:'';position:fixed;inset:0;z-index:0;background-image:url("d
           <div class="pf-meta-row" id="ig-meta"></div>
         </div>
         <div class="pf-score-block">
-          <div class="pf-score-num" id="ig-total-posts" style="color:#c77dff"></div>
-          <div class="pf-score-lbl">posts coletados</div>
+          <div class="pf-score-num" id="ig-score-num" style="color:#c77dff">—</div>
+          <div class="pf-score-lbl">score de sentimento</div>
         </div>
       </div>
+
+      <div id="ig-crisis" style="display:none;margin-bottom:16px" class="crisis-alert">
+        <div class="crisis-ico">🚨</div>
+        <div class="crisis-body">
+          <div class="crisis-ttl">Alerta de Crise Ativo</div>
+          <div class="crisis-msg" id="ig-crisis-msg"></div>
+        </div>
+        <div class="crisis-chip">URGENTE</div>
+      </div>
+
+      <div id="ig-narrative-card" class="card" style="margin-bottom:16px;display:none">
+        <div class="card-hd">Resumo Executivo — IA</div>
+        <p class="narrative" id="ig-narrative"></p>
+      </div>
+
+      <div id="ig-sentiment-row" class="g12" style="display:none">
+        <div class="card">
+          <div class="card-hd">Sentimento das Captions</div>
+          <div class="donut-wrap">
+            <canvas class="donut-c" id="ig-donut"></canvas>
+            <div class="donut-leg">
+              <div class="dl-item"><div class="dl-dot" style="background:var(--green)"></div><div class="dl-name">Positivo</div><div class="dl-pct" style="color:var(--green)" id="ig-pos"></div></div>
+              <div class="dl-item"><div class="dl-dot" style="background:var(--amber)"></div><div class="dl-name">Neutro</div><div class="dl-pct" style="color:var(--amber)" id="ig-neu"></div></div>
+              <div class="dl-item"><div class="dl-dot" style="background:var(--red)"></div><div class="dl-name">Negativo</div><div class="dl-pct" style="color:var(--red)" id="ig-neg"></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-hd">Temas Identificados</div>
+          <div class="theme-list" id="ig-themes"></div>
+        </div>
+      </div>
+
+      <div id="ig-quotes-card" class="card" style="margin-bottom:16px;display:none">
+        <div class="card-hd">Destaques das Captions</div>
+        <div class="quote-block qb-pos"><div class="qb-lbl">+ mais positivo</div><div class="qb-text" id="ig-qpos"></div></div>
+        <div class="quote-block qb-neg"><div class="qb-lbl">− mais negativo</div><div class="qb-text" id="ig-qneg"></div></div>
+      </div>
+
       <div class="g2" style="margin-bottom:16px">
         <div class="card">
           <div class="card-hd">Engajamento Médio</div>
@@ -366,6 +405,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;background-image:url("d
           <div class="chart-wrap"><canvas id="ig-chart"></canvas></div>
         </div>
       </div>
+
       <div class="card">
         <div class="card-hd">Últimos Posts</div>
         <div class="insta-posts" id="ig-posts-list"></div>
@@ -584,42 +624,94 @@ async function showInstagram(username, name){
   document.getElementById('ig-name').textContent=name;
   document.getElementById('ig-av').textContent=initials(name);
   document.getElementById('ig-posts-list').innerHTML='<div class="loading"><div class="spin"></div>Carregando posts...</div>';
+  document.getElementById('ig-narrative-card').style.display='none';
+  document.getElementById('ig-sentiment-row').style.display='none';
+  document.getElementById('ig-quotes-card').style.display='none';
+  document.getElementById('ig-crisis').style.display='none';
+  document.getElementById('ig-score-num').textContent='—';
 
   try{
     const data = await apiFetch(`/instagram/posts/${username}`);
     const posts = data.posts || [];
+    const analyzed = posts.filter(p=>p.sentiment);
+    const hasSentiment = analyzed.length > 0;
 
-    document.getElementById('ig-total-posts').textContent=posts.length;
     document.getElementById('ig-meta').innerHTML=`
       <span class="pf-chip">📸 Instagram</span>
       <span class="pf-chip">@${username}</span>
-      <span class="pf-chip">${posts.length} posts coletados</span>`;
+      <span class="pf-chip">${posts.length} posts coletados</span>
+      ${hasSentiment
+        ? `<span class="pf-chip" style="color:var(--green)">✓ analisado</span>`
+        : `<span class="pf-chip" style="cursor:pointer;color:#c77dff" onclick="analyzeInstagram('${username}','${name}')">⚡ analisar sentimento →</span>`}`;
 
     if(!posts.length){
       document.getElementById('ig-posts-list').innerHTML='<div style="color:var(--text3);font-size:13px;text-align:center;padding:24px">Nenhum post coletado ainda. <span style="color:#c77dff;cursor:pointer" onclick="collectInstagram(\''+username+'\',\''+name+'\')">Coletar agora →</span></div>';
       return;
     }
 
+    if(hasSentiment){
+      const pos=analyzed.filter(p=>p.sentiment==='positive').length;
+      const neu=analyzed.filter(p=>p.sentiment==='neutral').length;
+      const neg=analyzed.filter(p=>p.sentiment==='negative').length;
+      const total=analyzed.length;
+      const posPct=((pos/total)*100).toFixed(1);
+      const neuPct=((neu/total)*100).toFixed(1);
+      const negPct=((neg/total)*100).toFixed(1);
+      const score=((pos-neg)/total).toFixed(2);
+      const col=parseFloat(score)>=0.4?'var(--green)':parseFloat(score)<=-0.1?'var(--red)':'var(--amber)';
+
+      document.getElementById('ig-score-num').textContent=score;
+      document.getElementById('ig-score-num').style.color=col;
+      document.getElementById('ig-pos').textContent=posPct+'%';
+      document.getElementById('ig-neu').textContent=neuPct+'%';
+      document.getElementById('ig-neg').textContent=negPct+'%';
+      document.getElementById('ig-sentiment-row').style.display='grid';
+
+      if(igDonutChart)igDonutChart.destroy();
+      igDonutChart=new Chart(document.getElementById('ig-donut'),{type:'doughnut',data:{datasets:[{data:[posPct,neuPct,negPct],backgroundColor:['rgba(0,229,160,.85)','rgba(255,179,64,.85)','rgba(255,84,112,.85)'],borderWidth:0}]},options:{cutout:'75%',plugins:{legend:{display:false}},animation:{duration:700}}});
+
+      const summaryPost=posts.find(p=>p.ai_summary);
+      if(summaryPost){
+        document.getElementById('ig-narrative').textContent=summaryPost.ai_summary;
+        document.getElementById('ig-narrative-card').style.display='block';
+      }
+
+      const mostPos=posts.filter(p=>p.sentiment==='positive'&&p.caption).sort((a,b)=>(b.likes_count||0)-(a.likes_count||0))[0];
+      const mostNeg=posts.filter(p=>p.sentiment==='negative'&&p.caption).sort((a,b)=>(b.likes_count||0)-(a.likes_count||0))[0];
+      if(mostPos||mostNeg){
+        document.getElementById('ig-qpos').textContent=mostPos?.caption?.slice(0,200)||'—';
+        document.getElementById('ig-qneg').textContent=mostNeg?.caption?.slice(0,200)||'—';
+        document.getElementById('ig-quotes-card').style.display='block';
+      }
+
+      if(parseFloat(negPct)>60){
+        document.getElementById('ig-crisis').style.display='flex';
+        document.getElementById('ig-crisis-msg').textContent=`${negPct}% das captions com tom negativo.`;
+      }
+
+      document.getElementById('ig-themes').innerHTML='<div style="color:var(--text3);font-size:12px;font-family:var(--font-m)">Temas disponíveis após análise completa.</div>';
+    }
+
     const avgLikes=Math.round(posts.reduce((a,p)=>a+(p.likes_count||0),0)/posts.length);
     const avgComments=Math.round(posts.reduce((a,p)=>a+(p.comments_count||0),0)/posts.length);
     const avgViews=Math.round(posts.filter(p=>p.video_view_count).reduce((a,p)=>a+(p.video_view_count||0),0)/(posts.filter(p=>p.video_view_count).length||1));
-    const lastPost=posts.sort((a,b)=>new Date(b.posted_at)-new Date(a.posted_at))[0];
+    const sorted=posts.sort((a,b)=>new Date(b.posted_at)-new Date(a.posted_at));
 
     document.getElementById('ig-avg-likes').textContent=fmt(avgLikes);
     document.getElementById('ig-avg-comments').textContent=fmt(avgComments);
-    document.getElementById('ig-avg-views').textContent=fmt(avgViews)||'—';
-    document.getElementById('ig-last-post').textContent=lastPost?timeAgo(lastPost.posted_at):'—';
-
-    const sorted=posts.sort((a,b)=>new Date(b.posted_at)-new Date(a.posted_at));
+    document.getElementById('ig-avg-views').textContent=avgViews?fmt(avgViews):'—';
+    document.getElementById('ig-last-post').textContent=sorted[0]?timeAgo(sorted[0].posted_at):'—';
 
     if(igChart)igChart.destroy();
     const chartPosts=sorted.slice(0,8).reverse();
     igChart=new Chart(document.getElementById('ig-chart'),{type:'bar',data:{labels:chartPosts.map(p=>fmtDate(p.posted_at)),datasets:[{label:'Likes',data:chartPosts.map(p=>p.likes_count||0),backgroundColor:'rgba(199,125,255,0.6)',borderColor:'rgba(199,125,255,1)',borderWidth:1,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#3a4a5c',font:{size:10,family:'DM Mono'}},grid:{color:'rgba(255,255,255,.04)'}},y:{ticks:{color:'#3a4a5c',font:{size:10,family:'DM Mono'}},grid:{color:'rgba(255,255,255,.04)'}}}}});
 
+    const sentColor={positive:'var(--green)',neutral:'var(--amber)',negative:'var(--red)'};
     document.getElementById('ig-posts-list').innerHTML=sorted.slice(0,10).map(p=>`
       <div class="insta-post">
         <div class="insta-post-top">
           <span class="insta-type">${p.post_type||'Post'}</span>
+          ${p.sentiment?`<span style="font-size:10px;font-family:var(--font-m);color:${sentColor[p.sentiment]||'var(--text3)'};padding:2px 8px;background:var(--ink);border-radius:4px;border:1px solid currentColor">● ${p.sentiment}</span>`:''}
           <span class="insta-date">${fmtDate(p.posted_at)}</span>
         </div>
         <div class="insta-caption">${p.caption||'(sem legenda)'}</div>
@@ -634,6 +726,17 @@ async function showInstagram(username, name){
   }catch(e){
     document.getElementById('ig-posts-list').innerHTML=`<div style="color:var(--red);font-size:13px;padding:16px">Erro ao carregar posts: ${e.message}</div>`;
   }
+}
+
+let igDonutChart=null;
+
+async function analyzeInstagram(username, name){
+  toast(`Analisando sentimento de @${username}...`);
+  try{
+    const data = await apiFetch(`/analyze/instagram/${username}`, 'POST');
+    toast(`✓ ${data.posts_analyzed} posts de ${name} analisados!`);
+    showInstagram(username, name);
+  }catch{toast('Erro na análise','err');}
 }
 
 async function collectInstagram(username, name){
