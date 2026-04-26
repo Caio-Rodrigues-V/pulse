@@ -102,6 +102,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;background-image:url("d
 .pol-badge{padding:3px 9px;border-radius:20px;font-size:10px;font-weight:700;font-family:var(--font-m);letter-spacing:.04em}
 .badge-ok{background:var(--green-dim);color:var(--green);border:1px solid rgba(0,229,160,.2)}
 .badge-crisis{background:var(--red-dim);color:var(--red);border:1px solid var(--red-bd)}
+.badge-insta{background:rgba(131,58,180,0.15);color:#c77dff;border:1px solid rgba(131,58,180,0.3)}
 .pol-score-row{display:flex;align-items:center;gap:10px;margin-bottom:14px}
 .score-big{font-family:var(--font-d);font-size:36px;line-height:1}
 .score-desc{font-size:11px;color:var(--text2)}
@@ -161,6 +162,18 @@ body::before{content:'';position:fixed;inset:0;z-index:0;background-image:url("d
 .qb-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;opacity:.6;margin-bottom:5px;font-family:var(--font-m)}
 .qb-text{font-family:var(--font-d);font-size:14px;font-style:italic;color:var(--text);line-height:1.6}
 .chart-wrap{position:relative;height:180px}
+
+/* Instagram posts list */
+.insta-posts{display:flex;flex-direction:column;gap:10px}
+.insta-post{padding:14px 16px;background:var(--ink3);border-radius:10px;border:1px solid var(--border)}
+.insta-post-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.insta-type{font-size:10px;font-family:var(--font-m);color:var(--text3);padding:2px 8px;background:var(--ink);border-radius:4px;border:1px solid var(--border)}
+.insta-date{font-size:10px;color:var(--text3);font-family:var(--font-m);margin-left:auto}
+.insta-caption{font-size:13px;color:var(--text2);line-height:1.5;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.insta-stats{display:flex;gap:14px}
+.insta-stat{display:flex;align-items:center;gap:5px;font-size:12px;font-family:var(--font-m);color:var(--text3)}
+.insta-stat span{color:var(--text);font-weight:700}
+
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(8px)}
 .modal-overlay.on{display:flex}
 .modal{background:var(--ink2);border:1px solid var(--border2);border-radius:20px;padding:32px;width:100%;max-width:440px;position:relative}
@@ -172,6 +185,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;background-image:url("d
 .field input,.field select{width:100%;padding:11px 14px;background:var(--ink3);border:1px solid var(--border2);border-radius:9px;color:var(--text);font-size:13px;font-family:var(--font-b);outline:none;transition:border-color .2s}
 .field input:focus,.field select:focus{border-color:var(--cyan)}
 .field select option{background:var(--ink2)}
+.field-hint{font-size:11px;color:var(--text3);margin-top:5px;font-family:var(--font-m)}
 .modal-btns{display:flex;gap:10px;margin-top:24px}
 .btn-cancel{flex:1;padding:11px;background:transparent;border:1px solid var(--border2);border-radius:9px;color:var(--text2);font-size:13px;cursor:pointer;font-family:var(--font-b);transition:all .2s}
 .btn-cancel:hover{color:var(--text);border-color:var(--border)}
@@ -232,6 +246,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;background-image:url("d
 
   <div class="content">
 
+    <!-- VISÃO GERAL -->
     <div id="view-overview" class="view on">
       <div class="section-header">
         <div class="section-label">Dashboard Principal</div>
@@ -257,9 +272,9 @@ body::before{content:'';position:fixed;inset:0;z-index:0;background-image:url("d
       </div>
     </div>
 
+    <!-- PERFIL YOUTUBE -->
     <div id="view-profile" class="view">
       <div class="back" onclick="showView('overview')">← voltar ao painel</div>
-      <div class="demo-banner" id="demo-note" style="display:none">⚡ Dados de demonstração</div>
       <div class="pf-hero">
         <div class="pf-av-big" id="pf-av"></div>
         <div style="flex:1">
@@ -322,16 +337,62 @@ body::before{content:'';position:fixed;inset:0;z-index:0;background-image:url("d
       </div>
     </div>
 
+    <!-- PERFIL INSTAGRAM -->
+    <div id="view-instagram" class="view">
+      <div class="back" onclick="showView('overview')">← voltar ao painel</div>
+      <div class="pf-hero">
+        <div class="pf-av-big" id="ig-av" style="border-color:rgba(131,58,180,0.4)"></div>
+        <div style="flex:1">
+          <div class="pf-name" id="ig-name"></div>
+          <div class="pf-meta-row" id="ig-meta"></div>
+        </div>
+        <div class="pf-score-block">
+          <div class="pf-score-num" id="ig-total-posts" style="color:#c77dff"></div>
+          <div class="pf-score-lbl">posts coletados</div>
+        </div>
+      </div>
+      <div class="g2" style="margin-bottom:16px">
+        <div class="card">
+          <div class="card-hd">Engajamento Médio</div>
+          <div class="metric-grid">
+            <div class="metric-item"><div class="metric-lbl">Likes médio</div><div class="metric-val" id="ig-avg-likes"></div></div>
+            <div class="metric-item"><div class="metric-lbl">Comentários médio</div><div class="metric-val" id="ig-avg-comments"></div></div>
+            <div class="metric-item"><div class="metric-lbl">Views médio</div><div class="metric-val" id="ig-avg-views"></div></div>
+            <div class="metric-item"><div class="metric-lbl">Post mais recente</div><div class="metric-val" id="ig-last-post" style="font-size:14px"></div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-hd">Likes por Post</div>
+          <div class="chart-wrap"><canvas id="ig-chart"></canvas></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hd">Últimos Posts</div>
+        <div class="insta-posts" id="ig-posts-list"></div>
+      </div>
+    </div>
+
   </div>
 </div>
 
+<!-- MODAL -->
 <div class="modal-overlay" id="modal">
   <div class="modal">
     <div class="modal-title">Novo Perfil</div>
     <div class="modal-sub">Adicione um político para monitorar automaticamente.</div>
     <div class="field"><label>Nome</label><input type="text" id="m-name" placeholder="Ex: Lula, Bolsonaro, Tarcísio..."></div>
-    <div class="field"><label>Plataforma</label><select id="m-plat"><option value="youtube">YouTube</option><option value="instagram" disabled>Instagram (em breve)</option></select></div>
-    <div class="field"><label>Channel ID</label><input type="text" id="m-id" placeholder="UC8hGUtfEgvvnp6IaHSAg1OQ"></div>
+    <div class="field">
+      <label>Plataforma</label>
+      <select id="m-plat" onchange="updateIdField(this.value)">
+        <option value="youtube">YouTube</option>
+        <option value="instagram">Instagram</option>
+      </select>
+    </div>
+    <div class="field">
+      <label id="m-id-label">Channel ID</label>
+      <input type="text" id="m-id" placeholder="UC8hGUtfEgvvnp6IaHSAg1OQ">
+      <div class="field-hint" id="m-id-hint">ID do canal do YouTube (começa com UC...)</div>
+    </div>
     <div class="modal-btns">
       <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
       <button class="btn-save" id="btn-save" onclick="saveProfile()">Salvar & Analisar</button>
@@ -344,25 +405,13 @@ body::before{content:'';position:fixed;inset:0;z-index:0;background-image:url("d
 <script>
 const API = 'https://web-production-5d7201.up.railway.app';
 
-const MOCK = {
-  profiles:[
-    {id:'1',platform:'youtube',platform_id:'UC8hGUtfEgvvnp6IaHSAg1OQ',name:'Jair Bolsonaro',active:true},
-    {id:'2',platform:'youtube',platform_id:'UCl9HmQCwSyGFnMRLijlBcBQ',name:'Luiz Inácio Lula da Silva',active:true},
-    {id:'3',platform:'youtube',platform_id:'UCFVkwGQ3HjMKFQlM_tX7IUOA',name:'Tarcísio de Freitas',active:true},
-  ],
-  reports:{
-    'UC8hGUtfEgvvnp6IaHSAg1OQ':{channel_id:'UC8hGUtfEgvvnp6IaHSAg1OQ',profile_name:'Jair Bolsonaro',positive_pct:86.8,neutral_pct:3.0,negative_pct:10.1,overall_score:0.682,crisis_alert:false,crisis_reason:null,main_themes:['Apoio incondicional e lealdade','Perseguição política e injustiça','Fé religiosa e proteção divina','Esperança de retorno em 2026','Crítica ao sistema e à mídia'],top_positive_quote:'Eterno Capitão Jair Bolsonaro, estamos com você! Em 2026 se Deus quiser será novamente eleito nosso Presidente do Brasil!',top_negative_quote:'Quem está no Poder, foi quem deu o #Golpe!',narrative:'Base de apoiadores extremamente leal e homogênea. A amostra reflete uma comunidade altamente mobilizada com sentimento predominantemente positivo, enfatizando patriotismo, apoio incondicional e esperança em retorno político para 2026.',comments_analyzed:987,created_at:new Date().toISOString(),channel_metrics:{total_videos:15,total_views:968375,total_likes:165528,engagement_rate_pct:19.31},history:[60,65,72,78,80,83,86,86.8]},
-    'UCl9HmQCwSyGFnMRLijlBcBQ':{channel_id:'UCl9HmQCwSyGFnMRLijlBcBQ',profile_name:'Lula',positive_pct:52.3,neutral_pct:18.4,negative_pct:29.3,overall_score:0.231,crisis_alert:false,crisis_reason:null,main_themes:['Políticas sociais','Crítica à gestão econômica','Relações internacionais','Reforma tributária','Questões ambientais'],top_positive_quote:'Estamos recuperando o Brasil. As políticas sociais estão funcionando!',top_negative_quote:'Inflação alta, dólar nas alturas. O governo precisa apresentar resultados.',narrative:'Perfil com audiência polarizada refletindo o cenário político nacional.',comments_analyzed:1243,created_at:new Date(Date.now()-3600000).toISOString(),channel_metrics:{total_videos:22,total_views:1450000,total_likes:98000,engagement_rate_pct:11.2},history:[48,50,49,53,51,52,52,52.3]},
-    'UCFVkwGQ3HjMKFQlM_tX7IUOA':{channel_id:'UCFVkwGQ3HjMKFQlM_tX7IUOA',profile_name:'Tarcísio de Freitas',positive_pct:71.2,neutral_pct:14.6,negative_pct:14.2,overall_score:0.571,crisis_alert:false,crisis_reason:null,main_themes:['Gestão de São Paulo','Segurança pública','Infraestrutura','Candidatura 2026','Conservadorismo'],top_positive_quote:'Tarcísio está mostrando resultados em São Paulo. É o que o Brasil precisa em 2026!',top_negative_quote:'Governar um estado é diferente de gerir o país.',narrative:'Perfil com crescente base de apoio, refletindo aprovação da gestão estadual.',comments_analyzed:654,created_at:new Date(Date.now()-7200000).toISOString(),channel_metrics:{total_videos:8,total_views:420000,total_likes:62000,engagement_rate_pct:16.8},history:[55,58,60,63,65,68,70,71.2]}
-  }
-};
-
-let donutChart=null, histChart=null, usingMock=false;
+let donutChart=null, histChart=null, igChart=null;
 
 const fmt=n=>{if(!n&&n!==0)return'—';if(n>=1000000)return(n/1000000).toFixed(1)+'M';if(n>=1000)return(n/1000).toFixed(1)+'k';return Number(n).toLocaleString('pt-BR')};
 const initials=n=>n.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase();
 const scoreColor=s=>s>=0.4?'var(--green)':s<=-0.1?'var(--red)':'var(--amber)';
 const timeAgo=iso=>{const d=Math.floor((Date.now()-new Date(iso))/60000);if(d<1)return'agora mesmo';if(d<60)return`${d}min atrás`;if(d<1440)return`${Math.floor(d/60)}h atrás`;return`${Math.floor(d/1440)}d atrás`};
+const fmtDate=iso=>new Date(iso).toLocaleDateString('pt-BR',{day:'2-digit',month:'short'});
 
 function toast(msg,type='ok'){const t=document.getElementById('toast');t.textContent=msg;t.className=`toast ${type} on`;setTimeout(()=>t.classList.remove('on'),3000)}
 
@@ -377,17 +426,16 @@ async function apiFetch(path,method='GET',body=null){
 
 async function loadOverview(){
   const grid=document.getElementById('pol-grid');
-  let profiles,reports;
+  let profiles=[],reports={};
   try{
     const[pRes,rRes]=await Promise.all([apiFetch('/profiles'),apiFetch('/reports/latest')]);
     profiles=pRes.profiles||[];
-    reports={};
     (rRes.reports||[]).forEach(r=>reports[r.channel_id]=r);
-    usingMock=false;
     document.getElementById('api-txt').textContent='api · online';
   }catch{
-    profiles=MOCK.profiles;reports=MOCK.reports;usingMock=true;
-    document.getElementById('api-txt').textContent='api · demo mode';
+    document.getElementById('api-txt').textContent='api · offline';
+    grid.innerHTML=`<div class="empty" style="grid-column:1/-1"><div class="empty-ico">⚠</div><div class="empty-title">API indisponível</div><div class="empty-sub">Verifique se o backend está online.</div></div>`;
+    return;
   }
 
   const active=profiles.filter(p=>p.active);
@@ -415,11 +463,33 @@ async function loadOverview(){
   }
 
   grid.innerHTML=active.map(p=>{
+    const isInsta=p.platform==='instagram';
     const r=reports[p.platform_id];
     const pos=r?.positive_pct||0,neu=r?.neutral_pct||0,neg=r?.negative_pct||0;
     const score=r?.overall_score??null;
     const col=score!==null?scoreColor(score):'var(--text3)';
     const isCrisis=r?.crisis_alert;
+
+    if(isInsta){
+      return `<div class="pol-card" onclick="showInstagram('${p.platform_id}','${p.name}')">
+        <div class="pol-top">
+          <div class="pol-av" style="border-color:rgba(131,58,180,0.4);color:#c77dff">${initials(p.name)}</div>
+          <div class="pol-info">
+            <div class="pol-name">${p.name}</div>
+            <div class="pol-plat">instagram · @${p.platform_id}</div>
+          </div>
+          <div class="pol-badge badge-insta">📸 instagram</div>
+        </div>
+        <div style="color:var(--text3);font-size:12px;font-family:var(--font-m)">
+          <span style="color:#c77dff;cursor:pointer" onclick="event.stopPropagation();collectInstagram('${p.platform_id}','${p.name}')">⟳ coletar posts →</span>
+        </div>
+        <div class="pol-footer">
+          <span class="pol-time">@${p.platform_id}</span>
+          <span class="pol-remove" onclick="event.stopPropagation();deleteProfile('${p.id}','${p.name}')">× remover</span>
+        </div>
+      </div>`;
+    }
+
     return `<div class="pol-card ${isCrisis?'alert':''}" onclick="showProfile('${p.platform_id}','${p.name}')">
       <div class="pol-top">
         <div class="pol-av">${initials(p.name)}</div>
@@ -450,22 +520,19 @@ async function loadOverview(){
 }
 
 async function showProfile(channelId,name){
-  document.getElementById('view-overview').classList.remove('on');
+  document.querySelectorAll('.view').forEach(x=>x.classList.remove('on'));
   document.getElementById('view-profile').classList.add('on');
   document.getElementById('pf-name').textContent=name;
   document.getElementById('pf-av').textContent=initials(name);
   document.getElementById('pf-narrative').textContent='Carregando análise...';
 
   let r;
-  if(usingMock){
-    r=MOCK.reports[channelId];
-    document.getElementById('demo-note').style.display='flex';
-  }else{
-    try{
-      const data=await apiFetch(`/reports/${channelId}?limit=8`);
-      r=(data.reports||[])[0];
-      document.getElementById('demo-note').style.display='none';
-    }catch{r=MOCK.reports[channelId];}
+  try{
+    const data=await apiFetch(`/reports/${channelId}?limit=8`);
+    r=(data.reports||[])[0];
+  }catch{
+    document.getElementById('pf-narrative').textContent='Erro ao carregar dados.';
+    return;
   }
 
   if(!r){document.getElementById('pf-narrative').textContent='Nenhum dado disponível.';return;}
@@ -474,25 +541,23 @@ async function showProfile(channelId,name){
   const col=scoreColor(score);
   document.getElementById('pf-score-num').textContent=score.toFixed(2);
   document.getElementById('pf-score-num').style.color=col;
-
   document.getElementById('pf-meta').innerHTML=`
     <span class="pf-chip">YouTube</span>
     <span class="pf-chip">${fmt(r.channel_metrics?.total_views)} views</span>
     <span class="pf-chip">${fmt(r.comments_analyzed)} comentários</span>
     <span class="pf-chip">${timeAgo(r.created_at)}</span>`;
 
-  if(r.crisis_alert){document.getElementById('pf-crisis').style.display='flex';document.getElementById('pf-crisis-msg').textContent=r.crisis_reason||'Sentimento negativo elevado detectado.';}
+  if(r.crisis_alert){document.getElementById('pf-crisis').style.display='flex';document.getElementById('pf-crisis-msg').textContent=r.crisis_reason||'Sentimento negativo elevado.';}
   else{document.getElementById('pf-crisis').style.display='none';}
 
   document.getElementById('pf-narrative').textContent=r.narrative||'—';
-
   const pos=r.positive_pct||0,neu=r.neutral_pct||0,neg=r.negative_pct||0;
   document.getElementById('pf-pos').textContent=pos.toFixed(1)+'%';
   document.getElementById('pf-neu').textContent=neu.toFixed(1)+'%';
   document.getElementById('pf-neg').textContent=neg.toFixed(1)+'%';
 
   if(donutChart)donutChart.destroy();
-  donutChart=new Chart(document.getElementById('pf-donut'),{type:'doughnut',data:{datasets:[{data:[pos,neu,neg],backgroundColor:['rgba(0,229,160,.85)','rgba(255,179,64,.85)','rgba(255,84,112,.85)'],borderWidth:0}]},options:{cutout:'75%',plugins:{legend:{display:false}},animation:{duration:700,easing:'easeOutQuart'}}});
+  donutChart=new Chart(document.getElementById('pf-donut'),{type:'doughnut',data:{datasets:[{data:[pos,neu,neg],backgroundColor:['rgba(0,229,160,.85)','rgba(255,179,64,.85)','rgba(255,84,112,.85)'],borderWidth:0}]},options:{cutout:'75%',plugins:{legend:{display:false}},animation:{duration:700}}});
 
   const m=r.channel_metrics||{};
   document.getElementById('pf-videos').textContent=fmt(m.total_videos);
@@ -513,11 +578,93 @@ async function showProfile(channelId,name){
   histChart=new Chart(document.getElementById('pf-history'),{type:'line',data:{labels,datasets:[{label:'Positivo %',data:hist,borderColor:'rgba(0,229,160,.8)',backgroundColor:'rgba(0,229,160,.06)',tension:.45,fill:true,pointRadius:3,pointBackgroundColor:'rgba(0,229,160,.8)'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#3a4a5c',font:{size:10,family:'DM Mono'}},grid:{color:'rgba(255,255,255,.04)'}},y:{ticks:{color:'#3a4a5c',font:{size:10,family:'DM Mono'},callback:v=>v+'%'},grid:{color:'rgba(255,255,255,.04)'},min:0,max:100}}}});
 }
 
+async function showInstagram(username, name){
+  document.querySelectorAll('.view').forEach(x=>x.classList.remove('on'));
+  document.getElementById('view-instagram').classList.add('on');
+  document.getElementById('ig-name').textContent=name;
+  document.getElementById('ig-av').textContent=initials(name);
+  document.getElementById('ig-posts-list').innerHTML='<div class="loading"><div class="spin"></div>Carregando posts...</div>';
+
+  try{
+    const data = await apiFetch(`/instagram/posts/${username}`);
+    const posts = data.posts || [];
+
+    document.getElementById('ig-total-posts').textContent=posts.length;
+    document.getElementById('ig-meta').innerHTML=`
+      <span class="pf-chip">📸 Instagram</span>
+      <span class="pf-chip">@${username}</span>
+      <span class="pf-chip">${posts.length} posts coletados</span>`;
+
+    if(!posts.length){
+      document.getElementById('ig-posts-list').innerHTML='<div style="color:var(--text3);font-size:13px;text-align:center;padding:24px">Nenhum post coletado ainda. <span style="color:#c77dff;cursor:pointer" onclick="collectInstagram(\''+username+'\',\''+name+'\')">Coletar agora →</span></div>';
+      return;
+    }
+
+    const avgLikes=Math.round(posts.reduce((a,p)=>a+(p.likes_count||0),0)/posts.length);
+    const avgComments=Math.round(posts.reduce((a,p)=>a+(p.comments_count||0),0)/posts.length);
+    const avgViews=Math.round(posts.filter(p=>p.video_view_count).reduce((a,p)=>a+(p.video_view_count||0),0)/(posts.filter(p=>p.video_view_count).length||1));
+    const lastPost=posts.sort((a,b)=>new Date(b.posted_at)-new Date(a.posted_at))[0];
+
+    document.getElementById('ig-avg-likes').textContent=fmt(avgLikes);
+    document.getElementById('ig-avg-comments').textContent=fmt(avgComments);
+    document.getElementById('ig-avg-views').textContent=fmt(avgViews)||'—';
+    document.getElementById('ig-last-post').textContent=lastPost?timeAgo(lastPost.posted_at):'—';
+
+    const sorted=posts.sort((a,b)=>new Date(b.posted_at)-new Date(a.posted_at));
+
+    if(igChart)igChart.destroy();
+    const chartPosts=sorted.slice(0,8).reverse();
+    igChart=new Chart(document.getElementById('ig-chart'),{type:'bar',data:{labels:chartPosts.map(p=>fmtDate(p.posted_at)),datasets:[{label:'Likes',data:chartPosts.map(p=>p.likes_count||0),backgroundColor:'rgba(199,125,255,0.6)',borderColor:'rgba(199,125,255,1)',borderWidth:1,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#3a4a5c',font:{size:10,family:'DM Mono'}},grid:{color:'rgba(255,255,255,.04)'}},y:{ticks:{color:'#3a4a5c',font:{size:10,family:'DM Mono'}},grid:{color:'rgba(255,255,255,.04)'}}}}});
+
+    document.getElementById('ig-posts-list').innerHTML=sorted.slice(0,10).map(p=>`
+      <div class="insta-post">
+        <div class="insta-post-top">
+          <span class="insta-type">${p.post_type||'Post'}</span>
+          <span class="insta-date">${fmtDate(p.posted_at)}</span>
+        </div>
+        <div class="insta-caption">${p.caption||'(sem legenda)'}</div>
+        <div class="insta-stats">
+          <div class="insta-stat">❤️ <span>${fmt(p.likes_count||0)}</span></div>
+          <div class="insta-stat">💬 <span>${fmt(p.comments_count||0)}</span></div>
+          ${p.video_view_count?`<div class="insta-stat">▶️ <span>${fmt(p.video_view_count)}</span></div>`:''}
+          <a href="${p.url}" target="_blank" style="margin-left:auto;font-size:11px;color:#c77dff;text-decoration:none;font-family:var(--font-m)">ver post →</a>
+        </div>
+      </div>`).join('');
+
+  }catch(e){
+    document.getElementById('ig-posts-list').innerHTML=`<div style="color:var(--red);font-size:13px;padding:16px">Erro ao carregar posts: ${e.message}</div>`;
+  }
+}
+
+async function collectInstagram(username, name){
+  toast(`Coletando posts de @${username}...`);
+  try{
+    const data = await apiFetch(`/collect/instagram/${username}?limit=10`, 'POST');
+    toast(`✓ ${data.posts_saved} posts de ${name} salvos!`);
+    showInstagram(username, name);
+  }catch{toast('Erro na coleta','err');}
+}
+
 function showView(v){
   document.querySelectorAll('.view').forEach(x=>x.classList.remove('on'));
   document.getElementById('view-'+v).classList.add('on');
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('on'));
   if(v==='overview'){loadOverview();document.querySelector('.nav-item').classList.add('on');}
+}
+
+function updateIdField(platform){
+  const label=document.getElementById('m-id-label');
+  const input=document.getElementById('m-id');
+  const hint=document.getElementById('m-id-hint');
+  if(platform==='instagram'){
+    label.textContent='Username do Instagram';
+    input.placeholder='lulaoficial';
+    hint.textContent='Só o username, sem @ (ex: lulaoficial)';
+  }else{
+    label.textContent='Channel ID';
+    input.placeholder='UC8hGUtfEgvvnp6IaHSAg1OQ';
+    hint.textContent='ID do canal do YouTube (começa com UC...)';
+  }
 }
 
 function openModal(){document.getElementById('modal').classList.add('on')}
@@ -532,11 +679,18 @@ async function saveProfile(){
   btn.disabled=true;btn.textContent='Salvando...';
   try{
     await apiFetch('/profiles','POST',{name,platform,platform_id:id});
-    toast('Perfil adicionado! Iniciando análise...');
+    toast('Perfil adicionado!');
     closeModal();
-    btn.textContent='Analisando...';
-    await apiFetch(`/analyze/youtube/${id}?name=${encodeURIComponent(name)}&days=30`,'POST');
-    toast(`✓ Análise de ${name} concluída!`);
+
+    if(platform==='instagram'){
+      btn.textContent='Coletando posts...';
+      const data=await apiFetch(`/collect/instagram/${id}?limit=10`,'POST');
+      toast(`✓ ${data.posts_saved} posts de ${name} coletados!`);
+    }else{
+      btn.textContent='Analisando...';
+      await apiFetch(`/analyze/youtube/${id}?name=${encodeURIComponent(name)}&days=30`,'POST');
+      toast(`✓ Análise de ${name} concluída!`);
+    }
     loadOverview();
   }catch{toast('Erro ao salvar','err');closeModal();}
   finally{btn.disabled=false;btn.textContent='Salvar & Analisar';}
