@@ -707,7 +707,7 @@ async function showInstagram(username, name){
     igChart=new Chart(document.getElementById('ig-chart'),{type:'bar',data:{labels:chartPosts.map(p=>fmtDate(p.posted_at)),datasets:[{label:'Likes',data:chartPosts.map(p=>p.likes_count||0),backgroundColor:'rgba(199,125,255,0.6)',borderColor:'rgba(199,125,255,1)',borderWidth:1,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#3a4a5c',font:{size:10,family:'DM Mono'}},grid:{color:'rgba(255,255,255,.04)'}},y:{ticks:{color:'#3a4a5c',font:{size:10,family:'DM Mono'}},grid:{color:'rgba(255,255,255,.04)'}}}}});
 
     const sentColor={positive:'var(--green)',neutral:'var(--amber)',negative:'var(--red)'};
-    document.getElementById('ig-posts-list').innerHTML=sorted.slice(0,10).map(p=>`
+    document.getElementById('ig-posts-list').innerHTML=sorted.slice(0,50).map(p=>`
       <div class="insta-post">
         <div class="insta-post-top">
           <span class="insta-type">${p.post_type||'Post'}</span>
@@ -742,7 +742,7 @@ async function analyzeInstagram(username, name){
 async function collectInstagram(username, name){
   toast(`Coletando posts de @${username}...`);
   try{
-    const data = await apiFetch(`/collect/instagram/${username}?limit=10`, 'POST');
+    const data = await apiFetch(`/collect/instagram/${username}?limit=50`, 'POST');
     toast(`✓ ${data.posts_saved} posts de ${name} salvos!`);
     showInstagram(username, name);
   }catch{toast('Erro na coleta','err');}
