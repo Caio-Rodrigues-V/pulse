@@ -943,7 +943,7 @@ function renderAudienceSection(comments, username, name){
     </div>
     <div class="action-row">${pill('Atualizar','purple','refresh',"collectComments('"+username+"','"+name+"')")}</div>`;
 
-  igCommentsChart=new Chart(document.getElementById('ig-comments-donut'),{type:'doughnut',data:{datasets:[{data:[posPct,neuPct,negPct],backgroundColor:['rgba(0,229,160,.85)','rgba(255,179,64,.85)','rgba(255,84,112,.85)'],borderWidth:0}]},options:{cutout:'75%',plugins:{legend:{display:false}},animation:{duration:700}}});
+  igCommentsChart=new Chart(document.getElementById('ig-comments-donut'),{type:'doughnut',data:{datasets:[{data:[posPct,neuPct,negPct],backgroundColor:['rgba(0,229,160,.85)','rgba(255,179,64,.85)','rgba(255,84,112,.85)'],borderWidth:0}]},options:{responsive:false,maintainAspectRatio:false,cutout:'75%',plugins:{legend:{display:false}},animation:{duration:700}}});
 }
 
 async function collectComments(username, name){
