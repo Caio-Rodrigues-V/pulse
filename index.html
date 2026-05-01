@@ -473,6 +473,15 @@ body::before{content:'';position:fixed;inset:0;z-index:0;background-image:url("d
   </div>
 </div>
 
+<!-- MODAL DE PROGRESSO -->
+<div class="modal-overlay" id="progress-modal">
+  <div class="modal" style="max-width:360px;text-align:center;padding:40px 32px">
+    <div class="spin" style="margin:0 auto 20px"></div>
+    <div class="modal-title" id="progress-title" style="font-size:18px;margin-bottom:8px"></div>
+    <div id="progress-msg" style="font-size:13px;color:var(--text2);font-family:var(--font-m)"></div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -512,6 +521,15 @@ function updateTopbarLastUpdated(reports){
 }
 
 function toast(msg,type='ok'){const t=document.getElementById('toast');t.textContent=msg;t.className=`toast ${type} on`;setTimeout(()=>t.classList.remove('on'),3000)}
+
+function showProgress(title, msg){
+  document.getElementById('progress-title').textContent = title;
+  document.getElementById('progress-msg').textContent = msg;
+  document.getElementById('progress-modal').classList.add('on');
+}
+function hideProgress(){
+  document.getElementById('progress-modal').classList.remove('on');
+}
 
 document.getElementById('date-chip').textContent=new Date().toLocaleDateString('pt-BR',{weekday:'short',day:'2-digit',month:'short',year:'numeric'});
 
@@ -950,38 +968,46 @@ function renderAudienceSection(comments, username, name){
 
 async function collectComments(username, name){
   toast(`Coletando comentários de @${username}...`);
+  showProgress('Coletando comentários...', 'Buscando comentários dos posts via Apify');
   try{
     const data = await apiFetch(`/collect/comments/${username}?posts_limit=10&comments_per_post=20`, 'POST');
     toast(`✓ ${data.comments_saved} comentários salvos!`);
     showInstagram(username, name);
   }catch{toast('Erro na coleta','err');}
+  finally{hideProgress();}
 }
 
 async function analyzeComments(username, name){
   toast(`Analisando audiência de @${username}...`);
+  showProgress('Analisando audiência...', 'Claude está classificando os comentários');
   try{
     const data = await apiFetch(`/analyze/comments/${username}`, 'POST');
     toast(`✓ ${data.comments_analyzed} comentários analisados!`);
     showInstagram(username, name);
   }catch{toast('Erro na análise','err');}
+  finally{hideProgress();}
 }
 
 async function analyzeInstagram(username, name){
   toast(`Analisando sentimento de @${username}...`);
+  showProgress('Analisando discurso...', 'Claude está classificando as captions');
   try{
     const data = await apiFetch(`/analyze/instagram/${username}`, 'POST');
     toast(`✓ ${data.posts_analyzed} posts de ${name} analisados!`);
     showInstagram(username, name);
   }catch{toast('Erro na análise','err');}
+  finally{hideProgress();}
 }
 
 async function collectInstagram(username, name){
   toast(`Coletando posts de @${username}...`);
+  showProgress('Coletando posts...', 'Buscando os últimos posts via Apify');
   try{
     const data = await apiFetch(`/collect/instagram/${username}?limit=50`, 'POST');
     toast(`✓ ${data.posts_saved} posts de ${name} salvos!`);
     showInstagram(username, name);
   }catch{toast('Erro na coleta','err');}
+  finally{hideProgress();}
 }
 
 function showView(v){
@@ -1016,6 +1042,7 @@ async function saveProfile(){
   if(!name||!id){toast('Preencha todos os campos','err');return;}
   const btn=document.getElementById('btn-save');
   btn.disabled=true;btn.innerHTML=`${saveSpinner()}<span>Salvando...</span>`;
+  showProgress('Preparando monitoramento...', 'Salvando perfil...');
   try{
     await apiFetch('/profiles','POST',{name,platform,platform_id:id});
     toast('Perfil adicionado!');
@@ -1023,16 +1050,18 @@ async function saveProfile(){
 
     if(platform==='instagram'){
       btn.innerHTML=`${saveSpinner()}<span>Coletando posts...</span>`;
+      document.getElementById('progress-msg').textContent='Coletando posts...';
       const data=await apiFetch(`/collect/instagram/${id}?limit=50`,'POST');
       toast(`✓ ${data.posts_saved} posts de ${name} coletados!`);
     }else{
       btn.innerHTML=`${saveSpinner()}<span>Analisando...</span>`;
+      document.getElementById('progress-msg').textContent='Analisando...';
       await apiFetch(`/analyze/youtube/${id}?name=${encodeURIComponent(name)}&days=30`,'POST');
       toast(`✓ Análise de ${name} concluída!`);
     }
     loadOverview();
   }catch{toast('Erro ao salvar','err');closeModal();}
-  finally{btn.disabled=false;btn.innerHTML='Salvar & Analisar';}
+  finally{btn.disabled=false;btn.innerHTML='Salvar & Analisar';hideProgress();}
 }
 
 async function analyzeNow(id,name){
