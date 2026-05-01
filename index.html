@@ -431,6 +431,12 @@ body::before{content:'';position:fixed;inset:0;z-index:0;background-image:url("d
         </div>
       </div>
 
+      <!-- ANÁLISE DA AUDIÊNCIA -->
+      <div id="ig-audience-section" class="card" style="margin-bottom:16px">
+        <div class="card-hd">Análise da Audiência</div>
+        <div id="ig-audience-content"><!-- preenchido via JS --></div>
+      </div>
+
       <div class="card">
         <div class="card-hd">Últimos Posts</div>
         <div class="insta-posts" id="ig-posts-list"></div>
@@ -487,7 +493,7 @@ const platformBadge=(platform,id)=>platform==='instagram'
 const emptySvg=type=>`<div class="empty-svg">${icons[type]||icons.empty}</div>`;
 const saveSpinner=()=>`<svg class="btn-spinner" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M21 12a9 9 0 0 0-9-9"></path></svg>`;
 
-let donutChart=null, histChart=null, igChart=null, igDonutChart=null;
+let donutChart=null, histChart=null, igChart=null, igDonutChart=null, igCommentsChart=null;
 
 const fmt=n=>{if(!n&&n!==0)return'—';if(n>=1000000)return(n/1000000).toFixed(1)+'M';if(n>=1000)return(n/1000).toFixed(1)+'k';return Number(n).toLocaleString('pt-BR')};
 const initials=n=>n.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase();
@@ -728,6 +734,7 @@ async function showInstagram(username, name){
   document.getElementById('ig-quotes-card').style.display='none';
   document.getElementById('ig-crisis').style.display='none';
   document.getElementById('ig-score-num').textContent='—';
+  document.getElementById('ig-audience-content').innerHTML='<div class="loading"><div class="spin"></div>Carregando audiência...</div>';
 
   try{
     const data = await apiFetch(`/instagram/posts/${username}`);
@@ -742,6 +749,15 @@ async function showInstagram(username, name){
       ${hasSentiment
         ? `<span class="pf-chip" style="color:var(--green)">✓ analisado</span>`
         : pill('analisar sentimento','purple','lightning',`analyzeInstagram('${username}','${name}')`)}`;
+
+    // Carrega comentários
+    try{
+      const commentsData = await apiFetch(`/instagram/comments/${username}`);
+      const comments = commentsData.comments || [];
+      renderAudienceSection(comments, username, name);
+    }catch{
+      document.getElementById('ig-audience-content').innerHTML='<div style="color:var(--red);font-size:13px;padding:16px">Erro ao carregar comentários.</div>';
+    }
 
     if(!posts.length){
       document.getElementById('ig-posts-list').innerHTML=`<div style="color:var(--text3);font-size:13px;text-align:center;padding:24px">${emptySvg('empty')}<div style="margin-bottom:14px">Nenhum post coletado ainda.</div>${pill('Coletar agora','purple','refresh',`collectInstagram('${username}','${name}')`)}</div>`;
@@ -827,6 +843,125 @@ async function showInstagram(username, name){
   }catch(e){
     document.getElementById('ig-posts-list').innerHTML=`<div style="color:var(--red);font-size:13px;padding:16px">Erro ao carregar posts: ${e.message}</div>`;
   }
+}
+
+
+function escapeHtml(value){
+  return String(value??'')
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/\"/g,'&quot;')
+    .replace(/'/g,'&#039;');
+}
+
+function sentimentBadge(sentiment){
+  const colorMap={positive:'var(--green)',neutral:'var(--amber)',negative:'var(--red)'};
+  const labelMap={positive:'positivo',neutral:'neutro',negative:'negativo'};
+  const color=colorMap[sentiment]||'var(--text3)';
+  const label=labelMap[sentiment]||sentiment||'sem análise';
+  return `<span style="font-size:10px;font-family:var(--font-m);color:${color};padding:2px 8px;background:var(--ink);border-radius:4px;border:1px solid currentColor">● ${label}</span>`;
+}
+
+function renderAudienceSection(comments, username, name){
+  const box=document.getElementById('ig-audience-content');
+  if(!box)return;
+
+  if(igCommentsChart){igCommentsChart.destroy();igCommentsChart=null;}
+
+  if(!comments.length){
+    box.innerHTML=`<div style="color:var(--text3);font-size:13px;text-align:center;padding:24px">${emptySvg('empty')}<div style="margin-bottom:14px">Nenhum comentário coletado ainda.</div>${pill('Coletar comentários','purple','refresh',"collectComments('"+username+"','"+name+"')")}</div>`;
+    return;
+  }
+
+  const analyzed=comments.filter(c=>c.sentiment);
+  if(!analyzed.length){
+    box.innerHTML=`
+      <div class="metric-grid" style="margin-bottom:14px">
+        <div class="metric-item"><div class="metric-lbl">Comentários coletados</div><div class="metric-val">${fmt(comments.length)}</div></div>
+        <div class="metric-item"><div class="metric-lbl">Status</div><div class="metric-val" style="font-size:16px;color:var(--amber)">pendente de análise</div></div>
+      </div>
+      <div class="action-row">${pill('Analisar audiência','cyan','lightning',"analyzeComments('"+username+"','"+name+"')")}</div>`;
+    return;
+  }
+
+  const pos=analyzed.filter(c=>c.sentiment==='positive').length;
+  const neu=analyzed.filter(c=>c.sentiment==='neutral').length;
+  const neg=analyzed.filter(c=>c.sentiment==='negative').length;
+  const total=analyzed.length;
+  const posPct=(pos/total)*100;
+  const neuPct=(neu/total)*100;
+  const negPct=(neg/total)*100;
+  const score=(pos-neg)/total;
+  const col=scoreColor(score);
+  const topComments=[...analyzed]
+    .sort((a,b)=>(b.likes_count||0)-(a.likes_count||0))
+    .slice(0,3);
+
+  box.innerHTML=`
+    <div class="g12" style="margin-bottom:16px">
+      <div>
+        <div class="pol-score-row">
+          <div class="score-big" id="ig-audience-score" style="color:${col}">${score.toFixed(2)}</div>
+          <div class="score-desc"><strong style="color:${col}">${posPct.toFixed(0)}% positivo</strong>${fmt(comments.length)} comentários coletados · ${fmt(total)} analisados</div>
+        </div>
+        <div class="sent-bar"><div class="sb-pos" style="width:${posPct}%"></div><div class="sb-neu" style="width:${neuPct}%"></div><div class="sb-neg" style="width:${negPct}%"></div></div>
+        <div class="sent-labels"><span style="color:var(--green)">${posPct.toFixed(1)}% positivo</span><span style="color:var(--amber)">${neuPct.toFixed(1)}% neutro</span><span style="color:var(--red)">${negPct.toFixed(1)}% negativo</span></div>
+        <div class="metric-grid">
+          <div class="metric-item"><div class="metric-lbl">Positivos</div><div class="metric-val" style="color:var(--green)">${fmt(pos)}</div></div>
+          <div class="metric-item"><div class="metric-lbl">Neutros</div><div class="metric-val" style="color:var(--amber)">${fmt(neu)}</div></div>
+          <div class="metric-item"><div class="metric-lbl">Negativos</div><div class="metric-val" style="color:var(--red)">${fmt(neg)}</div></div>
+          <div class="metric-item"><div class="metric-lbl">Curtidas nos comentários</div><div class="metric-val">${fmt(analyzed.reduce((a,c)=>a+(c.likes_count||0),0))}</div></div>
+        </div>
+      </div>
+      <div>
+        <div class="donut-wrap">
+          <canvas class="donut-c" id="ig-comments-donut"></canvas>
+          <div class="donut-leg">
+            <div class="dl-item"><div class="dl-dot" style="background:var(--green)"></div><div class="dl-name">Positivo</div><div class="dl-pct" style="color:var(--green)">${posPct.toFixed(1)}%</div></div>
+            <div class="dl-item"><div class="dl-dot" style="background:var(--amber)"></div><div class="dl-name">Neutro</div><div class="dl-pct" style="color:var(--amber)">${neuPct.toFixed(1)}%</div></div>
+            <div class="dl-item"><div class="dl-dot" style="background:var(--red)"></div><div class="dl-name">Negativo</div><div class="dl-pct" style="color:var(--red)">${negPct.toFixed(1)}%</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-hd" style="margin-top:4px">Top comentários por curtidas</div>
+    <div class="insta-posts" style="margin-bottom:14px">
+      ${topComments.map(c=>`
+        <div class="insta-post">
+          <div class="insta-post-top">
+            ${sentimentBadge(c.sentiment)}
+            <span class="insta-type">@${escapeHtml(c.commenter_username||'usuario')}</span>
+            <span class="insta-date">${c.collected_at?fmtDate(c.collected_at):'—'}</span>
+          </div>
+          <div class="insta-caption">${escapeHtml(c.text||'(sem texto)')}</div>
+          <div class="insta-stats">
+            <div class="insta-stat">❤️ <span>${fmt(c.likes_count||0)}</span></div>
+            ${c.post_url?`<a href="${escapeHtml(c.post_url)}" target="_blank" style="margin-left:auto;font-size:11px;color:#c77dff;text-decoration:none;font-family:var(--font-m)">ver post →</a>`:''}
+          </div>
+        </div>`).join('')}
+    </div>
+    <div class="action-row">${pill('Atualizar','purple','refresh',"collectComments('"+username+"','"+name+"')")}</div>`;
+
+  igCommentsChart=new Chart(document.getElementById('ig-comments-donut'),{type:'doughnut',data:{datasets:[{data:[posPct,neuPct,negPct],backgroundColor:['rgba(0,229,160,.85)','rgba(255,179,64,.85)','rgba(255,84,112,.85)'],borderWidth:0}]},options:{cutout:'75%',plugins:{legend:{display:false}},animation:{duration:700}}});
+}
+
+async function collectComments(username, name){
+  toast(`Coletando comentários de @${username}...`);
+  try{
+    const data = await apiFetch(`/collect/comments/${username}?posts_limit=10&comments_per_post=20`, 'POST');
+    toast(`✓ ${data.comments_saved} comentários salvos!`);
+    showInstagram(username, name);
+  }catch{toast('Erro na coleta','err');}
+}
+
+async function analyzeComments(username, name){
+  toast(`Analisando audiência de @${username}...`);
+  try{
+    const data = await apiFetch(`/analyze/comments/${username}`, 'POST');
+    toast(`✓ ${data.comments_analyzed} comentários analisados!`);
+    showInstagram(username, name);
+  }catch{toast('Erro na análise','err');}
 }
 
 async function analyzeInstagram(username, name){
