@@ -1,1085 +1,142 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pulse — Inteligência Política</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<style>
-:root {
-  --ink:      #080b12;
-  --ink2:     #0c1018;
-  --ink3:     #111722;
-  --ink4:     #161d2e;
-  --border:   rgba(255,255,255,0.06);
-  --border2:  rgba(255,255,255,0.11);
-  --text:     #dce6f0;
-  --text2:    #7a8ba0;
-  --text3:    #3a4a5c;
-  --cyan:     #00d4ff;
-  --cyan-dim: rgba(0,212,255,0.12);
-  --cyan-bd:  rgba(0,212,255,0.25);
-  --green:    #00e5a0;
-  --green-dim:rgba(0,229,160,0.1);
-  --red:      #ff5470;
-  --red-dim:  rgba(255,84,112,0.1);
-  --red-bd:   rgba(255,84,112,0.3);
-  --amber:    #ffb340;
-  --amber-dim:rgba(255,179,64,0.1);
-  --font-d:   'DM Serif Display', serif;
-  --font-b:   'Manrope', sans-serif;
-  --font-m:   'DM Mono', monospace;
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{background:var(--ink);color:var(--text);font-family:var(--font-b);font-size:14px;line-height:1.6;overflow-x:hidden;min-height:100vh}
-body::before{content:'';position:fixed;inset:0;z-index:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;opacity:.4}
-.glow-bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-.glow-bg::before{content:'';position:absolute;top:-20%;left:50%;transform:translateX(-50%);width:700px;height:400px;border-radius:50%;background:radial-gradient(ellipse,rgba(0,212,255,0.04) 0%,transparent 70%)}
-.glow-bg::after{content:'';position:absolute;bottom:-10%;right:-10%;width:500px;height:500px;border-radius:50%;background:radial-gradient(ellipse,rgba(0,229,160,0.03) 0%,transparent 70%)}
-.sidebar{position:fixed;left:0;top:0;bottom:0;width:220px;background:var(--ink2);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:50}
-.sidebar-logo{padding:28px 24px 20px;border-bottom:1px solid var(--border)}
-.logo-word{font-family:var(--font-d);font-size:26px;font-style:italic;color:var(--text);letter-spacing:-.5px}
-.logo-word span{color:var(--cyan)}
-.logo-sub{font-size:10px;color:var(--text3);letter-spacing:.12em;text-transform:uppercase;margin-top:2px;font-weight:600}
-.sidebar-nav{flex:1;padding:16px 12px;display:flex;flex-direction:column;gap:2px}
-.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;color:var(--text2);font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;position:relative}
-.nav-item:hover{background:rgba(255,255,255,.04);color:var(--text)}
-.nav-item.on{background:var(--cyan-dim);color:var(--cyan);border:1px solid var(--cyan-bd)}
-.nav-item.on::before{content:'';position:absolute;left:-13px;top:50%;transform:translateY(-50%);width:3px;height:60%;border-radius:0 3px 3px 0;background:var(--cyan)}
-.nav-icon{font-size:15px;width:18px;text-align:center}
-.nav-section{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;padding:14px 12px 6px;font-weight:700}
-.sidebar-footer{padding:16px 20px;border-top:1px solid var(--border)}
-.api-pill{display:flex;align-items:center;gap:7px;padding:7px 10px;background:var(--ink3);border-radius:8px;border:1px solid var(--border)}
-.api-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse-dot 2s ease infinite}
-@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
-.api-txt{font-size:11px;color:var(--text2);font-family:var(--font-m)}
-.main{margin-left:220px;min-height:100vh;position:relative;z-index:1}
-.topbar{padding:18px 36px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:rgba(8,11,18,.7);backdrop-filter:blur(20px);position:sticky;top:0;z-index:40}
-.topbar-title{font-family:var(--font-d);font-size:20px;font-style:italic;color:var(--text)}
-.topbar-right{display:flex;align-items:center;gap:12px}
-.date-chip{font-family:var(--font-m);font-size:11px;color:var(--text2);padding:5px 10px;background:var(--ink3);border-radius:6px;border:1px solid var(--border)}
-.btn-analyze{padding:8px 18px;background:linear-gradient(135deg,rgba(0,212,255,.15),rgba(0,229,160,.1));border:1px solid var(--cyan-bd);color:var(--cyan);border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font-b);transition:all .2s;letter-spacing:.03em}
-.btn-analyze:hover{background:var(--cyan);color:var(--ink);transform:translateY(-1px)}
-.topbar-left{display:flex;flex-direction:column;gap:2px}
-.topbar-subtitle{font-size:11px;color:var(--text3);font-family:var(--font-m);line-height:1.2}
-.content{padding:32px 36px}
-.view{display:none;animation:fadeIn .3s ease}
-.view.on{display:block}
-@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.section-header{margin-bottom:24px}
-.section-label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--cyan);margin-bottom:6px;font-family:var(--font-m)}
-.section-title{font-family:var(--font-d);font-size:28px;font-style:italic;color:var(--text)}
-.section-sub{font-size:13px;color:var(--text2);margin-top:4px}
-.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px}
-.kpi{padding:20px 22px;background:var(--ink2);border:1px solid var(--border);border-radius:14px;position:relative;overflow:hidden;transition:border-color .2s}
-.kpi:hover{border-color:var(--border2)}
-.kpi::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--cyan-dim),transparent)}
-.kpi-label{font-size:11px;color:var(--text2);font-weight:600;letter-spacing:.05em;text-transform:uppercase;margin-bottom:10px}
-.kpi-value{font-family:var(--font-d);font-size:32px;color:var(--text);line-height:1;margin-bottom:4px}
-.kpi-value.cyan{color:var(--cyan)}
-.kpi-value.green{color:var(--green)}
-.kpi-value.red{color:var(--red)}
-.kpi-sub{font-size:11px;color:var(--text3);font-family:var(--font-m)}
-.crisis-alert{display:flex;align-items:center;gap:14px;padding:14px 20px;border-radius:12px;background:var(--red-dim);border:1px solid var(--red-bd);margin-bottom:24px;animation:crisis-pulse 2s ease infinite}
-@keyframes crisis-pulse{0%,100%{border-color:rgba(255,84,112,.3)}50%{border-color:rgba(255,84,112,.7);box-shadow:0 0 20px rgba(255,84,112,.1)}}
-.crisis-ico{font-size:20px}
-.crisis-body{flex:1}
-.crisis-ttl{font-weight:700;color:var(--red);font-size:13px}
-.crisis-msg{font-size:12px;color:var(--text2);margin-top:2px}
-.crisis-chip{padding:4px 10px;background:var(--red-dim);border:1px solid var(--red-bd);border-radius:20px;font-size:11px;color:var(--red);font-weight:700;font-family:var(--font-m)}
-.pol-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
-.pol-card{background:var(--ink2);border:1px solid var(--border);border-radius:16px;padding:22px;cursor:pointer;transition:all .25s;position:relative;overflow:hidden}
-.pol-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--green));transform:scaleX(0);transform-origin:left;transition:transform .3s}
-.pol-card:hover{border-color:var(--cyan-bd);transform:translateY(-4px);box-shadow:0 20px 40px rgba(0,0,0,.4)}
-.pol-card:hover::before{transform:scaleX(1)}
-.pol-card.alert{border-color:var(--red-bd)}
-.pol-card.alert::before{background:var(--red);transform:scaleX(1)}
-.pol-top{display:flex;align-items:flex-start;gap:14px;margin-bottom:18px}
-.pol-av{width:48px;height:48px;border-radius:12px;background:var(--ink3);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-family:var(--font-d);font-size:16px;font-style:italic;color:var(--cyan);flex-shrink:0}
-.pol-info{flex:1}
-.pol-name{font-family:var(--font-d);font-size:17px;font-style:italic;color:var(--text)}
-.pol-plat{font-size:11px;color:var(--text3);font-family:var(--font-m);margin-top:2px}
-.pol-badge{padding:3px 9px;border-radius:20px;font-size:10px;font-weight:700;font-family:var(--font-m);letter-spacing:.04em}
-.badge-ok{background:var(--green-dim);color:var(--green);border:1px solid rgba(0,229,160,.2)}
-.badge-crisis{background:var(--red-dim);color:var(--red);border:1px solid var(--red-bd)}
-.badge-insta{background:rgba(131,58,180,0.15);color:#c77dff;border:1px solid rgba(131,58,180,0.3)}
-.pol-score-row{display:flex;align-items:center;gap:10px;margin-bottom:14px}
-.score-big{font-family:var(--font-d);font-size:36px;line-height:1}
-.score-desc{font-size:11px;color:var(--text2)}
-.score-desc strong{display:block;font-size:13px;font-weight:700}
-.sent-bar{height:5px;border-radius:3px;overflow:hidden;background:var(--ink3);display:flex;margin-bottom:6px}
-.sb-pos{background:var(--green);height:100%}
-.sb-neu{background:var(--amber);height:100%}
-.sb-neg{background:var(--red);height:100%}
-.sent-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--text3);font-family:var(--font-m);margin-bottom:16px}
-.pol-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-.ps{padding:8px 10px;background:var(--ink3);border-radius:8px}
-.ps-l{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-bottom:3px}
-.ps-v{font-size:13px;font-weight:700;color:var(--text);font-family:var(--font-m)}
-.pol-footer{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
-.pol-time{font-size:10px;color:var(--text3);font-family:var(--font-m)}
-.pol-remove{font-size:11px;color:var(--red);cursor:pointer;font-family:var(--font-m);opacity:.6;transition:opacity .2s;background:transparent;border:0;padding:0;display:inline-flex;align-items:center;gap:4px}
-.pol-remove:hover{opacity:1}
-.pol-remove svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.back{display:inline-flex;align-items:center;gap:6px;color:var(--text2);font-size:13px;cursor:pointer;margin-bottom:24px;transition:color .2s;font-weight:500}
-.back:hover{color:var(--cyan)}
-.pf-hero{background:var(--ink2);border:1px solid var(--border);border-radius:18px;padding:28px;margin-bottom:20px;display:flex;align-items:flex-start;gap:20px;position:relative;overflow:hidden}
-.pf-hero::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--green),var(--cyan));background-size:200% 100%;animation:shimmer 3s ease infinite}
-@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-.pf-av-big{width:72px;height:72px;border-radius:18px;background:var(--ink3);border:2px solid var(--cyan-bd);display:flex;align-items:center;justify-content:center;font-family:var(--font-d);font-size:24px;font-style:italic;color:var(--cyan);flex-shrink:0}
-.pf-name{font-family:var(--font-d);font-size:32px;font-style:italic;color:var(--text);margin-bottom:4px}
-.pf-meta-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.pf-chip{padding:3px 10px;background:var(--ink3);border-radius:20px;font-size:11px;color:var(--text2);font-family:var(--font-m);border:1px solid var(--border)}
-.pf-score-block{margin-left:auto;text-align:right}
-.pf-score-num{font-family:var(--font-d);font-size:48px;line-height:1}
-.pf-score-lbl{font-size:11px;color:var(--text2);font-family:var(--font-m)}
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
-.g12{display:grid;grid-template-columns:1fr 2fr;gap:16px;margin-bottom:16px}
-@media(max-width:900px){.g2,.g12{grid-template-columns:1fr}}
-.card{background:var(--ink2);border:1px solid var(--border);border-radius:16px;padding:22px}
-.card-hd{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);font-family:var(--font-m);margin-bottom:16px}
-.narrative{font-family:var(--font-d);font-size:16px;font-style:italic;color:var(--text2);line-height:1.8;border-left:2px solid var(--cyan);padding-left:18px}
-.donut-wrap{display:flex;align-items:center;gap:20px}
-.donut-c{width:110px;height:110px;flex-shrink:0}
-.donut-leg{flex:1;display:flex;flex-direction:column;gap:10px}
-.dl-item{display:flex;align-items:center;gap:8px}
-.dl-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
-.dl-name{font-size:12px;color:var(--text2);flex:1}
-.dl-pct{font-family:var(--font-d);font-size:18px}
-.metric-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.metric-item{padding:12px 14px;background:var(--ink3);border-radius:10px}
-.metric-lbl{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;font-weight:700;margin-bottom:5px}
-.metric-val{font-family:var(--font-d);font-size:22px;color:var(--text)}
-.theme-list{display:flex;flex-direction:column;gap:8px}
-.theme-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--ink3);border-radius:9px}
-.theme-rank{font-family:var(--font-m);font-size:10px;color:var(--text3);width:14px}
-.theme-name{font-size:13px;color:var(--text);flex:1;font-weight:500}
-.theme-bar-wrap{width:60px;height:4px;background:var(--ink);border-radius:2px;overflow:hidden}
-.theme-bar{height:100%;background:linear-gradient(90deg,var(--cyan),var(--green));border-radius:2px}
-.quote-block{padding:14px 16px;border-radius:10px;margin-bottom:10px}
-.quote-block:last-child{margin-bottom:0}
-.qb-pos{background:var(--green-dim);border-left:3px solid var(--green)}
-.qb-neg{background:var(--red-dim);border-left:3px solid var(--red)}
-.qb-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;opacity:.6;margin-bottom:5px;font-family:var(--font-m)}
-.qb-text{font-family:var(--font-d);font-size:14px;font-style:italic;color:var(--text);line-height:1.6}
-.chart-wrap{position:relative;height:180px}
-
-/* Instagram posts list */
-.insta-posts{display:flex;flex-direction:column;gap:10px}
-.insta-post{padding:14px 16px;background:var(--ink3);border-radius:10px;border:1px solid var(--border)}
-.insta-post-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-.insta-type{font-size:10px;font-family:var(--font-m);color:var(--text3);padding:2px 8px;background:var(--ink);border-radius:4px;border:1px solid var(--border)}
-.insta-date{font-size:10px;color:var(--text3);font-family:var(--font-m);margin-left:auto}
-.insta-caption{font-size:13px;color:var(--text2);line-height:1.5;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.insta-stats{display:flex;gap:14px}
-.insta-stat{display:flex;align-items:center;gap:5px;font-size:12px;font-family:var(--font-m);color:var(--text3)}
-.insta-stat span{color:var(--text);font-weight:700}
-
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(8px)}
-.modal-overlay.on{display:flex}
-.modal{background:var(--ink2);border:1px solid var(--border2);border-radius:20px;padding:32px;width:100%;max-width:440px;position:relative}
-.modal::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;border-radius:20px 20px 0 0;background:linear-gradient(90deg,transparent,var(--cyan-bd),transparent)}
-.modal-title{font-family:var(--font-d);font-size:22px;font-style:italic;margin-bottom:4px}
-.modal-sub{font-size:13px;color:var(--text2);margin-bottom:24px}
-.field{margin-bottom:16px}
-.field label{display:block;font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:7px}
-.field input,.field select{width:100%;padding:11px 14px;background:var(--ink3);border:1px solid var(--border2);border-radius:9px;color:var(--text);font-size:13px;font-family:var(--font-b);outline:none;transition:border-color .2s}
-.field input:focus,.field select:focus{border-color:var(--cyan)}
-.field select option{background:var(--ink2)}
-.field-hint{font-size:11px;color:var(--text3);margin-top:5px;font-family:var(--font-m)}
-.modal-btns{display:flex;gap:10px;margin-top:24px}
-.btn-cancel{flex:1;padding:11px;background:transparent;border:1px solid var(--border2);border-radius:9px;color:var(--text2);font-size:13px;cursor:pointer;font-family:var(--font-b);transition:all .2s}
-.btn-cancel:hover{color:var(--text);border-color:var(--border)}
-.btn-save{flex:2;padding:11px;background:linear-gradient(135deg,var(--cyan),var(--green));border:none;border-radius:9px;color:var(--ink);font-size:13px;font-weight:800;cursor:pointer;font-family:var(--font-b);transition:all .2s}
-.btn-save:hover{filter:brightness(1.1);transform:translateY(-1px)}
-.btn-save:disabled{opacity:.4;cursor:not-allowed;transform:none}
-.toast{position:fixed;bottom:24px;right:24px;z-index:300;padding:12px 20px;border-radius:10px;font-size:13px;font-weight:600;transform:translateY(50px);opacity:0;transition:all .3s;pointer-events:none}
-.toast.on{transform:translateY(0);opacity:1}
-.toast.ok{background:var(--green-dim);border:1px solid rgba(0,229,160,.3);color:var(--green)}
-.toast.err{background:var(--red-dim);border:1px solid var(--red-bd);color:var(--red)}
-.loading{display:flex;flex-direction:column;align-items:center;gap:12px;padding:60px;color:var(--text2)}
-.spin{width:28px;height:28px;border:2px solid var(--ink4);border-top-color:var(--cyan);border-radius:50%;animation:spin .7s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.empty{text-align:center;padding:64px 20px}
-.empty-ico{font-size:48px;opacity:.2;margin-bottom:16px}
-.empty-title{font-family:var(--font-d);font-size:22px;font-style:italic;color:var(--text);margin-bottom:6px}
-.empty-sub{font-size:13px;color:var(--text2);margin-bottom:24px}
-.btn-empty{padding:11px 24px;background:linear-gradient(135deg,rgba(0,212,255,.15),rgba(0,229,160,.1));border:1px solid var(--cyan-bd);color:var(--cyan);border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font-b);transition:all .2s}
-.btn-empty:hover{background:var(--cyan);color:var(--ink)}
-.action-pill{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:6px 14px;border-radius:20px;font-size:11px;font-weight:700;border:1px solid currentColor;cursor:pointer;transition:all .2s;font-family:var(--font-b);line-height:1;background:transparent}
-.action-pill svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
-.action-pill.purple{color:#c77dff;background:rgba(199,125,255,.1)}
-.action-pill.purple:hover{background:#c77dff;color:var(--ink)}
-.action-pill.cyan{color:var(--cyan);background:rgba(0,212,255,.1)}
-.action-pill.cyan:hover{background:var(--cyan);color:var(--ink)}
-.action-pill.red{color:var(--red);background:var(--red-dim)}
-.action-pill.red:hover{background:var(--red);color:var(--ink)}
-.action-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px}
-.empty-svg{width:48px;height:48px;opacity:.2;margin:0 auto 16px;color:var(--text)}
-.empty-svg svg{width:48px;height:48px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
-.platform-badge{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:20px;font-size:10px;font-weight:700;font-family:var(--font-m);letter-spacing:.04em;border:1px solid currentColor;white-space:nowrap}
-.platform-badge svg{width:13px;height:13px;flex-shrink:0}
-.platform-badge.youtube{color:#ff0000;background:rgba(255,0,0,.08)}
-.platform-badge.instagram{color:#c77dff;background:rgba(199,125,255,.1)}
-.btn-save{display:inline-flex;align-items:center;justify-content:center;gap:8px}
-.btn-spinner{width:14px;height:14px;animation:spin .7s linear infinite}
-.btn-spinner circle{fill:none;stroke:currentColor;stroke-width:2;opacity:.25}
-.btn-spinner path{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
-.demo-banner{background:linear-gradient(90deg,rgba(0,212,255,.08),rgba(0,229,160,.06));border:1px solid var(--cyan-bd);border-radius:10px;padding:10px 16px;margin-bottom:20px;display:flex;align-items:center;gap:10px;font-size:12px;color:var(--cyan)}
-</style>
-</head>
-<body>
-<div class="glow-bg"></div>
-
-<nav class="sidebar">
-  <div class="sidebar-logo">
-    <div class="logo-word"><span>Pulse</span></div>
-    <div class="logo-sub">Inteligência Política</div>
-  </div>
-  <div class="sidebar-nav">
-    <div class="nav-section">Monitoramento</div>
-    <div class="nav-item on" onclick="showView('overview')"><span class="nav-icon">◈</span> Visão Geral</div>
-    <div class="nav-item" onclick="toast('Em breve','ok')"><span class="nav-icon">◉</span> Alertas</div>
-    <div class="nav-section">Análise</div>
-    <div class="nav-item" onclick="toast('Em breve','ok')"><span class="nav-icon">◫</span> Comparativo</div>
-    <div class="nav-item" onclick="toast('Em breve','ok')"><span class="nav-icon">◷</span> Histórico</div>
-    <div class="nav-item" onclick="toast('Em breve','ok')"><span class="nav-icon">◧</span> Relatórios</div>
-    <div class="nav-section">Config</div>
-    <div class="nav-item" onclick="openModal()"><span class="nav-icon">⊕</span> Novo Perfil</div>
-  </div>
-  <div class="sidebar-footer">
-    <div class="api-pill">
-      <div class="api-dot"></div>
-      <span class="api-txt" id="api-txt">api · online</span>
-    </div>
-  </div>
-</nav>
-
-<div class="main">
-  <div class="topbar">
-    <div class="topbar-left">
-      <div class="topbar-title">Painel de Inteligência</div>
-      <div class="topbar-subtitle" id="topbar-updated" style="display:none"></div>
-    </div>
-    <div class="topbar-right">
-      <div class="date-chip" id="date-chip"></div>
-      <button class="btn-analyze" onclick="openModal()">+ Adicionar Perfil</button>
-    </div>
-  </div>
-
-  <div class="content">
-
-    <!-- VISÃO GERAL -->
-    <div id="view-overview" class="view on">
-      <div class="section-header">
-        <div class="section-label">Dashboard Principal</div>
-        <div class="section-title">Monitoramento em Tempo Real</div>
-        <div class="section-sub">Análise de sentimento e engajamento dos perfis políticos monitorados</div>
-      </div>
-      <div class="kpi-row">
-        <div class="kpi"><div class="kpi-label">Perfis Ativos</div><div class="kpi-value cyan" id="kpi-total">—</div><div class="kpi-sub">perfis monitorados</div></div>
-        <div class="kpi"><div class="kpi-label">Score Médio</div><div class="kpi-value" id="kpi-score">—</div><div class="kpi-sub">sentimento geral</div></div>
-        <div class="kpi"><div class="kpi-label">Alertas de Crise</div><div class="kpi-value red" id="kpi-crisis">—</div><div class="kpi-sub">requerem atenção</div></div>
-        <div class="kpi"><div class="kpi-label">Comentários</div><div class="kpi-value green" id="kpi-comments">—</div><div class="kpi-sub">analisados hoje</div></div>
-      </div>
-      <div id="crisis-global" style="display:none" class="crisis-alert">
-        <div class="crisis-ico">🚨</div>
-        <div class="crisis-body">
-          <div class="crisis-ttl" id="crisis-global-title">Alerta de Crise Detectado</div>
-          <div class="crisis-msg" id="crisis-global-msg"></div>
-        </div>
-        <div class="crisis-chip">URGENTE</div>
-      </div>
-      <div id="pol-grid" class="pol-grid">
-        <div class="loading"><div class="spin"></div>Conectando à API...</div>
-      </div>
-    </div>
-
-    <!-- PERFIL YOUTUBE -->
-    <div id="view-profile" class="view">
-      <div class="back" onclick="showView('overview')">← voltar ao painel</div>
-      <div class="pf-hero">
-        <div class="pf-av-big" id="pf-av"></div>
-        <div style="flex:1">
-          <div class="pf-name" id="pf-name"></div>
-          <div class="pf-meta-row" id="pf-meta"></div>
-        </div>
-        <div class="pf-score-block">
-          <div class="pf-score-num" id="pf-score-num" style="color:var(--cyan)"></div>
-          <div class="pf-score-lbl">score de sentimento</div>
-        </div>
-      </div>
-      <div id="pf-crisis" style="display:none;margin-bottom:16px" class="crisis-alert">
-        <div class="crisis-ico">🚨</div>
-        <div class="crisis-body">
-          <div class="crisis-ttl">Alerta de Crise Ativo</div>
-          <div class="crisis-msg" id="pf-crisis-msg"></div>
-        </div>
-        <div class="crisis-chip">URGENTE</div>
-      </div>
-      <div class="card" style="margin-bottom:16px">
-        <div class="card-hd">Resumo Executivo — IA</div>
-        <p class="narrative" id="pf-narrative"></p>
-      </div>
-      <div class="g12">
-        <div class="card">
-          <div class="card-hd">Sentimento</div>
-          <div class="donut-wrap">
-            <canvas class="donut-c" id="pf-donut"></canvas>
-            <div class="donut-leg">
-              <div class="dl-item"><div class="dl-dot" style="background:var(--green)"></div><div class="dl-name">Positivo</div><div class="dl-pct" style="color:var(--green)" id="pf-pos"></div></div>
-              <div class="dl-item"><div class="dl-dot" style="background:var(--amber)"></div><div class="dl-name">Neutro</div><div class="dl-pct" style="color:var(--amber)" id="pf-neu"></div></div>
-              <div class="dl-item"><div class="dl-dot" style="background:var(--red)"></div><div class="dl-name">Negativo</div><div class="dl-pct" style="color:var(--red)" id="pf-neg"></div></div>
-            </div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-hd">Evolução do Sentimento</div>
-          <div class="chart-wrap"><canvas id="pf-history"></canvas></div>
-        </div>
-      </div>
-      <div class="g2">
-        <div class="card">
-          <div class="card-hd">Métricas do Canal</div>
-          <div class="metric-grid">
-            <div class="metric-item"><div class="metric-lbl">Vídeos</div><div class="metric-val" id="pf-videos"></div></div>
-            <div class="metric-item"><div class="metric-lbl">Comentários</div><div class="metric-val" id="pf-comments"></div></div>
-            <div class="metric-item"><div class="metric-lbl">Views</div><div class="metric-val" id="pf-views"></div></div>
-            <div class="metric-item"><div class="metric-lbl">Engajamento</div><div class="metric-val" id="pf-eng"></div></div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-hd">Temas Identificados</div>
-          <div class="theme-list" id="pf-themes"></div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-hd">Destaques da Audiência</div>
-        <div class="quote-block qb-pos"><div class="qb-lbl">+ mais positivo</div><div class="qb-text" id="pf-qpos"></div></div>
-        <div class="quote-block qb-neg"><div class="qb-lbl">− mais negativo</div><div class="qb-text" id="pf-qneg"></div></div>
-      </div>
-    </div>
-
-    <!-- PERFIL INSTAGRAM -->
-    <div id="view-instagram" class="view">
-      <div class="back" onclick="showView('overview')">← voltar ao painel</div>
-      <div class="pf-hero">
-        <div class="pf-av-big" id="ig-av" style="border-color:rgba(131,58,180,0.4)"></div>
-        <div style="flex:1">
-          <div class="pf-name" id="ig-name"></div>
-          <div class="pf-meta-row" id="ig-meta"></div>
-        </div>
-        <div class="pf-score-block">
-          <div class="pf-score-num" id="ig-score-num" style="color:#c77dff">—</div>
-          <div class="pf-score-lbl">score de sentimento</div>
-        </div>
-      </div>
-
-      <div id="ig-crisis" style="display:none;margin-bottom:16px" class="crisis-alert">
-        <div class="crisis-ico">🚨</div>
-        <div class="crisis-body">
-          <div class="crisis-ttl">Alerta de Crise Ativo</div>
-          <div class="crisis-msg" id="ig-crisis-msg"></div>
-        </div>
-        <div class="crisis-chip">URGENTE</div>
-      </div>
-
-      <div id="ig-narrative-card" class="card" style="margin-bottom:16px;display:none">
-        <div class="card-hd">Resumo Executivo — IA</div>
-        <p class="narrative" id="ig-narrative"></p>
-      </div>
-
-      <div id="ig-sentiment-row" class="g12" style="display:none">
-        <div class="card">
-          <div class="card-hd" style="margin-bottom:4px">Como o Político se Comunica</div>
-          <div style="font-size:11px;color:var(--text3);font-family:var(--font-m);margin-bottom:16px">Baseado nas legendas dos posts publicados</div>
-          <div class="donut-wrap">
-            <canvas class="donut-c" id="ig-donut"></canvas>
-            <div class="donut-leg">
-              <div class="dl-item"><div class="dl-dot" style="background:var(--green)"></div><div class="dl-name">Positivo</div><div class="dl-pct" style="color:var(--green)" id="ig-pos"></div></div>
-              <div class="dl-item"><div class="dl-dot" style="background:var(--amber)"></div><div class="dl-name">Neutro</div><div class="dl-pct" style="color:var(--amber)" id="ig-neu"></div></div>
-              <div class="dl-item"><div class="dl-dot" style="background:var(--red)"></div><div class="dl-name">Negativo</div><div class="dl-pct" style="color:var(--red)" id="ig-neg"></div></div>
-            </div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-hd">Temas Identificados</div>
-          <div class="theme-list" id="ig-themes"></div>
-        </div>
-      </div>
-
-      <div id="ig-quotes-card" class="card" style="margin-bottom:16px;display:none">
-        <div class="card-hd">Destaques das Captions</div>
-        <div class="quote-block qb-pos"><div class="qb-lbl">+ mais positivo</div><div class="qb-text" id="ig-qpos"></div></div>
-        <div class="quote-block qb-neg"><div class="qb-lbl">− mais negativo</div><div class="qb-text" id="ig-qneg"></div></div>
-      </div>
-
-      <div class="g2" style="margin-bottom:16px">
-        <div class="card">
-          <div class="card-hd">Engajamento Médio</div>
-          <div class="metric-grid">
-            <div class="metric-item"><div class="metric-lbl">Likes médio</div><div class="metric-val" id="ig-avg-likes"></div></div>
-            <div class="metric-item"><div class="metric-lbl">Comentários médio</div><div class="metric-val" id="ig-avg-comments"></div></div>
-            <div class="metric-item"><div class="metric-lbl">Views médio</div><div class="metric-val" id="ig-avg-views"></div></div>
-            <div class="metric-item"><div class="metric-lbl">Post mais recente</div><div class="metric-val" id="ig-last-post" style="font-size:14px"></div></div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-hd">Likes por Post</div>
-          <div class="chart-wrap"><canvas id="ig-chart"></canvas></div>
-        </div>
-      </div>
-
-      <!-- ANÁLISE DA AUDIÊNCIA -->
-      <div id="ig-audience-section" class="card" style="margin-bottom:16px">
-        <div class="card-hd" style="margin-bottom:4px">Como o Público Reage</div>
-        <div style="font-size:11px;color:var(--text3);font-family:var(--font-m);margin-bottom:16px">Baseado nos comentários mais curtidos</div>
-        <div id="ig-audience-content"><!-- preenchido via JS --></div>
-      </div>
-
-      <div class="card">
-        <div class="card-hd">Últimos Posts</div>
-        <div class="insta-posts" id="ig-posts-list"></div>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<!-- MODAL -->
-<div class="modal-overlay" id="modal">
-  <div class="modal">
-    <div class="modal-title">Novo Perfil</div>
-    <div class="modal-sub">Adicione um político para monitorar automaticamente.</div>
-    <div class="field"><label>Nome</label><input type="text" id="m-name" placeholder="Ex: Lula, Bolsonaro, Tarcísio..."></div>
-    <div class="field">
-      <label>Plataforma</label>
-      <select id="m-plat" onchange="updateIdField(this.value)">
-        <option value="youtube">YouTube</option>
-        <option value="instagram">Instagram</option>
-      </select>
-    </div>
-    <div class="field">
-      <label id="m-id-label">Channel ID</label>
-      <input type="text" id="m-id" placeholder="UC8hGUtfEgvvnp6IaHSAg1OQ">
-      <div class="field-hint" id="m-id-hint">ID do canal do YouTube (começa com UC...)</div>
-    </div>
-    <div class="modal-btns">
-      <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
-      <button class="btn-save" id="btn-save" onclick="saveProfile()">Salvar & Analisar</button>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL DE PROGRESSO -->
-<div class="modal-overlay" id="progress-modal">
-  <div class="modal" style="max-width:360px;text-align:center;padding:40px 32px">
-    <div class="spin" style="margin:0 auto 20px"></div>
-    <div class="modal-title" id="progress-title" style="font-size:18px;margin-bottom:8px"></div>
-    <div id="progress-msg" style="font-size:13px;color:var(--text2);font-family:var(--font-m)"></div>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
-
-<script>
-const API = 'https://web-production-5d7201.up.railway.app';
-
-const icons={
-  refresh:`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>`,
-  play:`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7-11-7z"/></svg>`,
-  lightning:`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L4 14h7l-1 8 10-13h-7l1-7z"/></svg>`,
-  alert:`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 8v5"/><path d="M12 17h.01"/></svg>`,
-  empty:`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v14H4z"/><path d="M8 9h8"/><path d="M8 13h5"/></svg>`,
-  youtube:`<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="4" fill="currentColor"/><path d="M10 9.5v5l5-2.5-5-2.5z" fill="var(--ink)"/></svg>`,
-  close:`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>`,
-  instagram:`<svg viewBox="0 0 24 24" aria-hidden="true"><defs><linearGradient id="igGrad" x1="0" y1="24" x2="24" y2="0"><stop stop-color="#feda75"/><stop offset=".45" stop-color="#d62976"/><stop offset="1" stop-color="#962fbf"/></linearGradient></defs><rect x="4" y="4" width="16" height="16" rx="5" fill="none" stroke="url(#igGrad)" stroke-width="2"/><circle cx="12" cy="12" r="3.5" fill="none" stroke="url(#igGrad)" stroke-width="2"/><circle cx="16.8" cy="7.2" r="1.1" fill="#c77dff"/></svg>`
-};
-const pill=(label,type,icon,handler)=>`<button type="button" class="action-pill ${type}" onclick="${handler}">${icons[icon]}<span>${label}</span></button>`;
-const platformBadge=(platform,id)=>platform==='instagram'
-  ? `<span class="platform-badge instagram">${icons.instagram}@${id}</span>`
-  : `<span class="platform-badge youtube">${icons.youtube}youtube · ${id.slice(0,14)}…</span>`;
-const emptySvg=type=>`<div class="empty-svg">${icons[type]||icons.empty}</div>`;
-const saveSpinner=()=>`<svg class="btn-spinner" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M21 12a9 9 0 0 0-9-9"></path></svg>`;
-
-let donutChart=null, histChart=null, igChart=null, igDonutChart=null, igCommentsChart=null;
-
-const fmt=n=>{if(!n&&n!==0)return'—';if(n>=1000000)return(n/1000000).toFixed(1)+'M';if(n>=1000)return(n/1000).toFixed(1)+'k';return Number(n).toLocaleString('pt-BR')};
-const initials=n=>n.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase();
-const scoreColor=s=>s>=0.4?'var(--green)':s<=-0.1?'var(--red)':'var(--amber)';
-const timeAgo=iso=>{const d=Math.floor((Date.now()-new Date(iso))/60000);if(d<1)return'agora mesmo';if(d<60)return`${d}min atrás`;if(d<1440)return`${Math.floor(d/60)}h atrás`;return`${Math.floor(d/1440)}d atrás`};
-const fmtDate=iso=>new Date(iso).toLocaleDateString('pt-BR',{day:'2-digit',month:'short'});
-function updateTopbarLastUpdated(reports){
-  const el=document.getElementById('topbar-updated');
-  const dates=(reports||[]).map(r=>r.created_at).filter(Boolean).map(d=>new Date(d)).filter(d=>!isNaN(d));
-  if(!dates.length){el.style.display='none';el.textContent='';return;}
-  const latest=new Date(Math.max(...dates.map(d=>d.getTime())));
-  el.textContent=`Atualizado ${timeAgo(latest.toISOString())}`;
-  el.style.display='block';
-}
-
-function toast(msg,type='ok'){const t=document.getElementById('toast');t.textContent=msg;t.className=`toast ${type} on`;setTimeout(()=>t.classList.remove('on'),3000)}
-
-function showProgress(title, msg){
-  document.getElementById('progress-title').textContent = title;
-  document.getElementById('progress-msg').textContent = msg;
-  document.getElementById('progress-modal').classList.add('on');
-}
-function hideProgress(){
-  document.getElementById('progress-modal').classList.remove('on');
-}
-
-document.getElementById('date-chip').textContent=new Date().toLocaleDateString('pt-BR',{weekday:'short',day:'2-digit',month:'short',year:'numeric'});
-
-async function apiFetch(path,method='GET',body=null){
-  const o={method,headers:{'Content-Type':'application/json'}};
-  if(body)o.body=JSON.stringify(body);
-  const r=await fetch(API+path,o);
-  return r.json();
-}
-
-async function loadOverview(){
-  const grid=document.getElementById('pol-grid');
-  let profiles=[],rawReports=[];
-  try{
-    const[pRes,rRes]=await Promise.all([apiFetch('/profiles'),apiFetch('/reports/latest')]);
-    profiles=pRes.profiles||[];
-    rawReports=rRes.reports||[];
-    document.getElementById('api-txt').textContent='api · online';
-    updateTopbarLastUpdated(rawReports);
-  }catch{
-    document.getElementById('api-txt').textContent='api · offline';
-    updateTopbarLastUpdated([]);
-    grid.innerHTML=`<div class="empty" style="grid-column:1/-1">${emptySvg('alert')}<div class="empty-title">API indisponível</div><div class="empty-sub">Verifique se o backend está online.</div></div>`;
-    return;
-  }
-
-  const active=profiles.filter(p=>p.active);
-  const activeIds=new Set(active.map(p=>p.platform_id));
-  const reports={};
-  rawReports.forEach(r=>{if(activeIds.has(r.channel_id))reports[r.channel_id]=r;});
-  const rList=Object.values(reports);
-  const crises=rList.filter(r=>r.crisis_alert&&activeIds.has(r.channel_id));
-  const scores=rList.map(r=>r.overall_score).filter(s=>s!==null&&s!==undefined);
-
-  document.getElementById('kpi-total').textContent=active.length;
-  document.getElementById('kpi-score').textContent=scores.length?(scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(2):'—';
-  document.getElementById('kpi-crisis').textContent=crises.length;
-  document.getElementById('kpi-comments').textContent=fmt(rList.reduce((a,r)=>a+(r.comments_analyzed||0),0));
-
-  const sc=parseFloat(document.getElementById('kpi-score').textContent);
-  if(!isNaN(sc))document.getElementById('kpi-score').style.color=scoreColor(sc);
-
-  const crisisBox=document.getElementById('crisis-global');
-  if(crises.length){
-    crisisBox.style.display='flex';
-    document.getElementById('crisis-global-title').textContent=`${crises.length} perfil(s) em situação de crise`;
-    document.getElementById('crisis-global-msg').textContent=crises.map(c=>c.profile_name).join(', ');
-  }else{
-    crisisBox.style.display='none';
-    document.getElementById('crisis-global-msg').textContent='';
-  }
-
-  if(!active.length){
-    grid.innerHTML=`<div class="empty" style="grid-column:1/-1">${emptySvg('empty')}<div class="empty-title">Nenhum perfil monitorado</div><div class="empty-sub">Adicione um político para iniciar o monitoramento automático.</div><button class="btn-empty" onclick="openModal()">+ Adicionar Perfil</button></div>`;
-    return;
-  }
-
-  const instagramProfiles=active.filter(p=>p.platform==='instagram');
-  const instagramPosts={};
-  await Promise.all(instagramProfiles.map(async p=>{
-    try{
-      const data=await apiFetch(`/instagram/posts/${p.platform_id}`);
-      instagramPosts[p.platform_id]=data.posts||[];
-    }catch{
-      instagramPosts[p.platform_id]=[];
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pulse — Inteligência Política</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --ink:      #080b12;
+      --ink2:     #0c1018;
+      --ink3:     #111722;
+      --ink4:     #161d2e;
+      --border:   rgba(255,255,255,0.06);
+      --border2:  rgba(255,255,255,0.11);
+      --text:     #dce6f0;
+      --text2:    #7a8ba0;
+      --text3:    #3a4a5c;
+      --cyan:     #00d4ff;
+      --cyan-dim: rgba(0,212,255,0.12);
+      --cyan-bd:  rgba(0,212,255,0.25);
+      --green:    #00e5a0;
+      --green-dim:rgba(0,229,160,0.1);
+      --red:      #ff5470;
+      --red-dim:  rgba(255,84,112,0.1);
+      --red-bd:   rgba(255,84,112,0.3);
+      --amber:    #ffb340;
+      --amber-dim:rgba(255,179,64,0.1);
+      --font-d:   'DM Serif Display', serif;
+      --font-b:   'Manrope', sans-serif;
+      --font-m:   'DM Mono', monospace;
+      --critical: #ff3860;
+      --high:     #ffb340;
+      --medium:   #00d4ff;
+      --low:      #3a4a5c;
     }
-  }));
-
-  grid.innerHTML=active.map(p=>{
-    const isInsta=p.platform==='instagram';
-    const r=reports[p.platform_id];
-    const pos=r?.positive_pct||0,neu=r?.neutral_pct||0,neg=r?.negative_pct||0;
-    const score=r?.overall_score??null;
-    const col=score!==null?scoreColor(score):'var(--text3)';
-    const isCrisis=r?.crisis_alert;
-
-    if(isInsta){
-      const posts=instagramPosts[p.platform_id]||[];
-      const analyzed=posts.filter(x=>x.sentiment);
-      const hasSentiment=analyzed.length>0;
-      let instaBody='';
-      if(hasSentiment){
-        const ipos=analyzed.filter(x=>x.sentiment==='positive').length;
-        const ineg=analyzed.filter(x=>x.sentiment==='negative').length;
-        const ineu=analyzed.filter(x=>x.sentiment==='neutral').length;
-        const total=analyzed.length;
-        const iposPct=(ipos/total)*100;
-        const inegPct=(ineg/total)*100;
-        const ineuPct=(ineu/total)*100;
-        const iscore=(ipos-ineg)/total;
-        const icol=scoreColor(iscore);
-        instaBody=`
-        <div class="pol-score-row">
-          <div class="score-big" style="color:${icol}">${iscore.toFixed(2)}</div>
-          <div class="score-desc"><strong style="color:${icol}">${iposPct.toFixed(0)}% positivo</strong>${fmt(posts.length)} posts coletados · ${fmt(total)} analisados</div>
-        </div>
-        <div class="sent-bar"><div class="sb-pos" style="width:${iposPct}%"></div><div class="sb-neu" style="width:${ineuPct}%"></div><div class="sb-neg" style="width:${inegPct}%"></div></div>
-        <div class="sent-labels"><span style="color:var(--green)">${iposPct.toFixed(1)}%</span><span style="color:var(--amber)">${ineuPct.toFixed(1)}%</span><span style="color:var(--red)">${inegPct.toFixed(1)}%</span></div>
-        <div class="pol-stats">
-          <div class="ps"><div class="ps-l">Posts</div><div class="ps-v">${fmt(posts.length)}</div></div>
-          <div class="ps"><div class="ps-l">Likes méd.</div><div class="ps-v">${fmt(Math.round(posts.reduce((a,x)=>a+(x.likes_count||0),0)/(posts.length||1)))}</div></div>
-          <div class="ps"><div class="ps-l">Coment.</div><div class="ps-v">${fmt(posts.reduce((a,x)=>a+(x.comments_count||0),0))}</div></div>
-        </div>`;
-      }else{
-        instaBody=`<div class="action-row">${pill('coletar posts','purple','refresh',`event.stopPropagation();collectInstagram('${p.platform_id}','${p.name}')`)}</div>`;
-      }
-      return `<div class="pol-card" onclick="showInstagram('${p.platform_id}','${p.name}')">
-        <div class="pol-top">
-          <div class="pol-av" style="border-color:rgba(131,58,180,0.4);color:#c77dff">${initials(p.name)}</div>
-          <div class="pol-info">
-            <div class="pol-name">${p.name}</div>
-            <div class="pol-plat">${platformBadge('instagram',p.platform_id)}</div>
-          </div>
-          <div class="pol-badge badge-insta">ativo</div>
-        </div>
-        ${instaBody}
-        <div class="pol-footer">
-          <span class="pol-time">@${p.platform_id}</span>
-          <button type="button" class="pol-remove" onclick="event.stopPropagation();deleteProfile('${p.id}','${p.name}')">${icons.close}<span>remover</span></button>
-        </div>
-      </div>`;
-    }
-
-    return `<div class="pol-card ${isCrisis?'alert':''}" onclick="showProfile('${p.platform_id}','${p.name}')">
-      <div class="pol-top">
-        <div class="pol-av">${initials(p.name)}</div>
-        <div class="pol-info">
-          <div class="pol-name">${p.name}</div>
-          <div class="pol-plat">${platformBadge('youtube',p.platform_id)}</div>
-        </div>
-        <div class="pol-badge ${isCrisis?'badge-crisis':'badge-ok'}">${isCrisis?'⚡ crise':'● ativo'}</div>
-      </div>
-      ${r?`
-      <div class="pol-score-row">
-        <div class="score-big" style="color:${col}">${score!==null?score.toFixed(2):'—'}</div>
-        <div class="score-desc"><strong style="color:${col}">${pos.toFixed(0)}% positivo</strong>${(r.comments_analyzed||0).toLocaleString('pt-BR')} comentários analisados</div>
-      </div>
-      <div class="sent-bar"><div class="sb-pos" style="width:${pos}%"></div><div class="sb-neu" style="width:${neu}%"></div><div class="sb-neg" style="width:${neg}%"></div></div>
-      <div class="sent-labels"><span style="color:var(--green)">${pos.toFixed(1)}%</span><span style="color:var(--amber)">${neu.toFixed(1)}%</span><span style="color:var(--red)">${neg.toFixed(1)}%</span></div>
-      <div class="pol-stats">
-        <div class="ps"><div class="ps-l">Views</div><div class="ps-v">${fmt(r.channel_metrics?.total_views)}</div></div>
-        <div class="ps"><div class="ps-l">Likes</div><div class="ps-v">${fmt(r.channel_metrics?.total_likes)}</div></div>
-        <div class="ps"><div class="ps-l">Engaj.</div><div class="ps-v">${(r.channel_metrics?.engagement_rate_pct||0).toFixed(1)}%</div></div>
-      </div>
-      <div class="pol-footer">
-        <span class="pol-time">Última análise: ${timeAgo(r.created_at)}</span>
-        <button type="button" class="pol-remove" onclick="event.stopPropagation();deleteProfile('${p.id}','${p.name}')">${icons.close}<span>remover</span></button>
-      </div>`:`<div class="action-row"><span style="color:var(--text3);font-size:12px;font-family:var(--font-m)">sem análise</span>${pill('analisar agora','cyan','play',`event.stopPropagation();analyzeNow('${p.platform_id}','${p.name}')`)}</div>`}
-    </div>`;
-  }).join('');
-}
-
-async function showProfile(channelId,name){
-  document.querySelectorAll('.view').forEach(x=>x.classList.remove('on'));
-  document.getElementById('view-profile').classList.add('on');
-  document.getElementById('pf-name').textContent=name;
-  document.getElementById('pf-av').textContent=initials(name);
-  document.getElementById('pf-narrative').textContent='Carregando análise...';
-
-  let r;
-  try{
-    const data=await apiFetch(`/reports/${channelId}?limit=8`);
-    r=(data.reports||[])[0];
-  }catch{
-    document.getElementById('pf-narrative').textContent='Erro ao carregar dados.';
-    return;
-  }
-
-  if(!r){document.getElementById('pf-narrative').textContent='Nenhum dado disponível.';return;}
-
-  const score=r.overall_score??0;
-  const col=scoreColor(score);
-  document.getElementById('pf-score-num').textContent=score.toFixed(2);
-  document.getElementById('pf-score-num').style.color=col;
-  document.getElementById('pf-meta').innerHTML=`
-    <span class="pf-chip">YouTube</span>
-    <span class="pf-chip">${fmt(r.channel_metrics?.total_views)} views</span>
-    <span class="pf-chip">${fmt(r.comments_analyzed)} comentários</span>
-    <span class="pf-chip">${timeAgo(r.created_at)}</span>`;
-
-  if(r.crisis_alert){document.getElementById('pf-crisis').style.display='flex';document.getElementById('pf-crisis-msg').textContent=r.crisis_reason||'Sentimento negativo elevado.';}
-  else{document.getElementById('pf-crisis').style.display='none';}
-
-  document.getElementById('pf-narrative').textContent=r.narrative||'—';
-  const pos=r.positive_pct||0,neu=r.neutral_pct||0,neg=r.negative_pct||0;
-  document.getElementById('pf-pos').textContent=pos.toFixed(1)+'%';
-  document.getElementById('pf-neu').textContent=neu.toFixed(1)+'%';
-  document.getElementById('pf-neg').textContent=neg.toFixed(1)+'%';
-
-  if(donutChart)donutChart.destroy();
-  donutChart=new Chart(document.getElementById('pf-donut'),{type:'doughnut',data:{datasets:[{data:[pos,neu,neg],backgroundColor:['rgba(0,229,160,.85)','rgba(255,179,64,.85)','rgba(255,84,112,.85)'],borderWidth:0}]},options:{cutout:'75%',plugins:{legend:{display:false}},animation:{duration:700}}});
-
-  const m=r.channel_metrics||{};
-  document.getElementById('pf-videos').textContent=fmt(m.total_videos);
-  document.getElementById('pf-comments').textContent=fmt(r.comments_analyzed);
-  document.getElementById('pf-views').textContent=fmt(m.total_views);
-  document.getElementById('pf-eng').textContent=(m.engagement_rate_pct||0).toFixed(1)+'%';
-
-  const themes=r.main_themes||[];
-  const widths=[100,80,65,50,38];
-  document.getElementById('pf-themes').innerHTML=themes.map((t,i)=>`<div class="theme-item"><span class="theme-rank">${i+1}</span><span class="theme-name">${t}</span><div class="theme-bar-wrap"><div class="theme-bar" style="width:${widths[i]||30}%"></div></div></div>`).join('');
-
-  document.getElementById('pf-qpos').textContent=r.top_positive_quote||'—';
-  document.getElementById('pf-qneg').textContent=r.top_negative_quote||'—';
-
-  if(histChart)histChart.destroy();
-  const hist=r.history||[pos];
-  const labels=hist.map((_,i)=>i===hist.length-1?'hoje':`-${hist.length-1-i}d`);
-  histChart=new Chart(document.getElementById('pf-history'),{type:'line',data:{labels,datasets:[{label:'Positivo %',data:hist,borderColor:'rgba(0,229,160,.8)',backgroundColor:'rgba(0,229,160,.06)',tension:.45,fill:true,pointRadius:3,pointBackgroundColor:'rgba(0,229,160,.8)'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#3a4a5c',font:{size:10,family:'DM Mono'}},grid:{color:'rgba(255,255,255,.04)'}},y:{ticks:{color:'#3a4a5c',font:{size:10,family:'DM Mono'},callback:v=>v+'%'},grid:{color:'rgba(255,255,255,.04)'},min:0,max:100}}}});
-}
-
-async function showInstagram(username, name){
-  document.querySelectorAll('.view').forEach(x=>x.classList.remove('on'));
-  document.getElementById('view-instagram').classList.add('on');
-  document.getElementById('ig-name').textContent=name;
-  document.getElementById('ig-av').textContent=initials(name);
-  document.getElementById('ig-posts-list').innerHTML='<div class="loading"><div class="spin"></div>Carregando posts...</div>';
-  document.getElementById('ig-narrative-card').style.display='none';
-  document.getElementById('ig-sentiment-row').style.display='none';
-  const igThemesCardReset=document.getElementById('ig-themes').closest('.card');
-  if(igThemesCardReset)igThemesCardReset.style.display='block';
-  document.getElementById('ig-quotes-card').style.display='none';
-  document.getElementById('ig-crisis').style.display='none';
-  document.getElementById('ig-score-num').textContent='—';
-  document.getElementById('ig-audience-content').innerHTML='<div class="loading"><div class="spin"></div>Carregando audiência...</div>';
-
-  try{
-    const data = await apiFetch(`/instagram/posts/${username}`);
-    const posts = data.posts || [];
-    const analyzed = posts.filter(p=>p.sentiment);
-    const hasSentiment = analyzed.length > 0;
-
-    document.getElementById('ig-meta').innerHTML=`
-      <span class="pf-chip">📸 Instagram</span>
-      <span class="pf-chip">@${username}</span>
-      <span class="pf-chip">${posts.length} posts coletados</span>
-      ${hasSentiment
-        ? `<span class="pf-chip" style="color:var(--green)">✓ analisado</span>`
-        : pill('analisar sentimento','purple','lightning',`analyzeInstagram('${username}','${name}')`)}`;
-
-    // Carrega comentários
-    try{
-      const commentsData = await apiFetch(`/instagram/comments/${username}`);
-      const comments = commentsData.comments || [];
-      renderAudienceSection(comments, username, name);
-    }catch{
-      document.getElementById('ig-audience-content').innerHTML='<div style="color:var(--red);font-size:13px;padding:16px">Erro ao carregar comentários.</div>';
-    }
-
-    if(!posts.length){
-      document.getElementById('ig-posts-list').innerHTML=`<div style="color:var(--text3);font-size:13px;text-align:center;padding:24px">${emptySvg('empty')}<div style="margin-bottom:14px">Nenhum post coletado ainda.</div>${pill('Coletar agora','purple','refresh',`collectInstagram('${username}','${name}')`)}</div>`;
-      return;
-    }
-
-    if(hasSentiment){
-      const pos=analyzed.filter(p=>p.sentiment==='positive').length;
-      const neu=analyzed.filter(p=>p.sentiment==='neutral').length;
-      const neg=analyzed.filter(p=>p.sentiment==='negative').length;
-      const total=analyzed.length;
-      const posPct=((pos/total)*100).toFixed(1);
-      const neuPct=((neu/total)*100).toFixed(1);
-      const negPct=((neg/total)*100).toFixed(1);
-      const score=((pos-neg)/total).toFixed(2);
-      const col=parseFloat(score)>=0.4?'var(--green)':parseFloat(score)<=-0.1?'var(--red)':'var(--amber)';
-
-      document.getElementById('ig-score-num').textContent=score;
-      document.getElementById('ig-score-num').style.color=col;
-      document.getElementById('ig-pos').textContent=posPct+'%';
-      document.getElementById('ig-neu').textContent=neuPct+'%';
-      document.getElementById('ig-neg').textContent=negPct+'%';
-      document.getElementById('ig-sentiment-row').style.display='grid';
-
-      if(igDonutChart)igDonutChart.destroy();
-      igDonutChart=new Chart(document.getElementById('ig-donut'),{type:'doughnut',data:{datasets:[{data:[posPct,neuPct,negPct],backgroundColor:['rgba(0,229,160,.85)','rgba(255,179,64,.85)','rgba(255,84,112,.85)'],borderWidth:0}]},options:{cutout:'75%',plugins:{legend:{display:false}},animation:{duration:700}}});
-
-      const summaryPost=posts.find(p=>p.ai_summary);
-      if(summaryPost){
-        document.getElementById('ig-narrative').textContent=summaryPost.ai_summary;
-        document.getElementById('ig-narrative-card').style.display='block';
-      }
-
-      const mostPos=posts.filter(p=>p.sentiment==='positive'&&p.caption).sort((a,b)=>(b.likes_count||0)-(a.likes_count||0))[0];
-      const mostNeg=posts.filter(p=>p.sentiment==='negative'&&p.caption).sort((a,b)=>(b.likes_count||0)-(a.likes_count||0))[0];
-      if(mostPos||mostNeg){
-        document.getElementById('ig-qpos').textContent=mostPos?.caption?.slice(0,200)||'—';
-        document.getElementById('ig-qneg').textContent=mostNeg?.caption?.slice(0,200)||'—';
-        document.getElementById('ig-quotes-card').style.display='block';
-      }
-
-      if(parseFloat(negPct)>60){
-        document.getElementById('ig-crisis').style.display='flex';
-        document.getElementById('ig-crisis-msg').textContent=`${negPct}% das captions com tom negativo.`;
-      }
-
-      document.getElementById('ig-themes').innerHTML='';
-      const igThemesCard=document.getElementById('ig-themes').closest('.card');
-      if(igThemesCard)igThemesCard.style.display='none';
-    }
-
-    const avgLikes=Math.round(posts.reduce((a,p)=>a+(p.likes_count||0),0)/posts.length);
-    const avgComments=Math.round(posts.reduce((a,p)=>a+(p.comments_count||0),0)/posts.length);
-    const avgViews=Math.round(posts.filter(p=>p.video_view_count).reduce((a,p)=>a+(p.video_view_count||0),0)/(posts.filter(p=>p.video_view_count).length||1));
-    const sorted=posts.sort((a,b)=>new Date(b.posted_at)-new Date(a.posted_at));
-
-    document.getElementById('ig-avg-likes').textContent=fmt(avgLikes);
-    document.getElementById('ig-avg-comments').textContent=fmt(avgComments);
-    document.getElementById('ig-avg-views').textContent=avgViews?fmt(avgViews):'—';
-    document.getElementById('ig-last-post').textContent=sorted[0]?timeAgo(sorted[0].posted_at):'—';
-
-    if(igChart)igChart.destroy();
-    const chartPosts=sorted.slice(0,8).reverse();
-    igChart=new Chart(document.getElementById('ig-chart'),{type:'bar',data:{labels:chartPosts.map(p=>fmtDate(p.posted_at)),datasets:[{label:'Likes',data:chartPosts.map(p=>p.likes_count||0),backgroundColor:'rgba(199,125,255,0.6)',borderColor:'rgba(199,125,255,1)',borderWidth:1,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#3a4a5c',font:{size:10,family:'DM Mono'}},grid:{color:'rgba(255,255,255,.04)'}},y:{ticks:{color:'#3a4a5c',font:{size:10,family:'DM Mono'}},grid:{color:'rgba(255,255,255,.04)'}}}}});
-
-    const sentColor={positive:'var(--green)',neutral:'var(--amber)',negative:'var(--red)'};
-    document.getElementById('ig-posts-list').innerHTML=sorted.slice(0,50).map(p=>`
-      <div class="insta-post">
-        <div class="insta-post-top">
-          <span class="insta-type">${p.post_type||'Post'}</span>
-          ${p.sentiment?`<span style="font-size:10px;font-family:var(--font-m);color:${sentColor[p.sentiment]||'var(--text3)'};padding:2px 8px;background:var(--ink);border-radius:4px;border:1px solid currentColor">● ${p.sentiment}</span>`:''}
-          <span class="insta-date">${fmtDate(p.posted_at)}</span>
-        </div>
-        <div class="insta-caption">${p.caption||'(sem legenda)'}</div>
-        <div class="insta-stats">
-          <div class="insta-stat">❤️ <span>${fmt(p.likes_count||0)}</span></div>
-          <div class="insta-stat">💬 <span>${fmt(p.comments_count||0)}</span></div>
-          ${p.video_view_count?`<div class="insta-stat">▶️ <span>${fmt(p.video_view_count)}</span></div>`:''}
-          <a href="${p.url}" target="_blank" style="margin-left:auto;font-size:11px;color:#c77dff;text-decoration:none;font-family:var(--font-m)">ver post →</a>
-        </div>
-      </div>`).join('');
-
-  }catch(e){
-    document.getElementById('ig-posts-list').innerHTML=`<div style="color:var(--red);font-size:13px;padding:16px">Erro ao carregar posts: ${e.message}</div>`;
-  }
-}
-
-
-function escapeHtml(value){
-  return String(value??'')
-    .replace(/&/g,'&amp;')
-    .replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;')
-    .replace(/\"/g,'&quot;')
-    .replace(/'/g,'&#039;');
-}
-
-function sentimentBadge(sentiment){
-  const colorMap={positive:'var(--green)',neutral:'var(--amber)',negative:'var(--red)'};
-  const labelMap={positive:'positivo',neutral:'neutro',negative:'negativo'};
-  const color=colorMap[sentiment]||'var(--text3)';
-  const label=labelMap[sentiment]||sentiment||'sem análise';
-  return `<span style="font-size:10px;font-family:var(--font-m);color:${color};padding:2px 8px;background:var(--ink);border-radius:4px;border:1px solid currentColor">● ${label}</span>`;
-}
-
-function renderAudienceSection(comments, username, name){
-  const box=document.getElementById('ig-audience-content');
-  if(!box)return;
-
-  if(igCommentsChart){igCommentsChart.destroy();igCommentsChart=null;}
-
-  if(!comments.length){
-    box.innerHTML=`<div style="color:var(--text3);font-size:13px;text-align:center;padding:24px">${emptySvg('empty')}<div style="margin-bottom:14px">Nenhum comentário coletado ainda.</div>${pill('Coletar comentários','purple','refresh',"collectComments('"+username+"','"+name+"')")}</div>`;
-    return;
-  }
-
-  const analyzed=comments.filter(c=>c.sentiment);
-  if(!analyzed.length){
-    box.innerHTML=`
-      <div class="metric-grid" style="margin-bottom:14px">
-        <div class="metric-item"><div class="metric-lbl">Comentários coletados</div><div class="metric-val">${fmt(comments.length)}</div></div>
-        <div class="metric-item"><div class="metric-lbl">Status</div><div class="metric-val" style="font-size:16px;color:var(--amber)">pendente de análise</div></div>
-      </div>
-      <div class="action-row">${pill('Analisar audiência','cyan','lightning',"analyzeComments('"+username+"','"+name+"')")}</div>`;
-    return;
-  }
-
-  const pos=analyzed.filter(c=>c.sentiment==='positive').length;
-  const neu=analyzed.filter(c=>c.sentiment==='neutral').length;
-  const neg=analyzed.filter(c=>c.sentiment==='negative').length;
-  const total=analyzed.length;
-  const posPct=(pos/total)*100;
-  const neuPct=(neu/total)*100;
-  const negPct=(neg/total)*100;
-  const score=(pos-neg)/total;
-  const col=scoreColor(score);
-  const topComments=[...analyzed]
-    .sort((a,b)=>(b.likes_count||0)-(a.likes_count||0))
-    .slice(0,3);
-
-  box.innerHTML=`
-    <div class="g12" style="margin-bottom:16px">
-      <div>
-        <div class="pol-score-row">
-          <div class="score-big" id="ig-audience-score" style="color:${col}">${score.toFixed(2)}</div>
-          <div class="score-desc"><strong style="color:${col}">${posPct.toFixed(0)}% positivo</strong>${fmt(comments.length)} comentários coletados · ${fmt(total)} analisados</div>
-        </div>
-        <div class="sent-bar"><div class="sb-pos" style="width:${posPct}%"></div><div class="sb-neu" style="width:${neuPct}%"></div><div class="sb-neg" style="width:${negPct}%"></div></div>
-        <div class="sent-labels"><span style="color:var(--green)">${posPct.toFixed(1)}% positivo</span><span style="color:var(--amber)">${neuPct.toFixed(1)}% neutro</span><span style="color:var(--red)">${negPct.toFixed(1)}% negativo</span></div>
-        <div class="metric-grid">
-          <div class="metric-item"><div class="metric-lbl">Positivos</div><div class="metric-val" style="color:var(--green)">${fmt(pos)}</div></div>
-          <div class="metric-item"><div class="metric-lbl">Neutros</div><div class="metric-val" style="color:var(--amber)">${fmt(neu)}</div></div>
-          <div class="metric-item"><div class="metric-lbl">Negativos</div><div class="metric-val" style="color:var(--red)">${fmt(neg)}</div></div>
-          <div class="metric-item"><div class="metric-lbl">Curtidas nos comentários</div><div class="metric-val">${fmt(analyzed.reduce((a,c)=>a+(c.likes_count||0),0))}</div></div>
-        </div>
-      </div>
-      <div>
-        <div class="donut-wrap">
-          <canvas class="donut-c" id="ig-comments-donut"></canvas>
-          <div class="donut-leg">
-            <div class="dl-item"><div class="dl-dot" style="background:var(--green)"></div><div class="dl-name">Positivo</div><div class="dl-pct" style="color:var(--green)">${posPct.toFixed(1)}%</div></div>
-            <div class="dl-item"><div class="dl-dot" style="background:var(--amber)"></div><div class="dl-name">Neutro</div><div class="dl-pct" style="color:var(--amber)">${neuPct.toFixed(1)}%</div></div>
-            <div class="dl-item"><div class="dl-dot" style="background:var(--red)"></div><div class="dl-name">Negativo</div><div class="dl-pct" style="color:var(--red)">${negPct.toFixed(1)}%</div></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="card-hd" style="margin-top:4px">Top comentários por curtidas</div>
-    <div class="insta-posts" style="margin-bottom:14px">
-      ${topComments.map(c=>`
-        <div class="insta-post">
-          <div class="insta-post-top">
-            ${sentimentBadge(c.sentiment)}
-            <span class="insta-type">@${escapeHtml(c.commenter_username||'usuario')}</span>
-            <span class="insta-date">${c.collected_at?fmtDate(c.collected_at):'—'}</span>
-          </div>
-          <div class="insta-caption">${escapeHtml(c.text||'(sem texto)')}</div>
-          <div class="insta-stats">
-            <div class="insta-stat">❤️ <span>${fmt(c.likes_count||0)}</span></div>
-            ${c.post_url?`<a href="${escapeHtml(c.post_url)}" target="_blank" style="margin-left:auto;font-size:11px;color:#c77dff;text-decoration:none;font-family:var(--font-m)">ver post →</a>`:''}
-          </div>
-        </div>`).join('')}
-    </div>
-    <div class="action-row">${pill('Atualizar','purple','refresh',"collectComments('"+username+"','"+name+"')")}</div>`;
-
-  igCommentsChart=new Chart(document.getElementById('ig-comments-donut'),{type:'doughnut',data:{datasets:[{data:[posPct,neuPct,negPct],backgroundColor:['rgba(0,229,160,.85)','rgba(255,179,64,.85)','rgba(255,84,112,.85)'],borderWidth:0}]},options:{responsive:false,maintainAspectRatio:false,cutout:'75%',plugins:{legend:{display:false}},animation:{duration:700}}});
-}
-
-async function collectComments(username, name){
-  toast(`Coletando comentários de @${username}...`);
-  showProgress('Coletando comentários...', 'Buscando comentários dos posts via Apify');
-  try{
-    const data = await apiFetch(`/collect/comments/${username}?posts_limit=10&comments_per_post=20`, 'POST');
-    toast(`✓ ${data.comments_saved} comentários salvos!`);
-    showInstagram(username, name);
-  }catch{toast('Erro na coleta','err');}
-  finally{hideProgress();}
-}
-
-async function analyzeComments(username, name){
-  toast(`Analisando audiência de @${username}...`);
-  showProgress('Analisando audiência...', 'Claude está classificando os comentários');
-  try{
-    const data = await apiFetch(`/analyze/comments/${username}`, 'POST');
-    toast(`✓ ${data.comments_analyzed} comentários analisados!`);
-    showInstagram(username, name);
-  }catch{toast('Erro na análise','err');}
-  finally{hideProgress();}
-}
-
-async function analyzeInstagram(username, name){
-  toast(`Analisando sentimento de @${username}...`);
-  showProgress('Analisando discurso...', 'Claude está classificando as captions');
-  try{
-    const data = await apiFetch(`/analyze/instagram/${username}`, 'POST');
-    toast(`✓ ${data.posts_analyzed} posts de ${name} analisados!`);
-    showInstagram(username, name);
-  }catch{toast('Erro na análise','err');}
-  finally{hideProgress();}
-}
-
-async function collectInstagram(username, name){
-  toast(`Coletando posts de @${username}...`);
-  showProgress('Coletando posts...', 'Buscando os últimos posts via Apify');
-  try{
-    const data = await apiFetch(`/collect/instagram/${username}?limit=50`, 'POST');
-    toast(`✓ ${data.posts_saved} posts de ${name} salvos!`);
-    showInstagram(username, name);
-  }catch{toast('Erro na coleta','err');}
-  finally{hideProgress();}
-}
-
-function showView(v){
-  document.querySelectorAll('.view').forEach(x=>x.classList.remove('on'));
-  document.getElementById('view-'+v).classList.add('on');
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('on'));
-  if(v==='overview'){loadOverview();document.querySelector('.nav-item').classList.add('on');}
-}
-
-function updateIdField(platform){
-  const label=document.getElementById('m-id-label');
-  const input=document.getElementById('m-id');
-  const hint=document.getElementById('m-id-hint');
-  if(platform==='instagram'){
-    label.textContent='Username do Instagram';
-    input.placeholder='lulaoficial';
-    hint.textContent='Só o username, sem @ (ex: lulaoficial)';
-  }else{
-    label.textContent='Channel ID';
-    input.placeholder='UC8hGUtfEgvvnp6IaHSAg1OQ';
-    hint.textContent='ID do canal do YouTube (começa com UC...)';
-  }
-}
-
-function openModal(){document.getElementById('modal').classList.add('on')}
-function closeModal(){document.getElementById('modal').classList.remove('on')}
-
-async function saveProfile(){
-  const name=document.getElementById('m-name').value.trim();
-  const platform=document.getElementById('m-plat').value;
-  const id=document.getElementById('m-id').value.trim();
-  if(!name||!id){toast('Preencha todos os campos','err');return;}
-  const btn=document.getElementById('btn-save');
-  btn.disabled=true;btn.innerHTML=`${saveSpinner()}<span>Salvando...</span>`;
-  showProgress('Preparando monitoramento...', 'Salvando perfil...');
-  try{
-    await apiFetch('/profiles','POST',{name,platform,platform_id:id});
-    toast('Perfil adicionado!');
-    closeModal();
-
-    if(platform==='instagram'){
-      btn.innerHTML=`${saveSpinner()}<span>Coletando posts...</span>`;
-      document.getElementById('progress-msg').textContent='Coletando posts...';
-      const data=await apiFetch(`/collect/instagram/${id}?limit=50`,'POST');
-      toast(`✓ ${data.posts_saved} posts de ${name} coletados!`);
-    }else{
-      btn.innerHTML=`${saveSpinner()}<span>Analisando...</span>`;
-      document.getElementById('progress-msg').textContent='Analisando...';
-      await apiFetch(`/analyze/youtube/${id}?name=${encodeURIComponent(name)}&days=30`,'POST');
-      toast(`✓ Análise de ${name} concluída!`);
-    }
-    loadOverview();
-  }catch{toast('Erro ao salvar','err');closeModal();}
-  finally{btn.disabled=false;btn.innerHTML='Salvar & Analisar';hideProgress();}
-}
-
-async function analyzeNow(id,name){
-  toast(`Analisando ${name}...`);
-  try{await apiFetch(`/analyze/youtube/${id}?name=${encodeURIComponent(name)}&days=30`,'POST');toast(`✓ ${name} analisado!`);loadOverview();}
-  catch{toast('API offline','err');}
-}
-
-async function deleteProfile(id,name){
-  if(!confirm(`Remover ${name} do monitoramento?`))return;
-  try{
-    await apiFetch(`/profiles/${id}`,'DELETE');
-    toast(`${name} removido!`);
-    loadOverview();
-  }catch{toast('Erro ao remover','err');}
-}
-
-loadOverview();
-</script>
-</body>
-</html>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{background:var(--ink);color:var(--text);font-family:var(--font-b);font-size:14px;line-height:1.6;overflow-x:hidden;min-height:100vh}
+    body::before{content:'';position:fixed;inset:0;z-index:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;opacity:.4}
+    .glow-bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+    .glow-bg::before{content:'';position:absolute;top:-20%;left:50%;transform:translateX(-50%);width:700px;height:400px;border-radius:50%;background:radial-gradient(ellipse,rgba(0,212,255,0.04) 0%,transparent 70%)}
+    .glow-bg::after{content:'';position:absolute;bottom:-10%;right:-10%;width:500px;height:500px;border-radius:50%;background:radial-gradient(ellipse,rgba(0,229,160,0.03) 0%,transparent 70%)}
+    .sidebar{position:fixed;left:0;top:0;bottom:0;width:220px;background:var(--ink2);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:50}
+    .sidebar-logo{padding:28px 24px 20px;border-bottom:1px solid var(--border)}
+    .logo-word{font-family:var(--font-m);font-size:26px;font-style:italic;color:var(--text);letter-spacing:-.5px}
+    .logo-word span{color:var(--cyan)}
+    .logo-sub{font-size:10px;color:var(--text3);letter-spacing:.12em;text-transform:uppercase;margin-top:2px;font-weight:600}
+    .sidebar-nav{flex:1;padding:16px 12px;display:flex;flex-direction:column;gap:2px}
+    .nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;color:var(--text2);font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;position:relative}
+    .nav-item:hover{background:rgba(255,255,255,.04);color:var(--text)}
+    .nav-item.on{background:var(--cyan-dim);color:var(--cyan);border:1px solid var(--cyan-bd)}
+    .nav-item.on::before{content:'';position:absolute;left:-13px;top:50%;transform:translateY(-50%);width:3px;height:60%;border-radius:0 3px 3px 0;background:var(--cyan)}
+    .nav-icon{font-size:15px;width:18px;text-align:center}
+    .nav-section{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;padding:14px 12px 6px;font-weight:700}
+    .sidebar-footer{padding:16px 20px;border-top:1px solid var(--border)}
+    .api-pill{display:flex;align-items:center;gap:7px;padding:7px 10px;background:var(--ink3);border-radius:8px;border:1px solid var(--border)}
+    .api-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse-dot 2s ease infinite}
+    @keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+    .api-txt{font-size:11px;color:var(--text2);font-family:var(--font-m)}
+    .main{margin-left:220px;min-height:100vh;position:relative;z-index:1}
+    .topbar{padding:18px 36px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:rgba(8,11,18,.7);backdrop-filter:blur(20px);position:sticky;top:0;z-index:40}
+    .topbar-title{font-family:var(--font-d);font-size:20px;font-style:italic;color:var(--text)}
+    .topbar-right{display:flex;align-items:center;gap:12px}
+    .date-chip{font-family:var(--font-m);font-size:11px;color:var(--text2);padding:5px 10px;background:var(--ink3);border-radius:6px;border:1px solid var(--border)}
+    .btn-analyze{padding:8px 18px;background:linear-gradient(135deg,rgba(0,212,255,.15),rgba(0,229,160,.1));border:1px solid var(--cyan-bd);color:var(--cyan);border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font-b);transition:all .2s;letter-spacing:.03em}
+    .btn-analyze:hover{background:var(--cyan);color:var(--ink);transform:translateY(-1px)}
+    .topbar-left{display:flex;flex-direction:column;gap:2px}
+    .topbar-subtitle{font-size:11px;color:var(--text3);font-family:var(--font-m);line-height:1.2}
+    .content{padding:32px 36px}
+    .view{display:none;animation:fadeIn .3s ease}
+    .view.on{display:block}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+    .section-header{margin-bottom:24px}
+    .section-label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--cyan);margin-bottom:6px;font-family:var(--font-m)}
+    .section-title{font-family:var(--font-d);font-size:28px;font-style:italic;color:var(--text)}
+    .section-sub{font-size:13px;color:var(--text2);margin-top:4px}
+    .kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px}
+    .kpi{padding:20px 22px;background:var(--ink2);border:1px solid var(--border);border-radius:14px;position:relative;overflow:hidden;transition:border-color .2s}
+    .kpi:hover{border-color:var(--border2)}
+    .kpi::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--cyan-dim),transparent)}
+    .kpi-label{font-size:11px;color:var(--text2);font-weight:600;letter-spacing:.05em;text-transform:uppercase;margin-bottom:10px}
+    .kpi-value{font-family:var(--font-d);font-size:32px;color:var(--text);line-height:1;margin-bottom:4px}
+    .kpi-value.cyan{color:var(--cyan)}
+    .kpi-value.green{color:var(--green)}
+    .kpi-value.red{color:var(--red)}
+    .kpi-sub{font-size:11px;color:var(--text3);font-family:var(--font-m)}
+    .crisis-alert{display:flex;align-items:center;gap:14px;padding:14px 20px;border-radius:12px;background:var(--red-dim);border:1px solid var(--red-bd);margin-bottom:24px;animation:crisis-pulse 2s ease infinite}
+    @keyframes crisis-pulse{0%,100%{border-color:rgba(255,84,112,.3)}50%{border-color:rgba(255,84,112,.7);box-shadow:0 0 20px rgba(255,84,112,.1)}}
+    .crisis-ico{font-size:20px}
+    .crisis-body{flex:1}
+    .crisis-ttl{font-weight:700;color:var(--red);font-size:13px}
+    .crisis-msg{font-size:12px;color:var(--text2);margin-top:2px}
+    .crisis-chip{padding:4px 10px;background:var(--red-dim);border:1px solid var(--red-bd);border-radius:20px;font-size:11px;color:var(--red);font-weight:700;font-family:var(--font-m)}
+    .pol-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+    .pol-card{background:var(--ink2);border:1px solid var(--border);border-radius:16px;padding:22px;cursor:pointer;transition:all .25s;position:relative;overflow:hidden}
+    .pol-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--green));transform:scaleX(0);transform-origin:left;transition:transform .3s}
+    .pol-card:hover{border-color:var(--cyan-bd);transform:translateY(-4px);box-shadow:0 20px 40px rgba(0,0,0,.4)}
+    .pol-card:hover::before{transform:scaleX(1)}
+    .pol-card.alert{border-color:var(--red-bd)}
+    .pol-card.alert::before{background:var(--red);transform:scaleX(1)}
+    .pol-top{display:flex;align-items:flex-start;gap:14px;margin-bottom:18px}
+    .pol-av{width:48px;height:48px;border-radius:12px;background:var(--ink3);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-family:var(--font-d);font-size:16px;font-style:italic;color:var(--cyan);flex-shrink:0}
+    .pol-info{flex:1}
+    .pol-name{font-family:var(--font-d);font-size:17px;font-style:italic;color:var(--text)}
+    .pol-plat{font-size:11px;color:var(--text3);font-family:var(--font-m);margin-top:2px}
+    .pol-badge{padding:3px 9px;border-radius:20px;font-size:10px;font-weight:700;font-family:var(--font-m);letter-spacing:.04em}
+    .badge-ok{background:var(--green-dim);color:var(--green);border:1px solid rgba(0,229,160,.2)}
+    .badge-crisis{background:var(--red-dim);color:var(--red);border:1px solid var(--red-bd)}
+    .badge-insta{background:rgba(131,58,180,0.15);color:#c77dff;border:1px solid rgba(131,58,180,0.3)}
+    .pol-score-row{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+    .score-big{font-family:var(--font-d);font-size:36px;line-height:1}
+    .score-desc{font-size:11px;color:var(--text2)}
+    .score-desc strong{display:block;font-size:13px;font-weight:700}
+    .sent-bar{height:5px;border-radius:3px;overflow:hidden;background:var(--ink3);display:flex;margin-bottom:6px}
+    .sb-pos{background:var(--green);height:100%}
+    .sb-neu{background:var(--amber);height:100%}
+    .sb-neg{background:var(--red);height:100%}
+    .sent-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--text3);font-family:var(--font-m);margin-bottom:16px}
+    .pol-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+    .ps{padding:8px 10px;background:var(--ink3);border-radius:8px}
+    .ps-l{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-bottom:3px}
+    .ps-v{font-size:13px;font-weight:700;color:var(--text);font-family:var(--font-m)}
+    .pol-footer{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
+    .pol-time{font-size:10px;color:var(--text3);font-family:var(--font-m)}
+    .pol-remove{font-size:11px;color:var(--red);cursor:pointer;font-family:var(--font-m);opacity:.6;transition:opacity .2s;background:transparent;border:0;padding:0;display:inline-flex;align-items:center;gap:4px}
+    .pol-remove:hover{opacity:1}
+    .pol-remove svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+    .back{display:inline-flex;align-items:center;gap:6px;color:var(--text2);font-size:13px;cursor:pointer;margin-bottom:24px;transition:color .2s;font-weight:500}
+    .back:hover{color:var(--cyan)}
+    .pf-hero{background:var(--ink2);border:1px solid var(--border);border-radius:18px;padding:28px;margin-bottom:20px;display:flex;align-items:flex-start;gap:20px;position:relative;overflow:hidden}
+    .pf-av-big{width:72px;height:72px;border-radius:18px;background:var(--ink3);border:2px solid var(--cyan-bd);display:flex;align-items:center;justify-content:center;font-family:var(--font-d);font-size:24px;font-style:italic;color:var(--cyan);flex-shrink:0}
+    .pf-name{font-family:var(--font-d);font-size:32px;font-style:italic;color:var(--text);margin-bottom:4px}
+    .pf-meta-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+    .pf-chip{padding:3px 10px;background:var(--ink3);border-radius:20px;font-size:11px;color:var(--text2);font-family:var(--font-m);border:1px solid var(--border)}
+    .pf-score-block{margin-left:auto;text-align:right}
+    .pf-score-num{font-family:var(--font-d);font-size:48px;line-height:1}
+    .pf-score-lbl{font-size:11px;color:var(--text2);font-family:var(--font-m)}
+    .g2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+    .g12{display:grid;grid-template-columns:1fr 2fr;gap:16px;margin-bottom:16px}
+    @media(max-width:900px){.g
