@@ -313,6 +313,15 @@ body::before{content:'';position:fixed;inset:0;z-index:0;background-image:url("d
 
 /* ── AUDIENCE SECTION ── */
 .ig-audience-section{background:rgba(12,16,24,0.8);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:14px;backdrop-filter:blur(10px)}
+
+/* ── MENTIONS FEED ── */
+.mention-item{padding:14px 16px;background:var(--ink3);border-radius:6px;border:1px solid var(--border);margin-bottom:8px;transition:border-color .2s}
+.mention-item:hover{border-color:var(--border2)}
+.mention-top{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.mention-source{font-size:9px;font-family:var(--font-m);color:var(--cyan);padding:2px 7px;background:var(--cyan-dim);border-radius:3px;border:1px solid var(--cyan-bd);letter-spacing:.06em;text-transform:uppercase}
+.mention-date{font-size:9px;color:var(--text3);font-family:var(--font-m);margin-left:auto}
+.mention-title{font-size:13px;color:var(--text);font-weight:600;margin-bottom:4px;line-height:1.4}
+.mention-snippet{font-size:11px;color:var(--text2);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 </style>
 </head>
 <body>
@@ -326,7 +335,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;background-image:url("d
   <div class="sidebar-search">
     <div class="search-wrap">
       <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <input type="text" class="search-input" placeholder="Search entities, topics, keyword">
+      <input type="text" class="search-input" id="sidebar-search" placeholder="Search entities, topics, keyword" onkeydown="if(event.key==='Enter')searchMentions(this.value)">
     </div>
   </div>
   <div class="sidebar-nav">
@@ -592,6 +601,19 @@ body::before{content:'';position:fixed;inset:0;z-index:0;background-image:url("d
       <div class="card">
         <div class="card-hd">Latest Posts</div>
         <div class="insta-posts" id="ig-posts-list"></div>
+      </div>
+    </div>
+
+    <!-- MENTIONS VIEW -->
+    <div id="view-mentions" class="view">
+      <div class="back" onclick="showView('overview')">← Intelligence Deck</div>
+      <div class="section-header">
+        <div class="section-label">Live Intelligence Feed · Media Monitoring</div>
+        <div class="section-title" id="mentions-title">Searching...</div>
+        <div class="section-sub" id="mentions-sub"></div>
+      </div>
+      <div id="mentions-list">
+        <div class="loading"><div class="spin"></div>Scanning intelligence sources...</div>
       </div>
     </div>
 
@@ -1219,6 +1241,44 @@ async function saveProfile(){
 }
 
 loadOverview();
+
+async function searchMentions(query){
+  if(!query.trim())return;
+  document.querySelectorAll('.view').forEach(x=>x.classList.remove('on'));
+  document.getElementById('view-mentions').classList.add('on');
+  document.getElementById('topbar-title').textContent='Live Intelligence Feed';
+  document.getElementById('mentions-title').textContent=`"${query}"`;
+  document.getElementById('mentions-sub').textContent='Scanning news, blogs and media sources...';
+  document.getElementById('mentions-list').innerHTML='<div class="loading"><div class="spin"></div>Scanning intelligence sources...</div>';
+
+  try{
+    const data=await apiFetch(`/search/mentions?q=${encodeURIComponent(query)}&limit=10`);
+    const mentions=data.mentions||[];
+
+    if(!mentions.length){
+      document.getElementById('mentions-list').innerHTML=`<div style="text-align:center;padding:48px;color:var(--text3);font-family:var(--font-m);font-size:11px;letter-spacing:.06em">NO MENTIONS FOUND FOR "${query.toUpperCase()}"</div>`;
+      return;
+    }
+
+    document.getElementById('mentions-sub').textContent=`${mentions.length} mentions found · last 7 days`;
+
+    const sentColor={positive:'var(--green)',neutral:'var(--amber)',negative:'var(--red)'};
+    document.getElementById('mentions-list').innerHTML=mentions.map(m=>`
+      <div class="mention-item">
+        <div class="mention-top">
+          <span class="mention-source">${m.source||'unknown'}</span>
+          ${m.sentiment?`<span style="font-size:9px;font-family:var(--font-m);color:${sentColor[m.sentiment]||'var(--text3)'};padding:2px 7px;background:var(--ink);border-radius:3px;border:1px solid currentColor;letter-spacing:.06em;text-transform:uppercase">● ${m.sentiment}</span>`:''}
+          <span class="mention-date">${m.date||'—'}</span>
+        </div>
+        <div class="mention-title">${m.title||'—'}</div>
+        <div class="mention-snippet">${m.snippet||'—'}</div>
+        ${m.url?`<a href="${m.url}" target="_blank" style="display:inline-block;margin-top:8px;font-size:10px;color:var(--cyan);text-decoration:none;font-family:var(--font-m);letter-spacing:.04em">read full article →</a>`:''}
+      </div>`).join('');
+
+  }catch(e){
+    document.getElementById('mentions-list').innerHTML=`<div style="color:var(--red);font-size:12px;font-family:var(--font-m);padding:16px">Error: ${e.message}</div>`;
+  }
+}
 </script>
 </body>
 </html>
