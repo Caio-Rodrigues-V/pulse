@@ -378,6 +378,69 @@ body::before{content:'';position:fixed;inset:0;z-index:0;background-image:url("d
 .sim-empty-icon{font-size:32px;margin-bottom:12px;opacity:.5}
 .sim-empty-title{font-family:var(--font-d);font-size:18px;font-style:italic;color:var(--text2);margin-bottom:6px}
 .sim-empty-sub{font-size:11px;color:var(--text3);font-family:var(--font-m);letter-spacing:.04em}
+  /* ── WAR ROOM ── */
+.defcon-banner{
+  display:flex;align-items:center;gap:24px;
+  padding:20px 24px;border-radius:8px;
+  background:rgba(12,16,24,0.8);border:1px solid var(--border);
+  margin-bottom:16px;backdrop-filter:blur(10px);
+  position:relative;overflow:hidden;
+}
+.defcon-banner::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:currentColor;opacity:.6}
+.defcon-banner.defcon-red{border-color:var(--red-bd);box-shadow:0 0 30px rgba(255,84,112,.1)}
+.defcon-banner.defcon-amber{border-color:rgba(255,179,64,.3)}
+.defcon-banner.defcon-green{border-color:rgba(0,229,160,.2)}
+.defcon-left{display:flex;flex-direction:column;gap:2px;min-width:160px}
+.defcon-num{font-family:var(--font-d);font-size:32px;font-style:italic;line-height:1}
+.defcon-label{font-size:11px;font-family:var(--font-m);font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.defcon-bar-wrap{flex:1;display:flex;flex-direction:column;gap:6px}
+.defcon-bar-track{height:10px;background:var(--ink3);border-radius:2px;overflow:hidden;border:1px solid var(--border)}
+.defcon-bar-fill{height:100%;border-radius:2px;transition:width .8s ease;background:var(--text3)}
+.defcon-bar-meta{font-size:10px;color:var(--text3);font-family:var(--font-m);letter-spacing:.06em}
+.defcon-right{display:flex;flex-direction:column;gap:4px;text-align:right;min-width:120px}
+.defcon-meta-item{font-size:9px;color:var(--text3);font-family:var(--font-m);letter-spacing:.06em;text-transform:uppercase}
+.defcon-meta-item strong{display:block;color:var(--text);font-weight:700;font-size:11px;margin-top:2px}
+.defcon-loading{display:flex;align-items:center;gap:10px;color:var(--text2);font-family:var(--font-m);font-size:11px;padding:8px 0}
+
+.wr-profiles-grid{display:flex;flex-direction:column;gap:6px}
+.wr-profile-row{display:flex;align-items:center;gap:14px;padding:10px 14px;background:var(--ink3);border-radius:6px;border:1px solid var(--border);transition:border-color .2s}
+.wr-profile-row:hover{border-color:var(--border2)}
+.wr-profile-name{flex:1;font-family:var(--font-d);font-size:14px;font-style:italic;color:var(--text)}
+.wr-profile-stats{display:flex;align-items:center;gap:8px;font-size:12px;font-family:var(--font-m)}
+.wr-profile-status{font-size:9px;font-weight:700;font-family:var(--font-m);letter-spacing:.1em;padding:3px 9px;border-radius:3px;border:1px solid currentColor;text-transform:uppercase}
+
+.wr-main-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+@media(max-width:1100px){.wr-main-grid{grid-template-columns:1fr}}
+
+.wr-feed{display:flex;flex-direction:column;gap:8px;max-height:600px;overflow-y:auto}
+.wr-feed::-webkit-scrollbar{width:4px}
+.wr-feed::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+.wr-feed-item{padding:12px 14px;background:var(--ink3);border-radius:6px;border:1px solid var(--border);border-left:3px solid var(--red);transition:border-color .2s}
+.wr-feed-item:hover{border-color:var(--border2);border-left-color:var(--red)}
+.wr-feed-top{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.wr-feed-politician{font-size:10px;font-family:var(--font-m);color:var(--cyan);padding:2px 7px;background:var(--cyan-dim);border-radius:3px;border:1px solid var(--cyan-bd);letter-spacing:.04em;font-weight:600}
+.wr-feed-likes{font-size:10px;font-family:var(--font-m);color:var(--text3);letter-spacing:.04em}
+.wr-feed-time{font-size:9px;font-family:var(--font-m);color:var(--text3);margin-left:auto;letter-spacing:.04em}
+.wr-feed-text{font-family:var(--font-d);font-size:13px;font-style:italic;color:var(--text);line-height:1.5;margin-bottom:8px}
+.wr-feed-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.wr-feed-user{font-size:10px;font-family:var(--font-m);color:var(--text3);letter-spacing:.04em}
+.wr-feed-link{font-size:10px;color:var(--cyan);text-decoration:none;font-family:var(--font-m);letter-spacing:.04em}
+.wr-feed-respond{margin-left:auto;font-size:10px;color:var(--red);background:var(--red-dim);border:1px solid var(--red-bd);padding:4px 10px;border-radius:3px;cursor:pointer;font-family:var(--font-m);font-weight:700;letter-spacing:.06em;text-transform:uppercase;transition:all .2s}
+.wr-feed-respond:hover{background:var(--red);color:var(--ink)}
+
+.wr-response-card{padding:14px 16px;background:var(--ink3);border:1px solid var(--border);border-radius:6px;margin-bottom:10px;transition:border-color .2s}
+.wr-response-card:hover{border-color:var(--border2)}
+.wr-response-header{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.wr-response-strategy{font-size:9px;font-weight:700;font-family:var(--font-m);letter-spacing:.1em;padding:3px 9px;border-radius:3px;border:1px solid currentColor;text-transform:uppercase}
+.wr-response-tag{font-size:9px;font-family:var(--font-m);color:var(--text3);padding:3px 9px;border-radius:3px;border:1px solid var(--border2);letter-spacing:.06em;text-transform:uppercase}
+.wr-response-text{font-family:var(--font-d);font-size:14px;font-style:italic;color:var(--text);line-height:1.55;margin-bottom:12px;padding:10px 12px;background:var(--ink);border-radius:4px;border-left:2px solid var(--cyan)}
+.wr-resp-sim{margin-top:10px;padding:10px 12px;background:var(--ink);border-radius:4px;border:1px solid var(--border)}
+.wr-resp-sim-title{font-size:9px;font-weight:700;color:var(--cyan);font-family:var(--font-m);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
+.wr-resp-sim-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.wr-resp-sim-grid > div{display:flex;flex-direction:column;gap:2px}
+.wr-resp-sim-lbl{font-size:9px;color:var(--text3);font-family:var(--font-m);letter-spacing:.08em;text-transform:uppercase}
+.wr-resp-sim-val{font-family:var(--font-d);font-size:18px;color:var(--text)}
+.wr-response-actions{display:flex;gap:6px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
 </style>
 </head>
 <body>
@@ -403,10 +466,10 @@ body::before{content:'';position:fixed;inset:0;z-index:0;background-image:url("d
       <svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
       Narrative Engine
     </div>
-    <div class="nav-item" onclick="toast('Em breve','ok')">
-      <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-      War Room
-    </div>
+   <div class="nav-item" onclick="showView('warroom')">
+  <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+  War Room
+</div>
     <div class="nav-item" onclick="toast('Em breve','ok')">
       <svg class="nav-icon" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
       Bot Detection
@@ -831,7 +894,111 @@ body::before{content:'';position:fixed;inset:0;z-index:0;background-image:url("d
 
   </div>
 </div>
+<!-- WAR ROOM -->
+<div id="view-warroom" class="view">
+  <div class="section-header">
+    <div class="section-label">War Room · Crisis Command Center</div>
+    <div class="section-title">Real-Time Threat Operations</div>
+    <div class="section-sub">Live monitoring across all monitored entities · auto-refreshes every 60s</div>
+  </div>
 
+  <!-- DEFCON BANNER -->
+  <div id="defcon-banner" class="defcon-banner">
+    <div class="defcon-loading">
+      <div class="spin"></div>
+      <span>Calculating threat level...</span>
+    </div>
+  </div>
+
+  <!-- METRICS ROW -->
+  <div class="kpi-row" id="wr-metrics" style="display:none">
+    <div class="kpi red-accent">
+      <div class="kpi-header">
+        <div class="kpi-label">Negative Sentiment 24h</div>
+        <svg class="kpi-icon" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+      </div>
+      <div class="kpi-value red" id="wr-neg-pct">—</div>
+      <div class="kpi-sub">of analyzed comments</div>
+    </div>
+    <div class="kpi amber-accent">
+      <div class="kpi-header">
+        <div class="kpi-label">Comment Spike</div>
+        <svg class="kpi-icon" viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/></svg>
+      </div>
+      <div class="kpi-value amber" id="wr-spike">—</div>
+      <div class="kpi-sub">vs 7d baseline</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-header">
+        <div class="kpi-label">Comments 24h</div>
+        <svg class="kpi-icon" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </div>
+      <div class="kpi-value cyan" id="wr-volume">—</div>
+      <div class="kpi-sub">total volume</div>
+    </div>
+    <div class="kpi red-accent">
+      <div class="kpi-header">
+        <div class="kpi-label">Entities in Crisis</div>
+        <svg class="kpi-icon" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <div class="kpi-value red" id="wr-crisis-count">—</div>
+      <div class="kpi-sub">need attention</div>
+    </div>
+  </div>
+
+  <!-- PER-PROFILE STATUS GRID -->
+  <div class="card" style="margin-bottom:14px">
+    <div class="card-hd">Entity Status Matrix</div>
+    <div id="wr-profiles-grid" class="wr-profiles-grid">
+      <div class="loading"><div class="spin"></div>Loading entity status...</div>
+    </div>
+  </div>
+
+  <!-- TWO COLS: FEED + RESPONSE GEN -->
+  <div class="wr-main-grid">
+    <!-- LIVE NEGATIVE FEED -->
+    <div class="card">
+      <div class="card-hd" style="display:flex;justify-content:space-between;align-items:center">
+        <span>Live Negative Feed</span>
+        <span style="font-size:9px;color:var(--red);font-family:var(--font-m);animation:crisis-pulse 2s ease infinite">● MONITORING</span>
+      </div>
+      <div id="wr-feed" class="wr-feed">
+        <div class="loading"><div class="spin"></div>Loading hostile comments...</div>
+      </div>
+    </div>
+
+    <!-- EMERGENCY RESPONSE GENERATOR -->
+    <div class="card">
+      <div class="card-hd">⚡ Emergency Response Generator</div>
+      <div class="field">
+        <label>Politician under attack</label>
+        <select id="wr-target-politician">
+          <option value="">All entities (generic response)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Attack / Criticism received</label>
+        <textarea id="wr-attack" class="sim-textarea" style="min-height:90px" placeholder="Cole aqui o ataque, crítica ou conteúdo hostil que o político recebeu..."></textarea>
+      </div>
+      <div class="field">
+        <label>Additional context (optional)</label>
+        <input type="text" id="wr-context" placeholder="Ex: ataque do oponente em debate ao vivo">
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
+        <input type="checkbox" id="wr-simulate" checked style="accent-color:var(--cyan);width:16px;height:16px">
+        <label for="wr-simulate" style="font-size:11px;color:var(--text2);font-family:var(--font-m);letter-spacing:.04em;cursor:pointer;margin:0">
+          Test each response with 30 simulated voters (+45s, +$0.15)
+        </label>
+      </div>
+      <button class="btn-simulate" id="wr-gen-btn" onclick="generateResponse()" style="width:100%">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L4 14h7l-1 8 10-13h-7l1-7z"/></svg>
+        Generate 3 Strategic Responses
+      </button>
+
+      <div id="wr-responses" style="margin-top:18px"></div>
+    </div>
+  </div>
+</div>
 <!-- MODAL ADD ENTITY -->
 <div class="modal-overlay" id="modal">
   <div class="modal">
@@ -1616,6 +1783,10 @@ function showView(v){
   document.querySelectorAll('.view').forEach(x=>x.classList.remove('on'));
   document.getElementById('view-'+v).classList.add('on');
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('on'));
+
+  // Para o auto-refresh da War Room se estiver indo pra outra view
+  if(v!=='warroom'&&warRoomInterval){clearInterval(warRoomInterval);warRoomInterval=null;}
+
   if(v==='overview'){
     document.getElementById('topbar-title').textContent='Intelligence Deck';
     loadOverview();
@@ -1623,6 +1794,11 @@ function showView(v){
   }else if(v==='simulator'){
     document.getElementById('topbar-title').textContent='AI Simulator';
     document.querySelectorAll('.nav-item')[4].classList.add('on');
+  }else if(v==='warroom'){
+    document.getElementById('topbar-title').textContent='War Room';
+    document.querySelectorAll('.nav-item')[2].classList.add('on');
+    loadWarRoom();
+    warRoomInterval=setInterval(loadWarRoom,60000); // auto-refresh 60s
   }
 }
 
@@ -1691,6 +1867,211 @@ async function searchMentions(query){
 
   }catch(e){
     document.getElementById('mentions-list').innerHTML=`<div style="color:var(--red);font-size:12px;font-family:var(--font-m);padding:16px">Error: ${e.message}</div>`;
+  }
+}
+  // ── WAR ROOM ──
+let warRoomInterval=null;
+
+async function loadWarRoom(){
+  await Promise.all([
+    loadThreatLevel(),
+    loadNegativeFeed(),
+    loadWarRoomProfiles(),
+  ]);
+}
+
+async function loadThreatLevel(){
+  try{
+    const data=await apiFetch('/warroom/threat-level');
+    if(data.error){console.error(data.error);return;}
+
+    const banner=document.getElementById('defcon-banner');
+    const colorMap={red:'var(--red)',amber:'var(--amber)',green:'var(--green)'};
+    const color=colorMap[data.color]||'var(--text3)';
+    const dotPulse=data.defcon<=2?'animation:crisis-pulse 1.5s ease infinite':'';
+
+    banner.innerHTML=`
+      <div class="defcon-left">
+        <div class="defcon-num" style="color:${color};${dotPulse}">DEFCON ${data.defcon}</div>
+        <div class="defcon-label" style="color:${color}">${data.label}</div>
+      </div>
+      <div class="defcon-bar-wrap">
+        <div class="defcon-bar-track">
+          <div class="defcon-bar-fill" style="width:${data.threat_score}%;background:${color}"></div>
+        </div>
+        <div class="defcon-bar-meta">Threat Score: <strong style="color:${color}">${data.threat_score}/100</strong></div>
+      </div>
+      <div class="defcon-right">
+        <div class="defcon-meta-item"><span>Last updated</span><strong>${new Date(data.calculated_at).toLocaleTimeString('pt-BR')}</strong></div>
+      </div>`;
+    banner.className=`defcon-banner defcon-${data.color}`;
+    banner.style.display='flex';
+
+    // KPIs
+    document.getElementById('wr-metrics').style.display='grid';
+    document.getElementById('wr-neg-pct').textContent=data.negative_pct_24h.toFixed(1)+'%';
+    document.getElementById('wr-spike').textContent=data.spike_factor.toFixed(2)+'x';
+    document.getElementById('wr-spike').style.color=data.has_spike?'var(--red)':'var(--amber)';
+    document.getElementById('wr-volume').textContent=fmt(data.comments_24h);
+    document.getElementById('wr-crisis-count').textContent=`${data.crisis_profiles}/${data.total_profiles}`;
+
+    // Per-profile grid
+    const gridEl=document.getElementById('wr-profiles-grid');
+    const profiles=Object.values(data.per_profile||{});
+    if(!profiles.length){
+      gridEl.innerHTML='<div style="padding:24px;color:var(--text3);font-family:var(--font-m);font-size:11px;text-align:center">No recent activity (last 24h)</div>';
+    }else{
+      gridEl.innerHTML=profiles.sort((a,b)=>b.neg_pct-a.neg_pct).map(p=>{
+        const col=p.in_crisis?'var(--red)':p.neg_pct>30?'var(--amber)':'var(--green)';
+        const status=p.in_crisis?'CRISIS':p.neg_pct>30?'WATCH':'OK';
+        return `<div class="wr-profile-row" style="border-left:3px solid ${col}">
+          <div class="wr-profile-name">${p.name}</div>
+          <div class="wr-profile-stats">
+            <span style="color:${col};font-weight:700">${p.neg_pct}%</span>
+            <span style="color:var(--text3);font-family:var(--font-m);font-size:10px">negative · ${p.comments_24h} comments 24h</span>
+          </div>
+          <span class="wr-profile-status" style="color:${col};border-color:${col}">${status}</span>
+        </div>`;
+      }).join('');
+    }
+
+    // Populate dropdown do response generator
+    const sel=document.getElementById('wr-target-politician');
+    if(sel.options.length<=1){
+      profiles.forEach(p=>{
+        const opt=document.createElement('option');
+        opt.value=p.username;
+        opt.textContent=p.name;
+        opt.dataset.name=p.name;
+        sel.appendChild(opt);
+      });
+    }
+
+  }catch(e){
+    console.error('Threat level error:',e);
+  }
+}
+
+async function loadNegativeFeed(){
+  const el=document.getElementById('wr-feed');
+  try{
+    const data=await apiFetch('/warroom/negative-feed?limit=20&hours=24');
+    const comments=data.comments||[];
+
+    if(!comments.length){
+      el.innerHTML='<div style="text-align:center;padding:24px;color:var(--green);font-family:var(--font-m);font-size:11px"><div style="font-size:24px;margin-bottom:8px">✓</div>No hostile comments in last 24h</div>';
+      return;
+    }
+
+    el.innerHTML=comments.map(c=>`
+      <div class="wr-feed-item">
+        <div class="wr-feed-top">
+          <span class="wr-feed-politician">${escapeHtml(c.politician_name||'unknown')}</span>
+          <span class="wr-feed-likes">❤️ ${fmt(c.likes_count||0)}</span>
+          <span class="wr-feed-time">${c.timestamp?timeAgo(c.timestamp):'—'}</span>
+        </div>
+        <div class="wr-feed-text">"${escapeHtml(c.text||'')}"</div>
+        <div class="wr-feed-meta">
+          <span class="wr-feed-user">@${escapeHtml(c.commenter_username||'user')}</span>
+          ${c.post_url?`<a href="${escapeHtml(c.post_url)}" target="_blank" class="wr-feed-link">view post →</a>`:''}
+          <button class="wr-feed-respond" onclick="useAsAttack('${escapeHtml(c.text||'').replace(/'/g,'\\\'')}','${escapeHtml(c.owner_username||'')}')">⚡ respond</button>
+        </div>
+      </div>`).join('');
+  }catch(e){
+    el.innerHTML=`<div style="color:var(--red);font-size:11px;padding:16px;font-family:var(--font-m)">Error: ${e.message}</div>`;
+  }
+}
+
+async function loadWarRoomProfiles(){
+  // já é populado no loadThreatLevel, mas mantém placeholder caso threat falhe
+}
+
+function useAsAttack(text,username){
+  document.getElementById('wr-attack').value=text;
+  if(username){
+    const sel=document.getElementById('wr-target-politician');
+    sel.value=username;
+  }
+  document.getElementById('wr-attack').scrollIntoView({behavior:'smooth',block:'center'});
+  document.getElementById('wr-attack').focus();
+}
+
+async function generateResponse(){
+  const attack=document.getElementById('wr-attack').value.trim();
+  if(!attack){toast('Cole um ataque para gerar respostas','err');return;}
+
+  const sel=document.getElementById('wr-target-politician');
+  const username=sel.value||null;
+  const politicianName=sel.options[sel.selectedIndex]?.textContent||'candidato';
+  const context=document.getElementById('wr-context').value.trim();
+  const simulate=document.getElementById('wr-simulate').checked;
+
+  const btn=document.getElementById('wr-gen-btn');
+  const out=document.getElementById('wr-responses');
+  btn.disabled=true;
+  btn.innerHTML=`${saveSpinner()}<span>${simulate?'Generating & simulating responses...':'Generating responses...'}</span>`;
+  out.innerHTML=`<div class="loading" style="padding:24px"><div class="spin"></div>${simulate?'Generating 3 responses and testing each with 30 voters...':'Generating 3 strategic responses...'}</div>`;
+
+  try{
+    const data=await apiFetch('/warroom/generate-response','POST',{
+      attack,
+      username,
+      politician_name:politicianName==='All entities (generic response)'?'candidato':politicianName,
+      context,
+      simulate,
+    });
+
+    if(data.error){
+      out.innerHTML=`<div style="color:var(--red);padding:12px;font-family:var(--font-m);font-size:11px">Error: ${data.error}</div>`;
+      return;
+    }
+
+    const strategyColors={defensiva:'var(--cyan)',ofensiva:'var(--red)',desvio:'var(--amber)'};
+    const strategyLabels={defensiva:'DEFENSIVE',ofensiva:'OFFENSIVE',desvio:'DEFLECTION'};
+    const riskColors={baixo:'var(--green)',medio:'var(--amber)',alto:'var(--red)'};
+
+    out.innerHTML=`<div class="card-hd" style="margin-top:14px">Generated Responses</div>`+
+      (data.respostas||[]).map((r,i)=>{
+        const col=strategyColors[r.estrategia]||'var(--cyan)';
+        const sim=r.simulation;
+        let simBlock='';
+        if(sim&&!sim.error){
+          const crisis=sim.crisis_score||0;
+          const crisisCol=crisis>70?'var(--red)':crisis>40?'var(--amber)':'var(--green)';
+          simBlock=`
+            <div class="wr-resp-sim">
+              <div class="wr-resp-sim-title">⊕ Simulation Results (${sim.agents} agents)</div>
+              <div class="wr-resp-sim-grid">
+                <div><span class="wr-resp-sim-lbl">Crisis Score</span><span class="wr-resp-sim-val" style="color:${crisisCol}">${crisis}</span></div>
+                <div><span class="wr-resp-sim-lbl">Viral Risk</span><span class="wr-resp-sim-val">${(sim.viral_risk||0).toFixed(1)}</span></div>
+                <div><span class="wr-resp-sim-lbl">Share %</span><span class="wr-resp-sim-val">${(sim.share_pct||0).toFixed(0)}%</span></div>
+              </div>
+            </div>`;
+        }else if(sim?.error){
+          simBlock=`<div class="wr-resp-sim" style="color:var(--red);font-size:10px">Simulation error: ${sim.error}</div>`;
+        }
+        return `
+          <div class="wr-response-card" style="border-left:3px solid ${col}">
+            <div class="wr-response-header">
+              <span class="wr-response-strategy" style="color:${col};border-color:${col}">${strategyLabels[r.estrategia]||r.estrategia.toUpperCase()}</span>
+              <span class="wr-response-tag" style="color:var(--text3)">tom: ${r.tom||'—'}</span>
+              <span class="wr-response-tag" style="color:${riskColors[r.risco]||'var(--text3)'};border-color:${riskColors[r.risco]||'var(--text3)'}">risco: ${r.risco||'—'}</span>
+            </div>
+            <div class="wr-response-text">"${escapeHtml(r.texto)}"</div>
+            ${simBlock}
+            <div class="wr-response-actions">
+              <button class="action-pill cyan" onclick="navigator.clipboard.writeText('${escapeHtml(r.texto).replace(/'/g,'\\\'')}');toast('Response copied!')">${icons.refresh}<span>copy</span></button>
+            </div>
+          </div>`;
+      }).join('');
+
+    toast('✓ 3 responses generated!');
+  }catch(e){
+    out.innerHTML=`<div style="color:var(--red);padding:12px;font-family:var(--font-m);font-size:11px">Error: ${e.message}</div>`;
+    toast('Generation failed','err');
+  }finally{
+    btn.disabled=false;
+    btn.innerHTML=`<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L4 14h7l-1 8 10-13h-7l1-7z"/></svg><span>Generate 3 Strategic Responses</span>`;
   }
 }
 </script>
