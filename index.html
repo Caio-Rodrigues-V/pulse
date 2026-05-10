@@ -1472,17 +1472,45 @@ function renderizarResultadoSim(d){
   document.getElementById('sim-results').style.display='block';
   document.getElementById('sim-empty').style.display='none';
 
-  // KPIs
+  // ── KPIs com margem de erro ──
   const crisis=d.crisis_score||0;
+  const crisisMargem=d.crisis_score_margem_erro||0;
   const crisisEl=document.getElementById('sim-crisis-score');
-  crisisEl.textContent=crisis;
+  crisisEl.innerHTML=`${crisis}<span style="font-size:14px;color:var(--text3);font-family:var(--font-m);margin-left:6px">±${crisisMargem}</span>`;
   crisisEl.style.color=crisis>70?'var(--red)':crisis>40?'var(--amber)':'var(--green)';
 
-  document.getElementById('sim-viral-score').textContent=(d.risco_viralizacao_medio||0).toFixed(1);
-  document.getElementById('sim-share-pct').textContent=(d.engajamento?.compartilhamento_pct||0).toFixed(0)+'%';
+  const viral=(d.risco_viralizacao_medio||0).toFixed(1);
+  const viralMargem=(d.risco_viralizacao_margem_erro||0).toFixed(1);
+  document.getElementById('sim-viral-score').innerHTML=`${viral}<span style="font-size:13px;color:var(--text3);font-family:var(--font-m);margin-left:6px">±${viralMargem}</span>`;
+
+  const share=(d.engajamento?.compartilhamento_pct||0).toFixed(0);
+  const shareMargem=(d.engajamento?.compartilhamento_margem_erro||0).toFixed(1);
+  document.getElementById('sim-share-pct').innerHTML=`${share}%<span style="font-size:13px;color:var(--text3);font-family:var(--font-m);margin-left:6px">±${shareMargem}%</span>`;
+
   document.getElementById('sim-agents-count').textContent=d.total_agentes||0;
 
-  // Sentiment Bars
+  // ── Banner de confiabilidade estatística ──
+  let confiabilidadeBanner=document.getElementById('sim-confiability-banner');
+  if(!confiabilidadeBanner){
+    confiabilidadeBanner=document.createElement('div');
+    confiabilidadeBanner.id='sim-confiability-banner';
+    confiabilidadeBanner.style.cssText='display:flex;align-items:center;gap:12px;padding:12px 18px;border-radius:6px;background:rgba(12,16,24,0.8);border:1px solid var(--border);margin-bottom:14px;backdrop-filter:blur(10px)';
+    document.getElementById('sim-results').insertBefore(confiabilidadeBanner,document.getElementById('sim-results').firstChild);
+  }
+  const conf=d.confiabilidade_geral||{};
+  const corMap={red:'var(--red)',amber:'var(--amber)',green:'var(--green)',cyan:'var(--cyan)'};
+  const confCor=corMap[conf.cor]||'var(--text3)';
+  confiabilidadeBanner.innerHTML=`
+    <div style="width:32px;height:32px;border-radius:8px;background:${confCor};opacity:.15;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${confCor}" stroke-width="2"><path d="M9 12l2 2 4-4"/><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z"/></svg>
+    </div>
+    <div style="flex:1">
+      <div style="font-size:11px;font-weight:700;color:${confCor};font-family:var(--font-m);letter-spacing:.06em;text-transform:uppercase">${conf.label||'Statistical Analysis'}</div>
+      <div style="font-size:11px;color:var(--text2);font-family:var(--font-m);margin-top:2px;letter-spacing:.04em">${d.metodo_estatistico||''} · Confidence: ${d.nivel_confianca||'95%'}</div>
+    </div>
+    <div style="font-family:var(--font-d);font-size:24px;color:${confCor};font-style:italic">n=${d.total_agentes||0}</div>`;
+
+  // ── Sentiment Bars com IC ──
   const sentColors={
     positivo:'var(--green)',apoio:'var(--green)',
     negativo:'var(--red)',raiva:'var(--red)',indignacao:'var(--red)',deboche:'var(--red)',
@@ -1494,15 +1522,20 @@ function renderizarResultadoSim(d){
     .sort((a,b)=>b[1]-a[1])
     .forEach(([sent,pct])=>{
       const color=sentColors[sent]||'var(--cyan)';
+      const ic=d.sentimento_distribuicao_ic?.[sent];
+      const icLabel=ic?`<span style="font-size:9px;color:var(--text3);font-family:var(--font-m);margin-left:6px">IC95: ${ic.ic_95[0]}%–${ic.ic_95[1]}%</span>`:'';
       sentBars.innerHTML+=`
         <div class="sim-bar-row">
           <span class="sim-bar-label">${sent}</span>
-          <div class="sim-bar-track"><div class="sim-bar-fill" style="width:${pct}%;background:${color}"></div></div>
-          <span class="sim-bar-pct">${pct.toFixed(1)}%</span>
+          <div class="sim-bar-track" style="position:relative">
+            <div class="sim-bar-fill" style="width:${pct}%;background:${color}"></div>
+            ${ic?`<div style="position:absolute;left:${ic.ic_95[0]}%;width:${ic.ic_95[1]-ic.ic_95[0]}%;top:-2px;bottom:-2px;border-left:1px solid ${color};border-right:1px solid ${color};opacity:.4;pointer-events:none"></div>`:''}
+          </div>
+          <span class="sim-bar-pct">${pct.toFixed(1)}%${icLabel}</span>
         </div>`;
     });
 
-  // Clusters por espectro
+  // ── Clusters com tamanho de amostra ──
   const clEl=document.getElementById('sim-clusters');
   clEl.innerHTML='';
   const espectroColors={
@@ -1517,11 +1550,18 @@ function renderizarResultadoSim(d){
   Object.entries(d.clusters_por_espectro||{}).forEach(([esp,info])=>{
     const color=espectroColors[esp]||'var(--cyan)';
     const sentColor=sentColors[info.sentimento_dominante]||'var(--text2)';
+    const confCluster=info.confiabilidade||{};
+    const confClusterCor=corMap[confCluster.cor]||'var(--text3)';
+    const marcadores=(info.marcadores_chave||[]).slice(0,2).join(' · ');
     clEl.innerHTML+=`
       <div class="sim-cluster" style="border-left-color:${color}">
-        <div class="sim-cluster-name">${esp.replace(/_/g,' ')}</div>
-        <div class="sim-cluster-metric">Dominant sentiment <strong style="color:${sentColor}">${info.sentimento_dominante}</strong></div>
-        <div class="sim-cluster-metric">Intensity <strong>${info.intensidade_media}/10</strong></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <div class="sim-cluster-name" style="margin:0">${esp.replace(/_/g,' ')}</div>
+          <span style="font-size:9px;color:${confClusterCor};font-family:var(--font-m);letter-spacing:.06em">n=${info.n_agentes}</span>
+        </div>
+        <div class="sim-cluster-metric">Dominant sentiment <strong style="color:${sentColor}">${info.sentimento_dominante} (${info.sentimento_dominante_pct}%)</strong></div>
+        <div class="sim-cluster-metric">Intensity <strong>${info.intensidade_media}/10</strong> <span style="font-size:9px;color:var(--text3);font-family:var(--font-m)">IC: ${info.intensidade_ic_95[0]}–${info.intensidade_ic_95[1]}</span></div>
+        ${marcadores?`<div class="sim-cluster-metric" style="margin-top:6px;color:var(--cyan);font-size:10px">⚑ ${marcadores}</div>`:''}
         ${info.amostra_comentarios?.length?`
           <details class="sim-cluster-comments">
             <summary>View predicted comments</summary>
@@ -1530,14 +1570,13 @@ function renderizarResultadoSim(d){
       </div>`;
   });
 
-  // Comentários gerais
+  // ── Comments / Themes / Vote Impact (igual antes) ──
   const comEl=document.getElementById('sim-comments');
   const sampleComments=(d.amostra_comentarios||[]).filter(Boolean).slice(0,8);
   comEl.innerHTML=sampleComments.length
     ?sampleComments.map(c=>`<div class="sim-comment">"${escapeHtml(c)}"</div>`).join('')
     :'<div style="color:var(--text3);font-size:11px;font-family:var(--font-m);padding:12px">No predicted comments available</div>';
 
-  // Temas percebidos
   const temaEl=document.getElementById('sim-themes');
   const temas=Object.entries(d.temas_percebidos||{});
   temaEl.innerHTML=temas.length
@@ -1548,7 +1587,6 @@ function renderizarResultadoSim(d){
       </div>`).join('')
     :'<div style="color:var(--text3);font-size:11px;font-family:var(--font-m);padding:12px">No themes identified</div>';
 
-  // Vote Impact
   const voteEl=document.getElementById('sim-vote-impact');
   const voteColors={
     sim:'var(--green)',
@@ -1562,13 +1600,15 @@ function renderizarResultadoSim(d){
     nao:'No Change',
     afasta:'Pushes Away'
   };
-  voteEl.innerHTML=Object.entries(d.impacto_voto||{}).map(([k,v])=>`
-    <div class="metric-item">
-      <div class="metric-lbl">${voteLabels[k]||k}</div>
-      <div class="metric-val" style="color:${voteColors[k]||'var(--text)'}">${v}</div>
-    </div>`).join('');
+  voteEl.innerHTML=Object.entries(d.impacto_voto||{}).map(([k,v])=>{
+    const pct=d.impacto_voto_pct?.[k]||0;
+    return `
+      <div class="metric-item">
+        <div class="metric-lbl">${voteLabels[k]||k}</div>
+        <div class="metric-val" style="color:${voteColors[k]||'var(--text)'}">${v}<span style="font-size:11px;color:var(--text3);font-family:var(--font-m);margin-left:4px">(${pct}%)</span></div>
+      </div>`;
+  }).join('');
 
-  // Scroll suave até o resultado
   document.getElementById('sim-results').scrollIntoView({behavior:'smooth',block:'start'});
 }
 
