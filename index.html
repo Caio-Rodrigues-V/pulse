@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pulse — Intelligence Protocol</title>
+    <title>Pulse — Protocolo de Inteligência</title>
     <link
       href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Manrope:wght@300;400;500;600;700;800&display=swap"
       rel="stylesheet"
@@ -3073,7 +3073,7 @@
     <nav class="sidebar">
       <div class="sidebar-logo">
         <div class="logo-word">PUL<span>SE</span></div>
-        <div class="logo-sub">PROTOCOL V2.4</div>
+        <div class="logo-sub">PROTOCOLO V2.4</div>
       </div>
       <div class="sidebar-search">
         <div class="search-wrap">
@@ -3085,7 +3085,7 @@
             type="text"
             class="search-input"
             id="sidebar-search"
-            placeholder="Search entities, topics, keyword"
+            placeholder="Buscar entidades, temas ou palavra-chave"
             onkeydown="if (event.key === 'Enter') searchMentions(this.value);"
           />
         </div>
@@ -3098,7 +3098,7 @@
             <rect x="3" y="14" width="7" height="7" />
             <rect x="14" y="14" width="7" height="7" />
           </svg>
-          Intelligence Deck
+          Painel de Inteligência
         </div>
         <div class="nav-item" onclick="toast('Em breve', 'ok')">
           <svg class="nav-icon" viewBox="0 0 24 24">
@@ -3107,39 +3107,39 @@
               d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"
             />
           </svg>
-          Narrative Engine
+          Motor Narrativo
         </div>
         <div class="nav-item" onclick="showView('warroom')">
           <svg class="nav-icon" viewBox="0 0 24 24">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
           </svg>
-          War Room
+          Sala de Crise
         </div>
         <div class="nav-item" onclick="toast('Em breve', 'ok')">
           <svg class="nav-icon" viewBox="0 0 24 24">
             <rect x="2" y="3" width="20" height="14" rx="2" />
             <path d="M8 21h8M12 17v4" />
           </svg>
-          Bot Detection
+          Detecção de Bots
         </div>
         <div class="nav-item" onclick="showView('simulator')">
           <svg class="nav-icon" viewBox="0 0 24 24">
             <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
           </svg>
-          AI Simulator
+          Simulador de IA
         </div>
         <div class="nav-item" onclick="openModal()">
           <svg class="nav-icon" viewBox="0 0 24 24">
             <circle cx="12" cy="12" r="10" />
             <path d="M12 8v8M8 12h8" />
           </svg>
-          Add Entity
+          Adicionar Entidade
         </div>
       </div>
       <div class="sidebar-footer">
         <div class="status-row">
           <div class="live-dot"></div>
-          <div class="live-txt">Live Feed Active</div>
+          <div class="live-txt">Feed ao Vivo Ativo</div>
         </div>
         <div class="clearance-badge">
           <svg
@@ -3154,7 +3154,7 @@
           >
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
           </svg>
-          Clearance: Alpha
+          Acesso: Alfa
         </div>
       </div>
     </nav>
@@ -3162,9 +3162,9 @@
     <div class="main">
       <div class="topbar">
         <div class="topbar-left">
-          <div class="topbar-title" id="topbar-title">Intelligence Deck</div>
+          <div class="topbar-title" id="topbar-title">Painel de Inteligência</div>
           <div class="topbar-subtitle">
-            REAL-TIME OVERVIEW · <span id="realtime-clock"></span>
+            VISÃO GERAL EM TEMPO REAL · <span id="realtime-clock"></span>
           </div>
         </div>
         <div class="topbar-right">
@@ -3179,11 +3179,11 @@
                 animation: pulse-dot 2s ease infinite;
               "
             ></span>
-            Live Feed Active
+            Feed ao Vivo Ativo
           </div>
-          <div class="topbar-badge alpha">⊕ Clearance: Alpha</div>
+          <div class="topbar-badge alpha">⊕ Acesso: Alfa</div>
           <button class="btn-analyze" onclick="openModal()">
-            + Add Entity
+            + Adicionar Entidade
           </button>
         </div>
       </div>
@@ -3192,14 +3192,14 @@
         <!-- VISÃO GERAL -->
         <div id="view-overview" class="view on">
           <div class="section-header">
-            <div class="section-label">Intelligence Deck · Real-Time</div>
-            <div class="section-title">Political Monitoring</div>
+            <div class="section-label">Painel de Inteligência · Tempo Real</div>
+            <div class="section-title">Monitoramento Político</div>
             <div class="section-sub" id="topbar-updated"></div>
           </div>
           <div class="kpi-row">
             <div class="kpi">
               <div class="kpi-header">
-                <div class="kpi-label">Active Entities</div>
+                <div class="kpi-label">Entidades Ativas</div>
                 <svg class="kpi-icon" viewBox="0 0 24 24">
                   <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
                   <circle cx="9" cy="7" r="4" />
@@ -3209,22 +3209,22 @@
                 </svg>
               </div>
               <div class="kpi-value cyan" id="kpi-total">—</div>
-              <div class="kpi-sub">profiles monitored</div>
+              <div class="kpi-sub">perfis monitorados</div>
             </div>
             <div class="kpi green-accent">
               <div class="kpi-header">
-                <div class="kpi-label">Sentiment Index</div>
+                <div class="kpi-label">Índice de Sentimento</div>
                 <svg class="kpi-icon" viewBox="0 0 24 24">
                   <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" />
                   <polyline points="16 7 22 7 22 13" />
                 </svg>
               </div>
               <div class="kpi-value green" id="kpi-score">—</div>
-              <div class="kpi-sub">overall sentiment score</div>
+              <div class="kpi-sub">pontuação geral de sentimento</div>
             </div>
             <div class="kpi red-accent">
               <div class="kpi-header">
-                <div class="kpi-label">Active Crises</div>
+                <div class="kpi-label">Crises Ativas</div>
                 <svg class="kpi-icon" viewBox="0 0 24 24">
                   <path
                     d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
@@ -3234,11 +3234,11 @@
                 </svg>
               </div>
               <div class="kpi-value red" id="kpi-crisis">—</div>
-              <div class="kpi-sub">require attention</div>
+              <div class="kpi-sub">exigem atenção</div>
             </div>
             <div class="kpi amber-accent">
               <div class="kpi-header">
-                <div class="kpi-label">Posts Analyzed</div>
+                <div class="kpi-label">Posts Analisados</div>
                 <svg class="kpi-icon" viewBox="0 0 24 24">
                   <path
                     d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
@@ -3246,7 +3246,7 @@
                 </svg>
               </div>
               <div class="kpi-value amber" id="kpi-comments">—</div>
-              <div class="kpi-sub">comments processed</div>
+              <div class="kpi-sub">comentários processados</div>
             </div>
           </div>
 
@@ -3255,23 +3255,23 @@
               <div id="pol-grid" class="pol-grid">
                 <div class="loading">
                   <div class="spin"></div>
-                  Connecting to intelligence feed...
+                  Conectando ao feed de inteligência...
                 </div>
               </div>
             </div>
             <div class="crisis-panel">
               <div class="crisis-panel-header">
                 <div class="crisis-panel-title">
-                  Crisis Alerts · Priority Queue
+                  Alertas de Crise · Fila de Prioridade
                 </div>
                 <div class="crisis-panel-badge" id="crisis-panel-status">
-                  ● MONITORING
+                  ● MONITORANDO
                 </div>
               </div>
               <div id="crisis-panel-list">
                 <div class="crisis-empty">
                   <div class="crisis-empty-dot"></div>
-                  No active crises detected
+                  Nenhuma crise ativa detectada
                 </div>
               </div>
             </div>
@@ -3281,7 +3281,7 @@
         <!-- PERFIL YOUTUBE -->
         <div id="view-profile" class="view">
           <div class="back" onclick="showView('overview')">
-            ← Intelligence Deck
+            ← Painel de Inteligência
           </div>
           <div class="pf-hero">
             <div class="pf-av-big" id="pf-av"></div>
@@ -3290,7 +3290,7 @@
               <div class="pf-meta-row" id="pf-meta"></div>
             </div>
             <div class="pf-score-block">
-              <div class="pf-score-lbl">Sentiment Index</div>
+              <div class="pf-score-lbl">Índice de Sentimento</div>
               <div
                 class="pf-score-num"
                 id="pf-score-num"
@@ -3305,24 +3305,24 @@
           >
             <div class="crisis-ico">🚨</div>
             <div class="crisis-body">
-              <div class="crisis-ttl">Crisis Alert Active</div>
+              <div class="crisis-ttl">Alerta de Crise Ativo</div>
               <div class="crisis-msg" id="pf-crisis-msg"></div>
             </div>
-            <div class="crisis-chip">Urgent</div>
+            <div class="crisis-chip">Urgente</div>
           </div>
           <div class="card" style="margin-bottom: 14px">
-            <div class="card-hd">Executive Summary — AI Analysis</div>
+            <div class="card-hd">Resumo Executivo — Análise por IA</div>
             <p class="narrative" id="pf-narrative"></p>
           </div>
           <div class="g12">
             <div class="card">
-              <div class="card-hd">Sentiment Distribution</div>
+              <div class="card-hd">Distribuição de Sentimento</div>
               <div class="donut-wrap">
                 <canvas class="donut-c" id="pf-donut"></canvas>
                 <div class="donut-leg">
                   <div class="dl-item">
                     <div class="dl-dot" style="background: var(--green)"></div>
-                    <div class="dl-name">Positive</div>
+                    <div class="dl-name">Positivo</div>
                     <div
                       class="dl-pct"
                       style="color: var(--green)"
@@ -3331,7 +3331,7 @@
                   </div>
                   <div class="dl-item">
                     <div class="dl-dot" style="background: var(--amber)"></div>
-                    <div class="dl-name">Neutral</div>
+                    <div class="dl-name">Neutro</div>
                     <div
                       class="dl-pct"
                       style="color: var(--amber)"
@@ -3340,7 +3340,7 @@
                   </div>
                   <div class="dl-item">
                     <div class="dl-dot" style="background: var(--red)"></div>
-                    <div class="dl-name">Negative</div>
+                    <div class="dl-name">Negativo</div>
                     <div
                       class="dl-pct"
                       style="color: var(--red)"
@@ -3351,45 +3351,45 @@
               </div>
             </div>
             <div class="card">
-              <div class="card-hd">Sentiment Timeline</div>
+              <div class="card-hd">Linha do Tempo de Sentimento</div>
               <div class="chart-wrap"><canvas id="pf-history"></canvas></div>
             </div>
           </div>
           <div class="g2">
             <div class="card">
-              <div class="card-hd">Channel Metrics</div>
+              <div class="card-hd">Métricas do Canal</div>
               <div class="metric-grid">
                 <div class="metric-item">
-                  <div class="metric-lbl">Videos</div>
+                  <div class="metric-lbl">Vídeos</div>
                   <div class="metric-val" id="pf-videos"></div>
                 </div>
                 <div class="metric-item">
-                  <div class="metric-lbl">Comments</div>
+                  <div class="metric-lbl">Comentários</div>
                   <div class="metric-val" id="pf-comments"></div>
                 </div>
                 <div class="metric-item">
-                  <div class="metric-lbl">Views</div>
+                  <div class="metric-lbl">Visualizações</div>
                   <div class="metric-val" id="pf-views"></div>
                 </div>
                 <div class="metric-item">
-                  <div class="metric-lbl">Engagement</div>
+                  <div class="metric-lbl">Engajamento</div>
                   <div class="metric-val" id="pf-eng"></div>
                 </div>
               </div>
             </div>
             <div class="card">
-              <div class="card-hd">Identified Themes</div>
+              <div class="card-hd">Temas Identificados</div>
               <div class="theme-list" id="pf-themes"></div>
             </div>
           </div>
           <div class="card">
-            <div class="card-hd">Audience Highlights</div>
+            <div class="card-hd">Destaques da Audiência</div>
             <div class="quote-block qb-pos">
-              <div class="qb-lbl">+ Most Positive</div>
+              <div class="qb-lbl">+ Most Positivo</div>
               <div class="qb-text" id="pf-qpos"></div>
             </div>
             <div class="quote-block qb-neg">
-              <div class="qb-lbl">− Most Negative</div>
+              <div class="qb-lbl">− Most Negativo</div>
               <div class="qb-text" id="pf-qneg"></div>
             </div>
           </div>
@@ -3398,7 +3398,7 @@
         <!-- PERFIL INSTAGRAM -->
         <div id="view-instagram" class="view">
           <div class="back" onclick="showView('overview')">
-            ← Intelligence Deck
+            ← Painel de Inteligência
           </div>
           <div class="pf-hero">
             <div
@@ -3411,7 +3411,7 @@
               <div class="pf-meta-row" id="ig-meta"></div>
             </div>
             <div class="pf-score-block">
-              <div class="pf-score-lbl">Sentiment Index</div>
+              <div class="pf-score-lbl">Índice de Sentimento</div>
               <div
                 class="pf-score-num"
                 id="ig-score-num"
@@ -3429,10 +3429,10 @@
           >
             <div class="crisis-ico">🚨</div>
             <div class="crisis-body">
-              <div class="crisis-ttl">Crisis Alert Active</div>
+              <div class="crisis-ttl">Alerta de Crise Ativo</div>
               <div class="crisis-msg" id="ig-crisis-msg"></div>
             </div>
-            <div class="crisis-chip">Urgent</div>
+            <div class="crisis-chip">Urgente</div>
           </div>
 
           <div
@@ -3440,7 +3440,7 @@
             class="card"
             style="margin-bottom: 14px; display: none"
           >
-            <div class="card-hd">Executive Summary — AI Analysis</div>
+            <div class="card-hd">Resumo Executivo — Análise por IA</div>
             <p class="narrative" id="ig-narrative"></p>
           </div>
 
@@ -3466,7 +3466,7 @@
                 <div class="donut-leg">
                   <div class="dl-item">
                     <div class="dl-dot" style="background: var(--green)"></div>
-                    <div class="dl-name">Positive</div>
+                    <div class="dl-name">Positivo</div>
                     <div
                       class="dl-pct"
                       style="color: var(--green)"
@@ -3475,7 +3475,7 @@
                   </div>
                   <div class="dl-item">
                     <div class="dl-dot" style="background: var(--amber)"></div>
-                    <div class="dl-name">Neutral</div>
+                    <div class="dl-name">Neutro</div>
                     <div
                       class="dl-pct"
                       style="color: var(--amber)"
@@ -3484,7 +3484,7 @@
                   </div>
                   <div class="dl-item">
                     <div class="dl-dot" style="background: var(--red)"></div>
-                    <div class="dl-name">Negative</div>
+                    <div class="dl-name">Negativo</div>
                     <div
                       class="dl-pct"
                       style="color: var(--red)"
@@ -3495,7 +3495,7 @@
               </div>
             </div>
             <div class="card">
-              <div class="card-hd">Identified Themes</div>
+              <div class="card-hd">Temas Identificados</div>
               <div class="theme-list" id="ig-themes"></div>
             </div>
           </div>
@@ -3505,35 +3505,35 @@
             class="card"
             style="margin-bottom: 14px; display: none"
           >
-            <div class="card-hd">Caption Highlights</div>
+            <div class="card-hd">Destaques das Legendas</div>
             <div class="quote-block qb-pos">
-              <div class="qb-lbl">+ Most Positive</div>
+              <div class="qb-lbl">+ Most Positivo</div>
               <div class="qb-text" id="ig-qpos"></div>
             </div>
             <div class="quote-block qb-neg">
-              <div class="qb-lbl">− Most Negative</div>
+              <div class="qb-lbl">− Most Negativo</div>
               <div class="qb-text" id="ig-qneg"></div>
             </div>
           </div>
 
           <div class="g2" style="margin-bottom: 14px">
             <div class="card">
-              <div class="card-hd">Average Engagement</div>
+              <div class="card-hd">Engajamento Médio</div>
               <div class="metric-grid">
                 <div class="metric-item">
-                  <div class="metric-lbl">Avg Likes</div>
+                  <div class="metric-lbl">Média de Curtidas</div>
                   <div class="metric-val" id="ig-avg-likes"></div>
                 </div>
                 <div class="metric-item">
-                  <div class="metric-lbl">Avg Comments</div>
+                  <div class="metric-lbl">Média de Comentários</div>
                   <div class="metric-val" id="ig-avg-comments"></div>
                 </div>
                 <div class="metric-item">
-                  <div class="metric-lbl">Avg Views</div>
+                  <div class="metric-lbl">Média de Visualizações</div>
                   <div class="metric-val" id="ig-avg-views"></div>
                 </div>
                 <div class="metric-item">
-                  <div class="metric-lbl">Latest Post</div>
+                  <div class="metric-lbl">Post Mais Recente</div>
                   <div
                     class="metric-val"
                     id="ig-last-post"
@@ -3543,7 +3543,7 @@
               </div>
             </div>
             <div class="card">
-              <div class="card-hd">Likes per Post</div>
+              <div class="card-hd">Curtidas por Post</div>
               <div class="chart-wrap"><canvas id="ig-chart"></canvas></div>
             </div>
           </div>
@@ -3567,13 +3567,13 @@
             <div id="ig-audience-content">
               <div class="loading">
                 <div class="spin"></div>
-                Loading audience data...
+                Carregando dados da audiência...
               </div>
             </div>
           </div>
 
           <div class="card">
-            <div class="card-hd">Latest Posts</div>
+            <div class="card-hd">Últimos Posts</div>
             <div class="insta-posts" id="ig-posts-list"></div>
           </div>
         </div>
@@ -3581,13 +3581,13 @@
         <!-- MENTIONS VIEW -->
         <div id="view-mentions" class="view">
           <div class="back" onclick="showView('overview')">
-            ← Intelligence Deck
+            ← Painel de Inteligência
           </div>
           <div class="section-header">
             <div class="section-label">
-              Live Intelligence Feed · Media Monitoring
+              Feed de Inteligência ao Vivo · Monitoramento de Mídia
             </div>
-            <div class="section-title" id="mentions-title">Searching...</div>
+            <div class="section-title" id="mentions-title">Buscando...</div>
             <div class="section-sub" id="mentions-sub"></div>
           </div>
           <div id="mentions-list">
@@ -3601,8 +3601,8 @@
         <!-- AI SIMULATOR -->
         <div id="view-simulator" class="view">
           <div class="section-header">
-            <div class="section-label">AI Simulator · Predictive Engine</div>
-            <div class="section-title">Scenario Prediction</div>
+            <div class="section-label">Simulador de IA · Motor Preditivo</div>
+            <div class="section-title">Previsão de Cenário</div>
             <div class="section-sub">
               Simulate how Brazilian voters would react before publishing.
             </div>
@@ -3618,7 +3618,7 @@
                 </svg>
               </div>
               <div style="flex: 1">
-                <div class="sim-hero-title">Multi-Agent Simulator</div>
+                <div class="sim-hero-title">Simulador Multiagente</div>
                 <div class="sim-hero-sub">
                   Powered by Claude Haiku · BR Political Personas
                 </div>
@@ -3628,7 +3628,7 @@
               <span
                 class="pf-chip"
                 style="color: var(--cyan); border-color: var(--cyan-bd)"
-                >⊕ Swarm Intelligence</span
+                >⊕ Inteligência de Enxame</span
               >
               <span class="pf-chip">7 Political Spectrums</span>
               <span class="pf-chip">5 Regions · 4 Age Groups</span>
@@ -3644,7 +3644,7 @@
           </div>
 
           <div class="card" style="margin-bottom: 14px">
-            <div class="card-hd">Test Content</div>
+            <div class="card-hd">Conteúdo de Teste</div>
             <div class="field">
               <label>Post, Speech or Campaign Material</label>
               <textarea
@@ -3663,7 +3663,7 @@
             </div>
             <div class="sim-form-grid">
               <div class="field" style="margin: 0">
-                <label>Simulated Voters</label>
+                <label>Eleitores Simulados</label>
                 <select id="sim-n-agentes">
                   <option value="50">50 · fast (~30s)</option>
                   <option value="100" selected>
@@ -3674,9 +3674,9 @@
                 </select>
               </div>
               <div class="field" style="margin: 0">
-                <label>Regional Cut</label>
+                <label>Recorte Regional</label>
                 <select id="sim-regiao">
-                  <option value="">National</option>
+                  <option value="">Nacional</option>
                   <option value="sudeste">Sudeste</option>
                   <option value="nordeste">Nordeste</option>
                   <option value="sul">Sul</option>
@@ -3685,9 +3685,9 @@
                 </select>
               </div>
               <div class="field" style="margin: 0">
-                <label>Class Cut</label>
+                <label>Recorte de Classe</label>
                 <select id="sim-classe">
-                  <option value="">All Classes</option>
+                  <option value="">Todas as Classes</option>
                   <option value="A_B">A/B (high income)</option>
                   <option value="C">C (middle class)</option>
                   <option value="D_E">D/E (low income)</option>
@@ -3710,7 +3710,7 @@
                 >
                   <path d="M13 2L4 14h7l-1 8 10-13h-7l1-7z" />
                 </svg>
-                Run Simulation
+                Rodar Simulação
               </button>
               <span class="sim-cost" id="sim-cost-est"
                 >Estimated cost: ~$0.15 USD per simulation</span
@@ -3737,7 +3737,7 @@
             <div class="kpi-row">
               <div class="kpi red-accent">
                 <div class="kpi-header">
-                  <div class="kpi-label">Crisis Score</div>
+                  <div class="kpi-label">Pontuação de Crise</div>
                   <svg class="kpi-icon" viewBox="0 0 24 24">
                     <path
                       d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
@@ -3750,7 +3750,7 @@
               </div>
               <div class="kpi amber-accent">
                 <div class="kpi-header">
-                  <div class="kpi-label">Viralization Risk</div>
+                  <div class="kpi-label">Risco de Viralização</div>
                   <svg class="kpi-icon" viewBox="0 0 24 24">
                     <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" />
                   </svg>
@@ -3760,7 +3760,7 @@
               </div>
               <div class="kpi green-accent">
                 <div class="kpi-header">
-                  <div class="kpi-label">Share Rate</div>
+                  <div class="kpi-label">Taxa de Compartilhamento</div>
                   <svg class="kpi-icon" viewBox="0 0 24 24">
                     <circle cx="18" cy="5" r="3" />
                     <circle cx="6" cy="12" r="3" />
@@ -3770,45 +3770,45 @@
                   </svg>
                 </div>
                 <div class="kpi-value green" id="sim-share-pct">—</div>
-                <div class="kpi-sub">would share</div>
+                <div class="kpi-sub">compartilhariam</div>
               </div>
               <div class="kpi">
                 <div class="kpi-header">
-                  <div class="kpi-label">Agents Simulated</div>
+                  <div class="kpi-label">Agentes Simulados</div>
                   <svg class="kpi-icon" viewBox="0 0 24 24">
                     <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
                     <circle cx="9" cy="7" r="4" />
                   </svg>
                 </div>
                 <div class="kpi-value cyan" id="sim-agents-count">—</div>
-                <div class="kpi-sub">valid responses</div>
+                <div class="kpi-sub">respostas válidas</div>
               </div>
             </div>
 
             <div class="g12">
               <div class="card">
-                <div class="card-hd">Sentiment Distribution</div>
+                <div class="card-hd">Distribuição de Sentimento</div>
                 <div id="sim-sentiment-bars"></div>
               </div>
               <div class="card">
-                <div class="card-hd">Reaction by Political Spectrum</div>
+                <div class="card-hd">Reação por Espectro Político</div>
                 <div class="sim-clusters-grid" id="sim-clusters"></div>
               </div>
             </div>
 
             <div class="g2">
               <div class="card">
-                <div class="card-hd">Predicted Comments Sample</div>
+                <div class="card-hd">Amostra de Comentários Previstos</div>
                 <div class="sim-comment-list" id="sim-comments"></div>
               </div>
               <div class="card">
-                <div class="card-hd">Themes Perceived by Public</div>
+                <div class="card-hd">Temas Percebidos pelo Público</div>
                 <div class="sim-theme-list" id="sim-themes"></div>
               </div>
             </div>
 
             <div class="card" style="margin-top: 14px">
-              <div class="card-hd">Voter Impact Forecast</div>
+              <div class="card-hd">Previsão de Impacto no Voto</div>
               <div
                 id="sim-vote-impact"
                 class="metric-grid"
@@ -3819,10 +3819,9 @@
 
           <div id="sim-empty" class="sim-empty-state">
             <div class="sim-empty-icon">⊕</div>
-            <div class="sim-empty-title">No simulation yet</div>
+            <div class="sim-empty-title">Nenhuma simulação ainda</div>
             <div class="sim-empty-sub">
-              Paste content above and run a simulation to see how voters would
-              react
+              Cole um conteúdo acima e rode uma simulação para ver como os eleitores reagiriam
             </div>
           </div>
         </div>
@@ -3830,11 +3829,10 @@
         <!-- WAR ROOM -->
         <div id="view-warroom" class="view">
           <div class="section-header">
-            <div class="section-label">War Room · Crisis Command Center</div>
-            <div class="section-title">Real-Time Threat Operations</div>
+            <div class="section-label">Sala de Crise · Centro de Comando de Crise</div>
+            <div class="section-title">Operações de Ameaça em Tempo Real</div>
             <div class="section-sub">
-              Live monitoring across all monitored entities · auto-refreshes
-              every 60s
+              Monitoramento ao vivo de todas as entidades monitoradas · atualização automática a cada 60s
             </div>
           </div>
 
@@ -3842,7 +3840,7 @@
           <div id="defcon-banner" class="defcon-banner">
             <div class="defcon-loading">
               <div class="spin"></div>
-              <span>Calculating threat level...</span>
+              <span>Calculando nível de ameaça...</span>
             </div>
           </div>
 
@@ -3850,7 +3848,7 @@
           <div class="kpi-row" id="wr-metrics" style="display: none">
             <div class="kpi red-accent">
               <div class="kpi-header">
-                <div class="kpi-label">Negative Sentiment 24h</div>
+                <div class="kpi-label">Sentimento Negativo 24h</div>
                 <svg class="kpi-icon" viewBox="0 0 24 24">
                   <path
                     d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
@@ -3858,21 +3856,21 @@
                 </svg>
               </div>
               <div class="kpi-value red" id="wr-neg-pct">—</div>
-              <div class="kpi-sub">of analyzed comments</div>
+              <div class="kpi-sub">dos comentários analisados</div>
             </div>
             <div class="kpi amber-accent">
               <div class="kpi-header">
-                <div class="kpi-label">Comment Spike</div>
+                <div class="kpi-label">Pico de Comentários</div>
                 <svg class="kpi-icon" viewBox="0 0 24 24">
                   <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" />
                 </svg>
               </div>
               <div class="kpi-value amber" id="wr-spike">—</div>
-              <div class="kpi-sub">vs 7d baseline</div>
+              <div class="kpi-sub">vs média dos últimos 7 dias</div>
             </div>
             <div class="kpi">
               <div class="kpi-header">
-                <div class="kpi-label">Comments 24h</div>
+                <div class="kpi-label">Comentários 24h</div>
                 <svg class="kpi-icon" viewBox="0 0 24 24">
                   <path
                     d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
@@ -3880,27 +3878,27 @@
                 </svg>
               </div>
               <div class="kpi-value cyan" id="wr-volume">—</div>
-              <div class="kpi-sub">total volume</div>
+              <div class="kpi-sub">volume total</div>
             </div>
             <div class="kpi red-accent">
               <div class="kpi-header">
-                <div class="kpi-label">Entities in Crisis</div>
+                <div class="kpi-label">Entidades em Crise</div>
                 <svg class="kpi-icon" viewBox="0 0 24 24">
                   <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                 </svg>
               </div>
               <div class="kpi-value red" id="wr-crisis-count">—</div>
-              <div class="kpi-sub">need attention</div>
+              <div class="kpi-sub">precisam de atenção</div>
             </div>
           </div>
 
           <!-- PER-PROFILE STATUS GRID -->
           <div class="card" style="margin-bottom: 14px">
-            <div class="card-hd">Entity Status Matrix</div>
+            <div class="card-hd">Matriz de Status das Entidades</div>
             <div id="wr-profiles-grid" class="wr-profiles-grid">
               <div class="loading">
                 <div class="spin"></div>
-                Loading entity status...
+                Carregando status das entidades...
               </div>
             </div>
           </div>
@@ -3917,7 +3915,7 @@
                   align-items: center;
                 "
               >
-                <span>Live Negative Feed</span>
+                <span>Feed Negativo ao Vivo</span>
                 <span
                   style="
                     font-size: 9px;
@@ -3925,28 +3923,28 @@
                     font-family: var(--font-m);
                     animation: crisis-pulse 2s ease infinite;
                   "
-                  >● MONITORING</span
+                  >● MONITORANDO</span
                 >
               </div>
               <div id="wr-feed" class="wr-feed">
                 <div class="loading">
                   <div class="spin"></div>
-                  Loading hostile comments...
+                  Carregando comentários hostis...
                 </div>
               </div>
             </div>
 
             <!-- EMERGENCY RESPONSE GENERATOR -->
             <div class="card">
-              <div class="card-hd">⚡ Emergency Response Generator</div>
+              <div class="card-hd">⚡ Gerador de Resposta Emergencial</div>
               <div class="field">
-                <label>Politician under attack</label>
+                <label>Político sob ataque</label>
                 <select id="wr-target-politician">
-                  <option value="">All entities (generic response)</option>
+                  <option value="">Todas as entidades (resposta genérica)</option>
                 </select>
               </div>
               <div class="field">
-                <label>Attack / Criticism received</label>
+                <label>Ataque / Crítica recebida</label>
                 <textarea
                   id="wr-attack"
                   class="sim-textarea"
@@ -3955,7 +3953,7 @@
                 ></textarea>
               </div>
               <div class="field">
-                <label>Additional context (optional)</label>
+                <label>Contexto adicional (opcional)</label>
                 <input
                   type="text"
                   id="wr-context"
@@ -3987,13 +3985,13 @@
                     margin: 0;
                   "
                 >
-                  Test each response with 30 simulated voters (+45s, +$0.15)
+                  Testar cada resposta com 30 eleitores simulados (+45s, +US$0,15)
                 </label>
               </div>
               <button
                 class="btn-simulate"
                 id="wr-gen-btn"
-                onclick="generateResponse()"
+                onclick="generateResposta()"
                 style="width: 100%"
               >
                 <svg
@@ -4006,7 +4004,7 @@
                 >
                   <path d="M13 2L4 14h7l-1 8 10-13h-7l1-7z" />
                 </svg>
-                Generate 3 Strategic Responses
+                Gerar 3 Respostas Estratégicas
               </button>
 
               <div id="wr-responses" style="margin-top: 18px"></div>
@@ -4018,10 +4016,10 @@
     <!-- MODAL ADD ENTITY -->
     <div class="modal-overlay" id="modal">
       <div class="modal">
-        <div class="modal-title">Add Entity</div>
-        <div class="modal-sub">Add a politician for automatic monitoring.</div>
+        <div class="modal-title">Adicionar Entidade</div>
+        <div class="modal-sub">Adicione um político para monitoramento automático.</div>
         <div class="field">
-          <label>Name</label
+          <label>Nome</label
           ><input
             type="text"
             id="m-name"
@@ -4029,22 +4027,22 @@
           />
         </div>
         <div class="field">
-          <label>Platform</label>
+          <label>Plataforma</label>
           <select id="m-plat" onchange="updateIdField(this.value)">
             <option value="instagram">Instagram</option>
           </select>
         </div>
         <div class="field">
-          <label id="m-id-label">Instagram Username</label>
+          <label id="m-id-label">Usuário do Instagram</label>
           <input type="text" id="m-id" placeholder="lulaoficial" />
           <div class="field-hint" id="m-id-hint">
-            Username only, no @ (e.g. lulaoficial)
+            Apenas o usuário, sem @ (ex: lulaoficial)
           </div>
         </div>
         <div class="modal-btns">
-          <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+          <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
           <button class="btn-save" id="btn-save" onclick="saveProfile()">
-            Deploy Monitor
+            Ativar Monitor
           </button>
         </div>
       </div>
@@ -4098,7 +4096,7 @@
         histChart = null,
         igChart = null,
         igDonutChart = null,
-        igCommentsChart = null;
+        igComentáriosChart = null;
 
       // ── UTILS ──
       const fmt = (n) => {
@@ -4119,9 +4117,9 @@
       const timeAgo = (iso) => {
         const d = Math.floor((Date.now() - new Date(iso)) / 60000);
         if (d < 1) return "just now";
-        if (d < 60) return `${d}min ago`;
-        if (d < 1440) return `${Math.floor(d / 60)}h ago`;
-        return `${Math.floor(d / 1440)}d ago`;
+        if (d < 60) return `${d}min atrás`;
+        if (d < 1440) return `${Math.floor(d / 60)}h atrás`;
+        return `${Math.floor(d / 1440)}d atrás`;
       };
       const fmtDate = (iso) =>
         new Date(iso).toLocaleDateString("pt-BR", {
@@ -4153,7 +4151,7 @@
           return;
         }
         const latest = new Date(Math.max(...dates.map((d) => d.getTime())));
-        el.textContent = `Last updated ${timeAgo(latest.toISOString())}`;
+        el.textContent = `Última atualização ${timeAgo(latest.toISOString())}`;
         el.style.display = "block";
       }
 
@@ -4161,7 +4159,7 @@
       function toast(msg, type = "ok") {
         const t = document.getElementById("toast");
         t.textContent = msg;
-        t.className = `toast ${type} on`;
+        t.classNome = `toast ${type} on`;
         setTimeout(() => t.classList.remove("on"), 3000);
       }
 
@@ -4201,13 +4199,13 @@
         });
 
         if (!crisisProfiles.length) {
-          status.textContent = "● ALL CLEAR";
+          status.textContent = "● TUDO LIMPO";
           status.style.color = "var(--green)";
-          list.innerHTML = `<div class="crisis-empty"><div class="crisis-empty-dot"></div>No active crises detected</div>`;
+          list.innerHTML = `<div class="crisis-empty"><div class="crisis-empty-dot"></div>Nenhuma crise ativa detectada</div>`;
           return;
         }
 
-        status.textContent = "● MONITORING";
+        status.textContent = "● MONITORANDO";
         status.style.color = "var(--red)";
 
         list.innerHTML = crisisProfiles
@@ -4239,7 +4237,7 @@
         <span class="risk-score">Risk: ${risk}/100</span>
       </div>
       <div class="crisis-item-name">${p.name}</div>
-      <div class="crisis-item-meta">instagram · @${p.platform_id} · ${posts.length} posts analyzed</div>
+      <div class="crisis-item-meta">instagram · @${p.platform_id} · ${posts.length} posts analisados</div>
     </div>`;
           })
           .join("");
@@ -4259,7 +4257,7 @@
           rawReports = rRes.reports || [];
           updateTopbarLastUpdated(rawReports);
         } catch {
-          grid.innerHTML = `<div class="loading"><div class="spin"></div>Intelligence feed unavailable</div>`;
+          grid.innerHTML = `<div class="loading"><div class="spin"></div>Feed de inteligência indisponível</div>`;
           return;
         }
 
@@ -4289,9 +4287,9 @@
 
         if (!active.length) {
           grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:48px 20px">
-      <div class="empty-title">No entities monitored</div>
-      <div class="empty-sub">Add a politician to begin intelligence monitoring.</div>
-      <button class="btn-empty" onclick="openModal()">+ Add Entity</button>
+      <div class="empty-title">Nenhuma entidade monitorada</div>
+      <div class="empty-sub">Adicione um político para iniciar o monitoramento de inteligência.</div>
+      <button class="btn-empty" onclick="openModal()">+ Adicionar Entidade</button>
     </div>`;
           renderCrisisPanel([], {});
           return;
@@ -4328,9 +4326,9 @@
             if (isInsta) {
               const posts = instagramPosts[p.platform_id] || [];
               const analyzed = posts.filter((x) => x.sentiment);
-              const hasSentiment = analyzed.length > 0;
+              const hasSentimento = analyzed.length > 0;
               let instaBody = "";
-              if (hasSentiment) {
+              if (hasSentimento) {
                 const ipos = analyzed.filter(
                   (x) => x.sentiment === "positive",
                 ).length;
@@ -4347,20 +4345,20 @@
                 const iscore = (ipos - ineg) / total;
                 const icol = scoreColor(iscore);
                 instaBody = `
-        <div class="score-label">Sentiment Index</div>
+        <div class="score-label">Índice de Sentimento</div>
         <div class="pol-score-row">
           <div class="score-big" style="color:${icol}">${iscore.toFixed(2)}</div>
-          <div class="score-desc"><strong style="color:${icol}">${iposPct.toFixed(0)}% positive</strong>${fmt(posts.length)} posts · ${fmt(total)} analyzed</div>
+          <div class="score-desc"><strong style="color:${icol}">${iposPct.toFixed(0)}% positivo</strong>${fmt(posts.length)} posts · ${fmt(total)} analyzed</div>
         </div>
         <div class="sent-bar"><div class="sb-pos" style="width:${iposPct}%"></div><div class="sb-neu" style="width:${ineuPct}%"></div><div class="sb-neg" style="width:${inegPct}%"></div></div>
         <div class="sent-labels"><span style="color:var(--green)">${iposPct.toFixed(1)}%</span><span style="color:var(--amber)">${ineuPct.toFixed(1)}%</span><span style="color:var(--red)">${inegPct.toFixed(1)}%</span></div>
         <div class="pol-stats">
           <div class="ps"><div class="ps-l">Posts</div><div class="ps-v">${fmt(posts.length)}</div></div>
-          <div class="ps"><div class="ps-l">Avg Likes</div><div class="ps-v">${fmt(Math.round(posts.reduce((a, x) => a + (x.likes_count || 0), 0) / (posts.length || 1)))}</div></div>
-          <div class="ps"><div class="ps-l">Comments</div><div class="ps-v">${fmt(posts.reduce((a, x) => a + (x.comments_count || 0), 0))}</div></div>
+          <div class="ps"><div class="ps-l">Média de Curtidas</div><div class="ps-v">${fmt(Math.round(posts.reduce((a, x) => a + (x.likes_count || 0), 0) / (posts.length || 1)))}</div></div>
+          <div class="ps"><div class="ps-l">Comentários</div><div class="ps-v">${fmt(posts.reduce((a, x) => a + (x.comments_count || 0), 0))}</div></div>
         </div>`;
               } else {
-                instaBody = `<div class="pol-status">Entity Active · Awaiting Analysis</div><div class="action-row" style="margin-top:10px">${pill("collect posts", "purple", "refresh", `event.stopPropagation();collectInstagram('${p.platform_id}','${p.name}')`)}</div>`;
+                instaBody = `<div class="pol-status">Entity Ativo · Awaiting Analysis</div><div class="action-row" style="margin-top:10px">${pill("collect posts", "purple", "refresh", `event.stopPropagation();collectInstagram('${p.platform_id}','${p.name}')`)}</div>`;
               }
               return `<div class="pol-card" onclick="showInstagram('${p.platform_id}','${p.name}')">
         <div class="pol-top">
@@ -4368,14 +4366,14 @@
           <div class="pol-info">
             <div class="pol-name">${p.name}</div>
             <div class="pol-plat">${platformBadge("instagram", p.platform_id)}</div>
-            <div class="pol-status">● Entity Status: Active</div>
+            <div class="pol-status">● Entity Status: Ativo</div>
           </div>
           <div class="pol-badge badge-insta">Instagram</div>
         </div>
         ${instaBody}
         <div class="pol-footer">
           <span class="pol-time">Last Updated: @${p.platform_id}</span>
-          <button type="button" class="pol-remove" onclick="event.stopPropagation();deleteProfile('${p.id}','${p.name}')">${icons.close}<span>remove</span></button>
+          <button type="button" class="pol-remove" onclick="event.stopPropagation();deleteProfile('${p.id}','${p.name}')">${icons.close}<span>remover</span></button>
         </div>
       </div>`;
             }
@@ -4386,30 +4384,30 @@
         <div class="pol-info">
           <div class="pol-name">${p.name}</div>
           <div class="pol-plat"><span class="platform-badge youtube">YouTube · ${p.platform_id.slice(0, 12)}…</span></div>
-          <div class="pol-status">● Entity Status: Active</div>
+          <div class="pol-status">● Entity Status: Ativo</div>
         </div>
-        <div class="pol-badge ${isCrisis ? "badge-crisis" : "badge-ok"}">${isCrisis ? "⚡ Crisis" : "Active"}</div>
+        <div class="pol-badge ${isCrisis ? "badge-crisis" : "badge-ok"}">${isCrisis ? "⚡ Crise" : "Ativo"}</div>
       </div>
       ${
         r
           ? `
-      <div class="score-label">Sentiment Index</div>
+      <div class="score-label">Índice de Sentimento</div>
       <div class="pol-score-row">
         <div class="score-big" style="color:${col}">${score !== null ? score.toFixed(2) : "—"}</div>
-        <div class="score-desc"><strong style="color:${col}">${pos.toFixed(0)}% positive</strong>${(r.comments_analyzed || 0).toLocaleString("pt-BR")} comments analyzed</div>
+        <div class="score-desc"><strong style="color:${col}">${pos.toFixed(0)}% positivo</strong>${(r.comments_analyzed || 0).toLocaleString("pt-BR")} comentários analisados</div>
       </div>
       <div class="sent-bar"><div class="sb-pos" style="width:${pos}%"></div><div class="sb-neu" style="width:${neu}%"></div><div class="sb-neg" style="width:${neg}%"></div></div>
       <div class="sent-labels"><span style="color:var(--green)">${pos.toFixed(1)}%</span><span style="color:var(--amber)">${neu.toFixed(1)}%</span><span style="color:var(--red)">${neg.toFixed(1)}%</span></div>
       <div class="pol-stats">
-        <div class="ps"><div class="ps-l">Views</div><div class="ps-v">${fmt(r.channel_metrics?.total_views)}</div></div>
-        <div class="ps"><div class="ps-l">Likes</div><div class="ps-v">${fmt(r.channel_metrics?.total_likes)}</div></div>
-        <div class="ps"><div class="ps-l">Engagement</div><div class="ps-v">${(r.channel_metrics?.engagement_rate_pct || 0).toFixed(1)}%</div></div>
+        <div class="ps"><div class="ps-l">Visualizações</div><div class="ps-v">${fmt(r.channel_metrics?.total_views)}</div></div>
+        <div class="ps"><div class="ps-l">Curtidas</div><div class="ps-v">${fmt(r.channel_metrics?.total_likes)}</div></div>
+        <div class="ps"><div class="ps-l">Engajamento</div><div class="ps-v">${(r.channel_metrics?.engagement_rate_pct || 0).toFixed(1)}%</div></div>
       </div>
       <div class="pol-footer">
         <span class="pol-time">Last Analysis: ${timeAgo(r.created_at)}</span>
-        <button type="button" class="pol-remove" onclick="event.stopPropagation();deleteProfile('${p.id}','${p.name}')">${icons.close}<span>remove</span></button>
+        <button type="button" class="pol-remove" onclick="event.stopPropagation();deleteProfile('${p.id}','${p.name}')">${icons.close}<span>remover</span></button>
       </div>`
-          : `<div class="pol-status" style="margin-bottom:8px">No analysis — entity pending</div><div class="action-row">${pill("analyze now", "cyan", "play", `event.stopPropagation();analyzeNow('${p.platform_id}','${p.name}')`)}</div>`
+          : `<div class="pol-status" style="margin-bottom:8px">Sem análise — entidade pendente</div><div class="action-row">${pill("analisar agora", "cyan", "play", `event.stopPropagation();analyzeNow('${p.platform_id}','${p.name}')`)}</div>`
       }
     </div>`;
           })
@@ -4426,7 +4424,7 @@
         document.getElementById("pf-name").textContent = name;
         document.getElementById("pf-av").textContent = initials(name);
         document.getElementById("pf-narrative").textContent =
-          "Loading intelligence report...";
+          "Carregando relatório de inteligência...";
 
         let r;
         try {
@@ -4434,13 +4432,13 @@
           r = (data.reports || [])[0];
         } catch {
           document.getElementById("pf-narrative").textContent =
-            "Error loading data.";
+            "Erro ao carregar dados.";
           return;
         }
 
         if (!r) {
           document.getElementById("pf-narrative").textContent =
-            "No data available.";
+            "Nenhum dado disponível.";
           return;
         }
 
@@ -4451,13 +4449,13 @@
         document.getElementById("pf-meta").innerHTML = `
     <span class="pf-chip">YouTube</span>
     <span class="pf-chip">${fmt(r.channel_metrics?.total_views)} views</span>
-    <span class="pf-chip">${fmt(r.comments_analyzed)} comments</span>
+    <span class="pf-chip">${fmt(r.comments_analyzed)} comentários</span>
     <span class="pf-chip">${timeAgo(r.created_at)}</span>`;
 
         if (r.crisis_alert) {
           document.getElementById("pf-crisis").style.display = "flex";
           document.getElementById("pf-crisis-msg").textContent =
-            r.crisis_reason || "High negative sentiment detected.";
+            r.crisis_reason || "Alto negative sentiment detected.";
         } else {
           document.getElementById("pf-crisis").style.display = "none";
         }
@@ -4528,7 +4526,7 @@
             labels,
             datasets: [
               {
-                label: "Positive %",
+                label: "Positivo %",
                 data: hist,
                 borderColor: "rgba(0,229,160,.8)",
                 backgroundColor: "rgba(0,229,160,.06)",
@@ -4576,30 +4574,30 @@
         document.getElementById("ig-name").textContent = name;
         document.getElementById("ig-av").textContent = initials(name);
         document.getElementById("ig-posts-list").innerHTML =
-          '<div class="loading"><div class="spin"></div>Loading intelligence data...</div>';
+          '<div class="loading"><div class="spin"></div>Carregando dados de inteligência...</div>';
         document.getElementById("ig-narrative-card").style.display = "none";
         document.getElementById("ig-sentiment-row").style.display = "none";
         document.getElementById("ig-quotes-card").style.display = "none";
         document.getElementById("ig-crisis").style.display = "none";
         document.getElementById("ig-score-num").textContent = "—";
         document.getElementById("ig-audience-content").innerHTML =
-          '<div class="loading"><div class="spin"></div>Loading audience data...</div>';
+          '<div class="loading"><div class="spin"></div>Carregando dados da audiência...</div>';
 
         try {
           const data = await apiFetch(`/instagram/posts/${username}`);
           const posts = data.posts || [];
           const analyzed = posts.filter((p) => p.sentiment);
-          const hasSentiment = analyzed.length > 0;
+          const hasSentimento = analyzed.length > 0;
 
           document.getElementById("ig-meta").innerHTML = `
       <span class="pf-chip">📸 Instagram</span>
       <span class="pf-chip">@${username}</span>
       <span class="pf-chip">${posts.length} posts collected</span>
       ${
-        hasSentiment
+        hasSentimento
           ? `<span class="pf-chip" style="color:var(--green)">✓ analyzed</span>`
           : pill(
-              "analyze sentiment",
+              "analisar sentimento",
               "purple",
               "lightning",
               `analyzeInstagram('${username}','${name}')`,
@@ -4613,18 +4611,18 @@
             renderAudienceSection(commentsData.comments || [], username, name);
           } catch {
             document.getElementById("ig-audience-content").innerHTML =
-              '<div style="color:var(--red);font-size:12px;font-family:var(--font-m);padding:16px">Error loading comments.</div>';
+              '<div style="color:var(--red);font-size:12px;font-family:var(--font-m);padding:16px">Erro ao carregar comentários.</div>';
           }
 
           if (!posts.length) {
             document.getElementById("ig-posts-list").innerHTML =
               `<div style="text-align:center;padding:32px;color:var(--text3);font-family:var(--font-m);font-size:11px">
-        <div style="margin-bottom:12px">NO POSTS COLLECTED</div>
+        <div style="margin-bottom:12px">NENHUM POST COLETADO</div>
         ${pill("Collect Posts", "purple", "refresh", `collectInstagram('${username}','${name}')`)}</div>`;
             return;
           }
 
-          if (hasSentiment) {
+          if (hasSentimento) {
             const pos = analyzed.filter(
               (p) => p.sentiment === "positive",
             ).length;
@@ -4705,17 +4703,17 @@
             }
 
             document.getElementById("ig-themes").innerHTML =
-              '<div style="color:var(--text3);font-size:10px;font-family:var(--font-m);letter-spacing:.06em">THEMES AVAILABLE AFTER FULL ANALYSIS</div>';
+              '<div style="color:var(--text3);font-size:10px;font-family:var(--font-m);letter-spacing:.06em">TEMAS DISPONÍVEIS APÓS ANÁLISE COMPLETA</div>';
           }
 
-          const avgLikes = Math.round(
+          const avgCurtidas = Math.round(
             posts.reduce((a, p) => a + (p.likes_count || 0), 0) / posts.length,
           );
-          const avgComments = Math.round(
+          const avgComentários = Math.round(
             posts.reduce((a, p) => a + (p.comments_count || 0), 0) /
               posts.length,
           );
-          const avgViews = Math.round(
+          const avgVisualizações = Math.round(
             posts
               .filter((p) => p.video_view_count)
               .reduce((a, p) => a + (p.video_view_count || 0), 0) /
@@ -4725,11 +4723,11 @@
             (a, b) => new Date(b.posted_at) - new Date(a.posted_at),
           );
 
-          document.getElementById("ig-avg-likes").textContent = fmt(avgLikes);
+          document.getElementById("ig-avg-likes").textContent = fmt(avgCurtidas);
           document.getElementById("ig-avg-comments").textContent =
-            fmt(avgComments);
-          document.getElementById("ig-avg-views").textContent = avgViews
-            ? fmt(avgViews)
+            fmt(avgComentários);
+          document.getElementById("ig-avg-views").textContent = avgVisualizações
+            ? fmt(avgVisualizações)
             : "—";
           document.getElementById("ig-last-post").textContent = sorted[0]
             ? timeAgo(sorted[0].posted_at)
@@ -4743,7 +4741,7 @@
               labels: chartPosts.map((p) => fmtDate(p.posted_at)),
               datasets: [
                 {
-                  label: "Likes",
+                  label: "Curtidas",
                   data: chartPosts.map((p) => p.likes_count || 0),
                   backgroundColor: "rgba(199,125,255,0.6)",
                   borderColor: "rgba(199,125,255,1)",
@@ -4802,7 +4800,7 @@
             .join("");
         } catch (e) {
           document.getElementById("ig-posts-list").innerHTML =
-            `<div style="color:var(--red);font-size:12px;font-family:var(--font-m);padding:16px">Error: ${e.message}</div>`;
+            `<div style="color:var(--red);font-size:12px;font-family:var(--font-m);padding:16px">Erro: ${e.message}</div>`;
         }
       }
 
@@ -4830,25 +4828,25 @@
       function renderAudienceSection(comments, username, name) {
         const box = document.getElementById("ig-audience-content");
         if (!box) return;
-        if (igCommentsChart) {
-          igCommentsChart.destroy();
-          igCommentsChart = null;
+        if (igComentáriosChart) {
+          igComentáriosChart.destroy();
+          igComentáriosChart = null;
         }
 
         if (!comments.length) {
           box.innerHTML = `<div style="text-align:center;padding:24px;color:var(--text3);font-family:var(--font-m);font-size:11px">
-      <div style="margin-bottom:12px;letter-spacing:.06em">NO COMMENTS COLLECTED</div>
-      ${pill("Collect Comments", "purple", "refresh", "collectComments('" + username + "','" + name + "')")}</div>`;
+      <div style="margin-bottom:12px;letter-spacing:.06em">NENHUM COMENTÁRIO COLETADO</div>
+      ${pill("Collect Comentários", "purple", "refresh", "collectComentários('" + username + "','" + name + "')")}</div>`;
           return;
         }
 
         const analyzed = comments.filter((c) => c.sentiment);
         if (!analyzed.length) {
           box.innerHTML = `<div class="metric-grid" style="margin-bottom:12px">
-      <div class="metric-item"><div class="metric-lbl">Comments Collected</div><div class="metric-val">${fmt(comments.length)}</div></div>
-      <div class="metric-item"><div class="metric-lbl">Status</div><div class="metric-val" style="font-size:14px;color:var(--amber)">Pending</div></div>
+      <div class="metric-item"><div class="metric-lbl">Comentários Collected</div><div class="metric-val">${fmt(comments.length)}</div></div>
+      <div class="metric-item"><div class="metric-lbl">Status</div><div class="metric-val" style="font-size:14px;color:var(--amber)">Pendente</div></div>
     </div>
-    <div class="action-row">${pill("Analyze Audience", "cyan", "lightning", "analyzeComments('" + username + "','" + name + "')")}</div>`;
+    <div class="action-row">${pill("Analisar Audiência", "cyan", "lightning", "analyzeComentários('" + username + "','" + name + "')")}</div>`;
           return;
         }
 
@@ -4861,41 +4859,41 @@
         const negPct = (neg / total) * 100;
         const score = (pos - neg) / total;
         const col = scoreColor(score);
-        const topComments = [...analyzed]
+        const topComentários = [...analyzed]
           .sort((a, b) => (b.likes_count || 0) - (a.likes_count || 0))
           .slice(0, 3);
 
         box.innerHTML = `
     <div class="g12" style="margin-bottom:14px">
       <div>
-        <div class="score-label">Audience Sentiment Score</div>
+        <div class="score-label">Pontuação de Sentimento da Audiência</div>
         <div class="pol-score-row">
           <div class="score-big" id="ig-audience-score" style="color:${col}">${score.toFixed(2)}</div>
-          <div class="score-desc"><strong style="color:${col}">${posPct.toFixed(0)}% positive</strong>${fmt(comments.length)} collected · ${fmt(total)} analyzed</div>
+          <div class="score-desc"><strong style="color:${col}">${posPct.toFixed(0)}% positivo</strong>${fmt(comments.length)} coletados · ${fmt(total)} analyzed</div>
         </div>
         <div class="sent-bar"><div class="sb-pos" style="width:${posPct}%"></div><div class="sb-neu" style="width:${neuPct}%"></div><div class="sb-neg" style="width:${negPct}%"></div></div>
-        <div class="sent-labels"><span style="color:var(--green)">${posPct.toFixed(1)}% positive</span><span style="color:var(--amber)">${neuPct.toFixed(1)}% neutral</span><span style="color:var(--red)">${negPct.toFixed(1)}% negative</span></div>
+        <div class="sent-labels"><span style="color:var(--green)">${posPct.toFixed(1)}% positivo</span><span style="color:var(--amber)">${neuPct.toFixed(1)}% neutral</span><span style="color:var(--red)">${negPct.toFixed(1)}% negative</span></div>
         <div class="metric-grid">
-          <div class="metric-item"><div class="metric-lbl">Positive</div><div class="metric-val" style="color:var(--green)">${fmt(pos)}</div></div>
-          <div class="metric-item"><div class="metric-lbl">Neutral</div><div class="metric-val" style="color:var(--amber)">${fmt(neu)}</div></div>
-          <div class="metric-item"><div class="metric-lbl">Negative</div><div class="metric-val" style="color:var(--red)">${fmt(neg)}</div></div>
-          <div class="metric-item"><div class="metric-lbl">Comment Likes</div><div class="metric-val">${fmt(analyzed.reduce((a, c) => a + (c.likes_count || 0), 0))}</div></div>
+          <div class="metric-item"><div class="metric-lbl">Positivo</div><div class="metric-val" style="color:var(--green)">${fmt(pos)}</div></div>
+          <div class="metric-item"><div class="metric-lbl">Neutro</div><div class="metric-val" style="color:var(--amber)">${fmt(neu)}</div></div>
+          <div class="metric-item"><div class="metric-lbl">Negativo</div><div class="metric-val" style="color:var(--red)">${fmt(neg)}</div></div>
+          <div class="metric-item"><div class="metric-lbl">Curtidas nos Comentários</div><div class="metric-val">${fmt(analyzed.reduce((a, c) => a + (c.likes_count || 0), 0))}</div></div>
         </div>
       </div>
       <div>
         <div class="donut-wrap">
           <canvas class="donut-c" id="ig-comments-donut"></canvas>
           <div class="donut-leg">
-            <div class="dl-item"><div class="dl-dot" style="background:var(--green)"></div><div class="dl-name">Positive</div><div class="dl-pct" style="color:var(--green)">${posPct.toFixed(1)}%</div></div>
-            <div class="dl-item"><div class="dl-dot" style="background:var(--amber)"></div><div class="dl-name">Neutral</div><div class="dl-pct" style="color:var(--amber)">${neuPct.toFixed(1)}%</div></div>
-            <div class="dl-item"><div class="dl-dot" style="background:var(--red)"></div><div class="dl-name">Negative</div><div class="dl-pct" style="color:var(--red)">${negPct.toFixed(1)}%</div></div>
+            <div class="dl-item"><div class="dl-dot" style="background:var(--green)"></div><div class="dl-name">Positivo</div><div class="dl-pct" style="color:var(--green)">${posPct.toFixed(1)}%</div></div>
+            <div class="dl-item"><div class="dl-dot" style="background:var(--amber)"></div><div class="dl-name">Neutro</div><div class="dl-pct" style="color:var(--amber)">${neuPct.toFixed(1)}%</div></div>
+            <div class="dl-item"><div class="dl-dot" style="background:var(--red)"></div><div class="dl-name">Negativo</div><div class="dl-pct" style="color:var(--red)">${negPct.toFixed(1)}%</div></div>
           </div>
         </div>
       </div>
     </div>
-    <div class="card-hd">Top Comments by Likes</div>
+    <div class="card-hd">Top Comentários by Curtidas</div>
     <div class="insta-posts" style="margin-bottom:12px">
-      ${topComments
+      ${topComentários
         .map(
           (c) => `
         <div class="insta-post">
@@ -4913,9 +4911,9 @@
         )
         .join("")}
     </div>
-    <div class="action-row">${pill("Refresh", "purple", "refresh", "collectComments('" + username + "','" + name + "')")}</div>`;
+    <div class="action-row">${pill("Refresh", "purple", "refresh", "collectComentários('" + username + "','" + name + "')")}</div>`;
 
-        igCommentsChart = new Chart(
+        igComentáriosChart = new Chart(
           document.getElementById("ig-comments-donut"),
           {
             type: "doughnut",
@@ -4944,9 +4942,9 @@
       }
 
       // ── ACTIONS ──
-      async function collectComments(username, name) {
+      async function collectComentários(username, name) {
         showProgress(
-          "Collecting Comments...",
+          "Coletando Comentários...",
           "Fetching post comments via Apify",
         );
         try {
@@ -4954,23 +4952,23 @@
             `/collect/comments/${username}?posts_limit=10&comments_per_post=20`,
             "POST",
           );
-          toast(`✓ ${data.comments_saved} comments saved!`);
+          toast(`✓ ${data.comments_saved} comentários salvos!`);
           showInstagram(username, name);
         } catch {
-          toast("Collection error", "err");
+          toast("Erro na coleta", "err");
         } finally {
           hideProgress();
         }
       }
 
-      async function analyzeComments(username, name) {
-        showProgress("Analyzing Audience...", "Claude is classifying comments");
+      async function analyzeComentários(username, name) {
+        showProgress("Analisando Audiência...", "Claude está classificando os comentários");
         try {
           const data = await apiFetch(`/analyze/comments/${username}`, "POST");
-          toast(`✓ ${data.comments_analyzed} comments analyzed!`);
+          toast(`✓ ${data.comments_analyzed} comentários analisados!`);
           showInstagram(username, name);
         } catch {
-          toast("Analysis error", "err");
+          toast("Erro na análise", "err");
         } finally {
           hideProgress();
         }
@@ -4983,26 +4981,26 @@
         );
         try {
           const data = await apiFetch(`/analyze/instagram/${username}`, "POST");
-          toast(`✓ ${data.posts_analyzed} posts analyzed!`);
+          toast(`✓ ${data.posts_analyzed} posts analisados!`);
           showInstagram(username, name);
         } catch {
-          toast("Analysis error", "err");
+          toast("Erro na análise", "err");
         } finally {
           hideProgress();
         }
       }
 
       async function collectInstagram(username, name) {
-        showProgress("Collecting Posts...", "Fetching latest posts via Apify");
+        showProgress("Coletando Posts...", "Buscando posts recentes via Apify");
         try {
           const data = await apiFetch(
             `/collect/instagram/${username}?limit=50`,
             "POST",
           );
-          toast(`✓ ${data.posts_saved} posts saved!`);
+          toast(`✓ ${data.posts_saved} posts salvos!`);
           showInstagram(username, name);
         } catch {
-          toast("Collection error", "err");
+          toast("Erro na coleta", "err");
         } finally {
           hideProgress();
         }
@@ -5023,13 +5021,13 @@
       }
 
       async function deleteProfile(id, name) {
-        if (!confirm(`Remove ${name} from monitoring?`)) return;
+        if (!confirm(`Remove ${name} do monitoramento?`)) return;
         try {
           await apiFetch(`/profiles/${id}`, "DELETE");
-          toast(`${name} removed!`);
+          toast(`${name} removido!`);
           loadOverview();
         } catch {
-          toast("Error removing", "err");
+          toast("Erro ao remover", "err");
         }
       }
 
@@ -5058,7 +5056,7 @@
 
         const btn = document.getElementById("sim-run-btn");
         btn.disabled = true;
-        btn.innerHTML = `${saveSpinner()}<span>Simulating...</span>`;
+        btn.innerHTML = `${saveSpinner()}<span>Simulando...</span>`;
         document.getElementById("sim-loading").style.display = "block";
         document.getElementById("sim-results").style.display = "none";
         document.getElementById("sim-empty").style.display = "none";
@@ -5066,7 +5064,7 @@
         // Loading messages rotativos
         const msgs = [
           "Spawning Brazilian voter agents...",
-          "Running parallel sentiment analysis...",
+          "Executando análise de sentimento em paralelo...",
           "Aggregating spectrum reactions...",
           "Computing crisis score...",
           "Finalizing forecast...",
@@ -5085,13 +5083,13 @@
             return;
           }
           renderizarResultadoSim(data);
-          toast("✓ Simulation complete!");
+          toast("✓ Simulação concluída!");
         } catch (e) {
-          toast("Simulation failed: " + e.message, "err");
+          toast("Falha na simulação: " + e.message, "err");
         } finally {
           clearInterval(msgInterval);
           btn.disabled = false;
-          btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L4 14h7l-1 8 10-13h-7l1-7z"/></svg><span>Run Simulation</span>`;
+          btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L4 14h7l-1 8 10-13h-7l1-7z"/></svg><span>Rodar Simulação</span>`;
           document.getElementById("sim-loading").style.display = "none";
         }
       }
@@ -5157,11 +5155,11 @@
     </div>
     <div style="flex:1">
       <div style="font-size:11px;font-weight:700;color:${confCor};font-family:var(--font-m);letter-spacing:.06em;text-transform:uppercase">${conf.label || "Statistical Analysis"}</div>
-      <div style="font-size:11px;color:var(--text2);font-family:var(--font-m);margin-top:2px;letter-spacing:.04em">${d.metodo_estatistico || ""} · Confidence: ${d.nivel_confianca || "95%"}</div>
+      <div style="font-size:11px;color:var(--text2);font-family:var(--font-m);margin-top:2px;letter-spacing:.04em">${d.metodo_estatistico || ""} · Confiança: ${d.nivel_confianca || "95%"}</div>
     </div>
     <div style="font-family:var(--font-d);font-size:24px;color:${confCor};font-style:italic">n=${d.total_agentes || 0}</div>`;
 
-        // ── Sentiment Bars com IC ──
+        // ── Sentimento Bars com IC ──
         const sentColors = {
           positivo: "var(--green)",
           apoio: "var(--green)",
@@ -5219,14 +5217,14 @@
           <div class="sim-cluster-name" style="margin:0">${esp.replace(/_/g, " ")}</div>
           <span style="font-size:9px;color:${confClusterCor};font-family:var(--font-m);letter-spacing:.06em">n=${info.n_agentes}</span>
         </div>
-        <div class="sim-cluster-metric">Dominant sentiment <strong style="color:${sentColor}">${info.sentimento_dominante} (${info.sentimento_dominante_pct}%)</strong></div>
-        <div class="sim-cluster-metric">Intensity <strong>${info.intensidade_media}/10</strong> <span style="font-size:9px;color:var(--text3);font-family:var(--font-m)">IC: ${info.intensidade_ic_95[0]}–${info.intensidade_ic_95[1]}</span></div>
+        <div class="sim-cluster-metric">Sentimento dominante <strong style="color:${sentColor}">${info.sentimento_dominante} (${info.sentimento_dominante_pct}%)</strong></div>
+        <div class="sim-cluster-metric">Intensidade <strong>${info.intensidade_media}/10</strong> <span style="font-size:9px;color:var(--text3);font-family:var(--font-m)">IC: ${info.intensidade_ic_95[0]}–${info.intensidade_ic_95[1]}</span></div>
         ${marcadores ? `<div class="sim-cluster-metric" style="margin-top:6px;color:var(--cyan);font-size:10px">⚑ ${marcadores}</div>` : ""}
         ${
           info.amostra_comentarios?.length
             ? `
           <details class="sim-cluster-comments">
-            <summary>View predicted comments</summary>
+            <summary>Ver comentários previstos</summary>
             <ul>${info.amostra_comentarios.map((c) => `<li>"${escapeHtml(c)}"</li>`).join("")}</ul>
           </details>`
             : ""
@@ -5234,16 +5232,16 @@
       </div>`;
         });
 
-        // ── Comments / Themes / Vote Impact (igual antes) ──
+        // ── Comentários / Themes / Vote Impact (igual antes) ──
         const comEl = document.getElementById("sim-comments");
-        const sampleComments = (d.amostra_comentarios || [])
+        const sampleComentários = (d.amostra_comentarios || [])
           .filter(Boolean)
           .slice(0, 8);
-        comEl.innerHTML = sampleComments.length
-          ? sampleComments
+        comEl.innerHTML = sampleComentários.length
+          ? sampleComentários
               .map((c) => `<div class="sim-comment">"${escapeHtml(c)}"</div>`)
               .join("")
-          : '<div style="color:var(--text3);font-size:11px;font-family:var(--font-m);padding:12px">No predicted comments available</div>';
+          : '<div style="color:var(--text3);font-size:11px;font-family:var(--font-m);padding:12px">Nenhum comentário previsto disponível</div>';
 
         const temaEl = document.getElementById("sim-themes");
         const temas = Object.entries(d.temas_percebidos || {});
@@ -5257,7 +5255,7 @@
       </div>`,
               )
               .join("")
-          : '<div style="color:var(--text3);font-size:11px;font-family:var(--font-m);padding:12px">No themes identified</div>';
+          : '<div style="color:var(--text3);font-size:11px;font-family:var(--font-m);padding:12px">Nenhum tema identificado</div>';
 
         const voteEl = document.getElementById("sim-vote-impact");
         const voteColors = {
@@ -5269,7 +5267,7 @@
         const voteLabels = {
           sim: "Changes Vote",
           reforça_voto_atual: "Reinforces",
-          nao: "No Change",
+          nao: "Sem Mudança",
           afasta: "Pushes Away",
         };
         voteEl.innerHTML = Object.entries(d.impacto_voto || {})
@@ -5297,7 +5295,7 @@
           .querySelectorAll(".nav-item")
           .forEach((n) => n.classList.remove("on"));
 
-        // Para o auto-refresh da War Room se estiver indo pra outra view
+        // Para o auto-refresh da Sala de Crise se estiver indo pra outra view
         if (v !== "warroom" && warRoomInterval) {
           clearInterval(warRoomInterval);
           warRoomInterval = null;
@@ -5305,14 +5303,14 @@
 
         if (v === "overview") {
           document.getElementById("topbar-title").textContent =
-            "Intelligence Deck";
+            "Painel de Inteligência";
           loadOverview();
           document.querySelectorAll(".nav-item")[0].classList.add("on");
         } else if (v === "simulator") {
-          document.getElementById("topbar-title").textContent = "AI Simulator";
+          document.getElementById("topbar-title").textContent = "Simulador de IA";
           document.querySelectorAll(".nav-item")[4].classList.add("on");
         } else if (v === "warroom") {
-          document.getElementById("topbar-title").textContent = "War Room";
+          document.getElementById("topbar-title").textContent = "Sala de Crise";
           document.querySelectorAll(".nav-item")[2].classList.add("on");
           loadWarRoom();
           warRoomInterval = setInterval(loadWarRoom, 60000); // auto-refresh 60s
@@ -5321,10 +5319,10 @@
 
       function updateIdField(platform) {
         document.getElementById("m-id-label").textContent =
-          "Instagram Username";
+          "Usuário do Instagram";
         document.getElementById("m-id").placeholder = "lulaoficial";
         document.getElementById("m-id-hint").textContent =
-          "Username only, no @ (e.g. lulaoficial)";
+          "Apenas o usuário, sem @ (ex: lulaoficial)";
       }
 
       function openModal() {
@@ -5342,20 +5340,20 @@
           .value.trim()
           .replace(/^@+/, "");
         if (!name || !id) {
-          toast("Fill in all fields", "err");
+          toast("Preencha todos os campos", "err");
           return;
         }
         const btn = document.getElementById("btn-save");
         btn.disabled = true;
-        btn.innerHTML = `${saveSpinner()}<span>Deploying...</span>`;
-        showProgress("Deploying Monitor...", "Saving entity profile...");
+        btn.innerHTML = `${saveSpinner()}<span>Ativando...</span>`;
+        showProgress("Ativando Monitor...", "Salvando perfil da entidade...");
         try {
           await apiFetch("/profiles", "POST", {
             name,
             platform,
             platform_id: id,
           });
-          toast("Entity added!");
+          toast("Entidade adicionada!");
           closeModal();
           document.getElementById("progress-msg").textContent =
             "Collecting posts...";
@@ -5363,14 +5361,14 @@
             `/collect/instagram/${id}?limit=50`,
             "POST",
           );
-          toast(`✓ ${data.posts_saved} posts from ${name} collected!`);
+          toast(`✓ ${data.posts_saved} posts de ${name} coletados!`);
           loadOverview();
         } catch {
-          toast("Deployment error", "err");
+          toast("Erro ao ativar", "err");
           closeModal();
         } finally {
           btn.disabled = false;
-          btn.innerHTML = "Deploy Monitor";
+          btn.innerHTML = "Ativar Monitor";
           hideProgress();
         }
       }
@@ -5384,7 +5382,7 @@
           .forEach((x) => x.classList.remove("on"));
         document.getElementById("view-mentions").classList.add("on");
         document.getElementById("topbar-title").textContent =
-          "Live Intelligence Feed";
+          "Feed de Inteligência ao Vivo";
         document.getElementById("mentions-title").textContent = `"${query}"`;
         document.getElementById("mentions-sub").textContent =
           "Scanning news, blogs and media sources...";
@@ -5428,7 +5426,7 @@
             .join("");
         } catch (e) {
           document.getElementById("mentions-list").innerHTML =
-            `<div style="color:var(--red);font-size:12px;font-family:var(--font-m);padding:16px">Error: ${e.message}</div>`;
+            `<div style="color:var(--red);font-size:12px;font-family:var(--font-m);padding:16px">Erro: ${e.message}</div>`;
         }
       }
       // ── WAR ROOM ──
@@ -5437,7 +5435,7 @@
       async function loadWarRoom() {
         await Promise.all([
           loadThreatLevel(),
-          loadNegativeFeed(),
+          loadNegativoFeed(),
           loadWarRoomProfiles(),
         ]);
       }
@@ -5469,12 +5467,12 @@
         <div class="defcon-bar-track">
           <div class="defcon-bar-fill" style="width:${data.threat_score}%;background:${color}"></div>
         </div>
-        <div class="defcon-bar-meta">Threat Score: <strong style="color:${color}">${data.threat_score}/100</strong></div>
+        <div class="defcon-bar-meta">Pontuação de Ameaça: <strong style="color:${color}">${data.threat_score}/100</strong></div>
       </div>
       <div class="defcon-right">
-        <div class="defcon-meta-item"><span>Last updated</span><strong>${new Date(data.calculated_at).toLocaleTimeString("pt-BR")}</strong></div>
+        <div class="defcon-meta-item"><span>Última atualização</span><strong>${new Date(data.calculated_at).toLocaleTimeString("pt-BR")}</strong></div>
       </div>`;
-          banner.className = `defcon-banner defcon-${data.color}`;
+          banner.classNome = `defcon-banner defcon-${data.color}`;
           banner.style.display = "flex";
 
           // KPIs
@@ -5497,7 +5495,7 @@
           const profiles = Object.values(data.per_profile || {});
           if (!profiles.length) {
             gridEl.innerHTML =
-              '<div style="padding:24px;color:var(--text3);font-family:var(--font-m);font-size:11px;text-align:center">No recent activity (last 24h)</div>';
+              '<div style="padding:24px;color:var(--text3);font-family:var(--font-m);font-size:11px;text-align:center">Nenhuma atividade recente (últimas 24h)</div>';
           } else {
             gridEl.innerHTML = profiles
               .sort((a, b) => b.neg_pct - a.neg_pct)
@@ -5516,7 +5514,7 @@
           <div class="wr-profile-name">${p.name}</div>
           <div class="wr-profile-stats">
             <span style="color:${col};font-weight:700">${p.neg_pct}%</span>
-            <span style="color:var(--text3);font-family:var(--font-m);font-size:10px">negative · ${p.comments_24h} comments 24h</span>
+            <span style="color:var(--text3);font-family:var(--font-m);font-size:10px">negativo · ${p.comments_24h} comentários 24h</span>
           </div>
           <span class="wr-profile-status" style="color:${col};border-color:${col}">${status}</span>
         </div>`;
@@ -5540,7 +5538,7 @@
         }
       }
 
-      async function loadNegativeFeed() {
+      async function loadNegativoFeed() {
         const el = document.getElementById("wr-feed");
         try {
           const data = await apiFetch(
@@ -5550,7 +5548,7 @@
 
           if (!comments.length) {
             el.innerHTML =
-              '<div style="text-align:center;padding:24px;color:var(--green);font-family:var(--font-m);font-size:11px"><div style="font-size:24px;margin-bottom:8px">✓</div>No hostile comments in last 24h</div>';
+              '<div style="text-align:center;padding:24px;color:var(--green);font-family:var(--font-m);font-size:11px"><div style="font-size:24px;margin-bottom:8px">✓</div>Nenhum comentário hostil nas últimas 24h</div>';
             return;
           }
 
@@ -5573,7 +5571,7 @@
             )
             .join("");
         } catch (e) {
-          el.innerHTML = `<div style="color:var(--red);font-size:11px;padding:16px;font-family:var(--font-m)">Error: ${e.message}</div>`;
+          el.innerHTML = `<div style="color:var(--red);font-size:11px;padding:16px;font-family:var(--font-m)">Erro: ${e.message}</div>`;
         }
       }
 
@@ -5593,7 +5591,7 @@
         document.getElementById("wr-attack").focus();
       }
 
-      async function generateResponse() {
+      async function generateResposta() {
         const attack = document.getElementById("wr-attack").value.trim();
         if (!attack) {
           toast("Cole um ataque para gerar respostas", "err");
@@ -5602,7 +5600,7 @@
 
         const sel = document.getElementById("wr-target-politician");
         const username = sel.value || null;
-        const politicianName =
+        const politicianNome =
           sel.options[sel.selectedIndex]?.textContent || "candidato";
         const context = document.getElementById("wr-context").value.trim();
         const simulate = document.getElementById("wr-simulate").checked;
@@ -5610,23 +5608,23 @@
         const btn = document.getElementById("wr-gen-btn");
         const out = document.getElementById("wr-responses");
         btn.disabled = true;
-        btn.innerHTML = `${saveSpinner()}<span>${simulate ? "Generating & simulating responses..." : "Generating responses..."}</span>`;
-        out.innerHTML = `<div class="loading" style="padding:24px"><div class="spin"></div>${simulate ? "Generating 3 responses and testing each with 30 voters..." : "Generating 3 strategic responses..."}</div>`;
+        btn.innerHTML = `${saveSpinner()}<span>${simulate ? "Gerando e simulando respostas..." : "Gerando respostas..."}</span>`;
+        out.innerHTML = `<div class="loading" style="padding:24px"><div class="spin"></div>${simulate ? "Gerando 3 respostas e testando cada uma com 30 eleitores..." : "Gerando 3 respostas estratégicas..."}</div>`;
 
         try {
           const data = await apiFetch("/warroom/generate-response", "POST", {
             attack,
             username,
             politician_name:
-              politicianName === "All entities (generic response)"
+              politicianNome === "Todas as entidades (resposta genérica)"
                 ? "candidato"
-                : politicianName,
+                : politicianNome,
             context,
             simulate,
           });
 
           if (data.error) {
-            out.innerHTML = `<div style="color:var(--red);padding:12px;font-family:var(--font-m);font-size:11px">Error: ${data.error}</div>`;
+            out.innerHTML = `<div style="color:var(--red);padding:12px;font-family:var(--font-m);font-size:11px">Erro: ${data.error}</div>`;
             return;
           }
 
@@ -5647,7 +5645,7 @@
           };
 
           out.innerHTML =
-            `<div class="card-hd" style="margin-top:14px">Generated Responses</div>` +
+            `<div class="card-hd" style="margin-top:14px">Respostas Geradas</div>` +
             (data.respostas || [])
               .map((r, i) => {
                 const col = strategyColors[r.estrategia] || "var(--cyan)";
@@ -5665,9 +5663,9 @@
             <div class="wr-resp-sim">
               <div class="wr-resp-sim-title">⊕ Simulation Results (${sim.agents} agents)</div>
               <div class="wr-resp-sim-grid">
-                <div><span class="wr-resp-sim-lbl">Crisis Score</span><span class="wr-resp-sim-val" style="color:${crisisCol}">${crisis}</span></div>
-                <div><span class="wr-resp-sim-lbl">Viral Risk</span><span class="wr-resp-sim-val">${(sim.viral_risk || 0).toFixed(1)}</span></div>
-                <div><span class="wr-resp-sim-lbl">Share %</span><span class="wr-resp-sim-val">${(sim.share_pct || 0).toFixed(0)}%</span></div>
+                <div><span class="wr-resp-sim-lbl">Pontuação de Crise</span><span class="wr-resp-sim-val" style="color:${crisisCol}">${crisis}</span></div>
+                <div><span class="wr-resp-sim-lbl">Risco Viral</span><span class="wr-resp-sim-val">${(sim.viral_risk || 0).toFixed(1)}</span></div>
+                <div><span class="wr-resp-sim-lbl">Compartilhar %</span><span class="wr-resp-sim-val">${(sim.share_pct || 0).toFixed(0)}%</span></div>
               </div>
             </div>`;
                 } else if (sim?.error) {
@@ -5683,19 +5681,19 @@
             <div class="wr-response-text">"${escapeHtml(r.texto)}"</div>
             ${simBlock}
             <div class="wr-response-actions">
-              <button class="action-pill cyan" onclick="navigator.clipboard.writeText('${escapeHtml(r.texto).replace(/'/g, "\\'")}');toast('Response copied!')">${icons.refresh}<span>copy</span></button>
+              <button class="action-pill cyan" onclick="navigator.clipboard.writeText('${escapeHtml(r.texto).replace(/'/g, "\\'")}');toast('Resposta copiada!')">${icons.refresh}<span>copiar</span></button>
             </div>
           </div>`;
               })
               .join("");
 
-          toast("✓ 3 responses generated!");
+          toast("✓ 3 respostas geradas!");
         } catch (e) {
-          out.innerHTML = `<div style="color:var(--red);padding:12px;font-family:var(--font-m);font-size:11px">Error: ${e.message}</div>`;
-          toast("Generation failed", "err");
+          out.innerHTML = `<div style="color:var(--red);padding:12px;font-family:var(--font-m);font-size:11px">Erro: ${e.message}</div>`;
+          toast("Falha na geração", "err");
         } finally {
           btn.disabled = false;
-          btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L4 14h7l-1 8 10-13h-7l1-7z"/></svg><span>Generate 3 Strategic Responses</span>`;
+          btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L4 14h7l-1 8 10-13h-7l1-7z"/></svg><span>Gerar 3 Respostas Estratégicas</span>`;
         }
       }
 
