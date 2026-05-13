@@ -1,701 +1,775 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pulse — Inteligência Política</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
-    body { background: #fafafa; }
-    .card { background: white; border: 1px solid #e5e5e5; border-radius: 12px; }
-    .scrollbar-thin::-webkit-scrollbar { width: 6px; height: 6px; }
-    .scrollbar-thin::-webkit-scrollbar-thumb { background: #d4d4d4; border-radius: 3px; }
-    .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
-    .word-cloud span { transition: all 0.15s; cursor: default; }
-    .word-cloud span:hover { color: #0c4a6e; }
-    .defcon-1 { background: #fee2e2; color: #991b1b; border-color: #fca5a5; }
-    .defcon-2 { background: #fed7aa; color: #9a3412; border-color: #fdba74; }
-    .defcon-3 { background: #fef3c7; color: #92400e; border-color: #fde68a; }
-    .defcon-4 { background: #ecfccb; color: #3f6212; border-color: #d9f99d; }
-    .defcon-5 { background: #dcfce7; color: #166534; border-color: #bbf7d0; }
-    .heatmap-cell { aspect-ratio: 1; border-radius: 4px; transition: transform 0.1s; cursor: default; }
-    .heatmap-cell:hover { transform: scale(1.2); z-index: 10; position: relative; }
-    .toast { animation: slideIn 0.3s ease-out; }
-    @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-  </style>
-</head>
-<body class="text-neutral-900">
-
-<!-- ═══════════════════════════════════════════════════════════════
-     TELA DE LOGIN
-     ═══════════════════════════════════════════════════════════════ -->
-<div id="login-screen" class="min-h-screen flex items-center justify-center px-4">
-  <div class="card w-full max-w-md p-8">
-    <div class="flex items-center gap-3 mb-8">
-      <div class="w-10 h-10 rounded-lg bg-sky-900 flex items-center justify-center">
-        <i data-lucide="activity" class="w-5 h-5 text-white"></i>
-      </div>
-      <div>
-        <h1 class="text-xl font-semibold">Pulse</h1>
-        <p class="text-xs text-neutral-500">Inteligência política</p>
-      </div>
-    </div>
-
-    <h2 class="text-lg font-semibold mb-1">Entrar na conta</h2>
-    <p class="text-sm text-neutral-500 mb-6">Acesse o painel da sua campanha</p>
-
-    <form id="login-form" class="space-y-4">
-      <div>
-        <label class="block text-sm font-medium mb-1.5">Email</label>
-        <input type="email" id="login-email" required
-          class="w-full px-3 py-2 border border-neutral-200 rounded-lg text-sm focus:outline-none focus:border-sky-900 focus:ring-1 focus:ring-sky-900"
-          placeholder="voce@email.com">
-      </div>
-      <div>
-        <label class="block text-sm font-medium mb-1.5">Senha</label>
-        <input type="password" id="login-password" required
-          class="w-full px-3 py-2 border border-neutral-200 rounded-lg text-sm focus:outline-none focus:border-sky-900 focus:ring-1 focus:ring-sky-900"
-          placeholder="••••••••">
-      </div>
-      <div id="login-error" class="hidden text-sm text-red-600 bg-red-50 border border-red-200 px-3 py-2 rounded-lg"></div>
-      <button type="submit" id="login-btn"
-        class="w-full bg-sky-900 hover:bg-sky-950 text-white text-sm font-medium py-2.5 rounded-lg transition-colors">
-        Entrar
-      </button>
-    </form>
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════════════════════════════════
-     DASHBOARD
-     ═══════════════════════════════════════════════════════════════ -->
-<div id="dashboard" class="hidden min-h-screen">
-
-  <!-- TOPBAR -->
-  <header class="bg-white border-b border-neutral-200 px-6 py-3 flex items-center justify-between sticky top-0 z-20">
-    <div class="flex items-center gap-3">
-      <div class="w-8 h-8 rounded-lg bg-sky-900 flex items-center justify-center">
-        <i data-lucide="activity" class="w-4 h-4 text-white"></i>
-      </div>
-      <span class="font-semibold">Pulse</span>
-    </div>
-    <div class="flex items-center gap-4">
-      <div id="threat-badge" class="hidden px-3 py-1.5 rounded-lg border text-xs font-medium flex items-center gap-2">
-        <span class="w-2 h-2 rounded-full bg-current"></span>
-        <span id="threat-label">—</span>
-      </div>
-      <div class="text-sm">
-        <span class="text-neutral-500">Olá,</span>
-        <span id="user-name" class="font-medium">—</span>
-      </div>
-      <button id="logout-btn" class="text-sm text-neutral-500 hover:text-neutral-900 flex items-center gap-1">
-        <i data-lucide="log-out" class="w-4 h-4"></i>
-        Sair
-      </button>
-    </div>
-  </header>
-
-  <div class="flex">
-    <!-- SIDEBAR -->
-    <aside class="w-64 border-r border-neutral-200 bg-white min-h-[calc(100vh-57px)] p-4">
-      <div class="flex items-center justify-between mb-3">
-        <h3 class="text-xs font-semibold text-neutral-500 uppercase tracking-wide">Perfis</h3>
-        <button id="add-profile-btn" class="text-neutral-400 hover:text-sky-900" title="Adicionar perfil">
-          <i data-lucide="plus" class="w-4 h-4"></i>
-        </button>
-      </div>
-      <div id="profiles-list" class="space-y-1">
-        <div class="text-sm text-neutral-400">Carregando...</div>
-      </div>
-    </aside>
-
-    <!-- MAIN -->
-    <main class="flex-1 p-6">
-      <div id="empty-state" class="hidden text-center py-20">
-        <i data-lucide="inbox" class="w-12 h-12 mx-auto text-neutral-300 mb-3"></i>
-        <h3 class="font-medium mb-1">Nenhum perfil monitorado</h3>
-        <p class="text-sm text-neutral-500 mb-4">Adicione um perfil pra começar a coletar dados</p>
-        <button onclick="document.getElementById('add-profile-btn').click()"
-          class="bg-sky-900 hover:bg-sky-950 text-white text-sm font-medium px-4 py-2 rounded-lg">
-          + Adicionar perfil
-        </button>
-      </div>
-
-      <div id="profile-view" class="hidden">
-        <!-- HEADER DO PERFIL -->
-        <div class="flex items-center justify-between mb-6">
-          <div>
-            <h2 id="profile-name" class="text-2xl font-semibold">—</h2>
-            <p id="profile-username" class="text-sm text-neutral-500">—</p>
-          </div>
-          <div class="flex gap-2">
-            <button id="collect-btn" class="text-sm bg-white border border-neutral-200 hover:border-sky-900 px-3 py-2 rounded-lg flex items-center gap-1.5">
-              <i data-lucide="download-cloud" class="w-4 h-4"></i>
-              Coletar dados
-            </button>
-            <button id="analyze-btn" class="text-sm bg-sky-900 hover:bg-sky-950 text-white px-3 py-2 rounded-lg flex items-center gap-1.5">
-              <i data-lucide="sparkles" class="w-4 h-4"></i>
-              Analisar
-            </button>
-          </div>
-        </div>
-
-        <!-- KPIs -->
-        <div class="grid grid-cols-4 gap-4 mb-6">
-          <div class="card p-4">
-            <div class="text-xs text-neutral-500 uppercase tracking-wide mb-1">Threat Level</div>
-            <div class="flex items-baseline gap-2">
-              <span id="kpi-defcon" class="text-2xl font-semibold">—</span>
-              <span id="kpi-defcon-label" class="text-xs text-neutral-500">—</span>
-            </div>
-          </div>
-          <div class="card p-4">
-            <div class="text-xs text-neutral-500 uppercase tracking-wide mb-1">Comentários 24h</div>
-            <div class="text-2xl font-semibold" id="kpi-comments-24h">—</div>
-          </div>
-          <div class="card p-4">
-            <div class="text-xs text-neutral-500 uppercase tracking-wide mb-1">% Negativo</div>
-            <div class="text-2xl font-semibold" id="kpi-negative-pct">—</div>
-          </div>
-          <div class="card p-4">
-            <div class="text-xs text-neutral-500 uppercase tracking-wide mb-1">Spike Factor</div>
-            <div class="text-2xl font-semibold" id="kpi-spike">—</div>
-          </div>
-        </div>
-
-        <!-- CHARTS -->
-        <div class="grid grid-cols-2 gap-4 mb-6">
-          <div class="card p-5">
-            <div class="flex items-center justify-between mb-4">
-              <h3 class="font-semibold">Sentiment Timeline</h3>
-              <span class="text-xs text-neutral-400">últimos 30 dias</span>
-            </div>
-            <canvas id="chart-timeline" height="200"></canvas>
-          </div>
-
-          <div class="card p-5">
-            <div class="flex items-center justify-between mb-4">
-              <h3 class="font-semibold">Engagement por Tipo</h3>
-              <span class="text-xs text-neutral-400">média por post</span>
-            </div>
-            <canvas id="chart-engagement" height="200"></canvas>
-          </div>
-
-          <div class="card p-5">
-            <div class="flex items-center justify-between mb-4">
-              <h3 class="font-semibold">Horários de Pico</h3>
-              <span class="text-xs text-neutral-400">horário BR</span>
-            </div>
-            <div id="heatmap" class="text-xs"></div>
-          </div>
-
-          <div class="card p-5">
-            <div class="flex items-center justify-between mb-4">
-              <h3 class="font-semibold">Temas em Alta</h3>
-              <span class="text-xs text-neutral-400">word cloud</span>
-            </div>
-            <div id="word-cloud" class="word-cloud flex flex-wrap gap-2 items-center justify-center min-h-[200px] p-3"></div>
-          </div>
-        </div>
-
-        <!-- FEED NEGATIVO -->
-        <div class="card p-5">
-          <div class="flex items-center justify-between mb-4">
-            <h3 class="font-semibold flex items-center gap-2">
-              <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-600"></i>
-              Comentários Negativos Recentes
-            </h3>
-            <span class="text-xs text-neutral-400">últimas 24h</span>
-          </div>
-          <div id="negative-feed" class="space-y-2 max-h-96 overflow-y-auto scrollbar-thin">
-            <div class="text-sm text-neutral-400">Carregando...</div>
-          </div>
-        </div>
-      </div>
-    </main>
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════════════════════════════════
-     MODAL ADICIONAR PERFIL
-     ═══════════════════════════════════════════════════════════════ -->
-<div id="add-modal" class="hidden fixed inset-0 bg-black/40 z-30 flex items-center justify-center px-4">
-  <div class="card w-full max-w-md p-6">
-    <h3 class="font-semibold mb-4">Adicionar perfil monitorado</h3>
-    <form id="add-form" class="space-y-4">
-      <div>
-        <label class="block text-sm font-medium mb-1.5">Nome</label>
-        <input type="text" id="add-name" required
-          class="w-full px-3 py-2 border border-neutral-200 rounded-lg text-sm focus:outline-none focus:border-sky-900"
-          placeholder="Ex: Lula, Bolsonaro, Tarcísio">
-      </div>
-      <div>
-        <label class="block text-sm font-medium mb-1.5">Plataforma</label>
-        <select id="add-platform" class="w-full px-3 py-2 border border-neutral-200 rounded-lg text-sm focus:outline-none focus:border-sky-900">
-          <option value="instagram">Instagram</option>
-          <option value="youtube">YouTube</option>
-        </select>
-      </div>
-      <div>
-        <label class="block text-sm font-medium mb-1.5">Identificador</label>
-        <input type="text" id="add-platform-id" required
-          class="w-full px-3 py-2 border border-neutral-200 rounded-lg text-sm focus:outline-none focus:border-sky-900"
-          placeholder="username do Instagram OU channel ID do YouTube">
-        <p class="text-xs text-neutral-500 mt-1">Ex: <code>lulaoficial</code> (sem @) ou <code>UCxxxx</code> pro YouTube</p>
-      </div>
-      <div class="flex gap-2 pt-2">
-        <button type="button" onclick="closeAddModal()" class="flex-1 border border-neutral-200 text-sm font-medium py-2 rounded-lg hover:bg-neutral-50">
-          Cancelar
-        </button>
-        <button type="submit" class="flex-1 bg-sky-900 hover:bg-sky-950 text-white text-sm font-medium py-2 rounded-lg">
-          Adicionar
-        </button>
-      </div>
-    </form>
-  </div>
-</div>
-
-<!-- TOAST -->
-<div id="toast-container" class="fixed top-4 right-4 z-50 space-y-2"></div>
-
-<script>
-// ═══════════════════════════════════════════════════════════════
-// CONFIG
-// ═══════════════════════════════════════════════════════════════
-const API_BASE = "https://web-production-5d7201.up.railway.app";
-
-// ═══════════════════════════════════════════════════════════════
-// STATE
-// ═══════════════════════════════════════════════════════════════
-const state = {
-  token: localStorage.getItem("pulse_token"),
-  user: JSON.parse(localStorage.getItem("pulse_user") || "null"),
-  profiles: [],
-  selectedProfile: null,
-  charts: {},
-};
-
-// ═══════════════════════════════════════════════════════════════
-// API WRAPPER
-// ═══════════════════════════════════════════════════════════════
-async function api(path, opts = {}) {
-  const headers = { "Content-Type": "application/json", ...opts.headers };
-  if (state.token) headers["Authorization"] = `Bearer ${state.token}`;
-
-  const res = await fetch(`${API_BASE}${path}`, { ...opts, headers });
-  if (res.status === 401) {
-    logout();
-    throw new Error("Sessão expirada");
-  }
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
-  return data;
-}
-
-// ═══════════════════════════════════════════════════════════════
-// TOAST
-// ═══════════════════════════════════════════════════════════════
-function toast(msg, type = "info") {
-  const colors = {
-    info: "bg-neutral-900 text-white",
-    success: "bg-emerald-600 text-white",
-    error: "bg-red-600 text-white",
-  };
-  const el = document.createElement("div");
-  el.className = `toast ${colors[type]} text-sm px-4 py-2.5 rounded-lg shadow-lg flex items-center gap-2`;
-  el.textContent = msg;
-  document.getElementById("toast-container").appendChild(el);
-  setTimeout(() => el.remove(), 3500);
-}
-
-// ═══════════════════════════════════════════════════════════════
-// AUTH
-// ═══════════════════════════════════════════════════════════════
-async function login(email, password) {
-  const data = await api("/auth/login", {
-    method: "POST",
-    body: JSON.stringify({ email, password }),
-  });
-  state.token = data.token;
-  state.user = data.user;
-  localStorage.setItem("pulse_token", data.token);
-  localStorage.setItem("pulse_user", JSON.stringify(data.user));
-}
-
-function logout() {
-  state.token = null;
-  state.user = null;
-  localStorage.removeItem("pulse_token");
-  localStorage.removeItem("pulse_user");
-  showLogin();
-}
-
-function showLogin() {
-  document.getElementById("login-screen").classList.remove("hidden");
-  document.getElementById("dashboard").classList.add("hidden");
-}
-
-function showDashboard() {
-  document.getElementById("login-screen").classList.add("hidden");
-  document.getElementById("dashboard").classList.remove("hidden");
-  document.getElementById("user-name").textContent = state.user?.name || state.user?.email || "—";
-  loadProfiles();
-  loadThreatLevel();
-  lucide.createIcons();
-}
-
-// ═══════════════════════════════════════════════════════════════
-// PROFILES
-// ═══════════════════════════════════════════════════════════════
-async function loadProfiles() {
-  try {
-    const data = await api("/profiles");
-    state.profiles = data.profiles || [];
-    renderProfilesList();
-
-    if (state.profiles.length === 0) {
-      document.getElementById("empty-state").classList.remove("hidden");
-      document.getElementById("profile-view").classList.add("hidden");
-    } else if (!state.selectedProfile) {
-      selectProfile(state.profiles[0]);
-    }
-  } catch (e) {
-    toast(e.message, "error");
-  }
-}
-
-function renderProfilesList() {
-  const container = document.getElementById("profiles-list");
-  if (state.profiles.length === 0) {
-    container.innerHTML = '<div class="text-sm text-neutral-400">Nenhum perfil ainda</div>';
-    return;
-  }
-  container.innerHTML = state.profiles.map(p => `
-    <button onclick='selectProfile(${JSON.stringify(p)})'
-      class="w-full text-left px-3 py-2 rounded-lg text-sm hover:bg-neutral-100 ${state.selectedProfile?.id === p.id ? 'bg-neutral-100 font-medium' : ''}">
-      <div class="flex items-center justify-between">
-        <span class="truncate">${escapeHtml(p.name)}</span>
-        <span class="text-xs text-neutral-400 ml-2">${p.platform === 'instagram' ? 'IG' : 'YT'}</span>
-      </div>
-      <div class="text-xs text-neutral-500 truncate">@${escapeHtml(p.platform_id)}</div>
-    </button>
-  `).join("");
-}
-
-function selectProfile(p) {
-  state.selectedProfile = p;
-  document.getElementById("empty-state").classList.add("hidden");
-  document.getElementById("profile-view").classList.remove("hidden");
-  document.getElementById("profile-name").textContent = p.name;
-  document.getElementById("profile-username").textContent = `@${p.platform_id} · ${p.platform}`;
-  renderProfilesList();
-  loadProfileData(p.platform_id);
-  lucide.createIcons();
-}
-
-async function loadProfileData(username) {
-  loadTimeline(username);
-  loadEngagement(username);
-  loadPeakHours(username);
-  loadThemes(username);
-  loadNegativeFeed();
-}
-
-// ═══════════════════════════════════════════════════════════════
-// THREAT LEVEL
-// ═══════════════════════════════════════════════════════════════
-async function loadThreatLevel() {
-  try {
-    const data = await api("/warroom/threat-level");
-    const badge = document.getElementById("threat-badge");
-    const label = document.getElementById("threat-label");
-
-    badge.className = `px-3 py-1.5 rounded-lg border text-xs font-medium flex items-center gap-2 defcon-${data.defcon}`;
-    badge.classList.remove("hidden");
-    label.textContent = `DEFCON ${data.defcon} · ${data.label}`;
-
-    document.getElementById("kpi-defcon").textContent = data.defcon;
-    document.getElementById("kpi-defcon-label").textContent = data.label;
-    document.getElementById("kpi-comments-24h").textContent = data.comments_24h;
-    document.getElementById("kpi-negative-pct").textContent = `${data.negative_pct_24h}%`;
-    document.getElementById("kpi-spike").textContent = `${data.spike_factor}x`;
-  } catch (e) {
-    console.error(e);
-  }
-}
-
-// ═══════════════════════════════════════════════════════════════
-// CHARTS
-// ═══════════════════════════════════════════════════════════════
-function destroyChart(key) {
-  if (state.charts[key]) {
-    state.charts[key].destroy();
-    delete state.charts[key];
-  }
-}
-
-async function loadTimeline(username) {
-  try {
-    const { timeline } = await api(`/charts/sentiment-timeline/${username}?days=30`);
-    destroyChart("timeline");
-    const ctx = document.getElementById("chart-timeline");
-    state.charts.timeline = new Chart(ctx, {
-      type: "line",
-      data: {
-        labels: timeline.map(t => t.date.slice(5)),
-        datasets: [
-          { label: "Positivo", data: timeline.map(t => t.positive), borderColor: "#16a34a", backgroundColor: "rgba(22,163,74,0.1)", tension: 0.3, fill: true },
-          { label: "Negativo", data: timeline.map(t => t.negative), borderColor: "#dc2626", backgroundColor: "rgba(220,38,38,0.1)", tension: 0.3, fill: true },
-          { label: "Neutro", data: timeline.map(t => t.neutral), borderColor: "#a3a3a3", backgroundColor: "rgba(163,163,163,0.05)", tension: 0.3, fill: true },
-        ],
-      },
-      options: chartOpts(),
-    });
-  } catch (e) { console.error(e); }
-}
-
-async function loadEngagement(username) {
-  try {
-    const { breakdown } = await api(`/charts/engagement-by-type/${username}`);
-    destroyChart("engagement");
-    const ctx = document.getElementById("chart-engagement");
-    state.charts.engagement = new Chart(ctx, {
-      type: "bar",
-      data: {
-        labels: breakdown.map(b => b.post_type),
-        datasets: [
-          { label: "Likes médios", data: breakdown.map(b => b.avg_likes), backgroundColor: "#0c4a6e" },
-          { label: "Comentários médios", data: breakdown.map(b => b.avg_comments), backgroundColor: "#0284c7" },
-        ],
-      },
-      options: chartOpts(),
-    });
-  } catch (e) { console.error(e); }
-}
-
-async function loadPeakHours(username) {
-  try {
-    const { heatmap } = await api(`/charts/peak-hours/${username}`);
-    const max = Math.max(...heatmap.map(h => h.count), 1);
-    const container = document.getElementById("heatmap");
-    const days = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"];
-    const matrix = {};
-    heatmap.forEach(c => { matrix[`${c.weekday}-${c.hour}`] = c; });
-
-    let html = '<div class="grid grid-cols-[auto_repeat(24,_1fr)] gap-0.5">';
-    html += '<div></div>';
-    for (let h = 0; h < 24; h++) {
-      html += `<div class="text-[9px] text-neutral-400 text-center ${h % 3 === 0 ? '' : 'invisible'}">${h}h</div>`;
-    }
-    for (let wd = 0; wd < 7; wd++) {
-      html += `<div class="text-[10px] text-neutral-500 pr-1 flex items-center">${days[wd]}</div>`;
-      for (let h = 0; h < 24; h++) {
-        const cell = matrix[`${wd}-${h}`] || { count: 0 };
-        const intensity = cell.count / max;
-        const bg = intensity === 0 ? "#f5f5f5" : `rgba(12,74,110,${0.15 + intensity * 0.85})`;
-        html += `<div class="heatmap-cell" style="background:${bg}" title="${days[wd]} ${h}h: ${cell.count} coments"></div>`;
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pulse — Inteligência Política</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --bg: #070b08;
+        --panel: #0d1510;
+        --panel-2: #101b14;
+        --panel-3: #132118;
+        --border: rgba(132, 204, 22, 0.18);
+        --border-soft: rgba(255, 255, 255, 0.08);
+        --text: #e7efe4;
+        --muted: #94a3a0;
+        --green: #84cc16;
+        --green-2: #22c55e;
+        --amber: #f59e0b;
+        --red: #ef4444;
+        --blue: #38bdf8;
       }
-    }
-    html += '</div>';
-    container.innerHTML = html;
-  } catch (e) { console.error(e); }
-}
-
-async function loadThemes(username) {
-  try {
-    const { word_cloud, top_themes } = await api(`/charts/themes/${username}?days=30`);
-    const container = document.getElementById("word-cloud");
-    const words = word_cloud.slice(0, 30);
-    if (words.length === 0) {
-      container.innerHTML = '<div class="text-sm text-neutral-400">Sem dados ainda</div>';
-      return;
-    }
-    const max = Math.max(...words.map(w => w.count));
-    const min = Math.min(...words.map(w => w.count));
-    container.innerHTML = words.map(w => {
-      const ratio = (w.count - min) / (max - min || 1);
-      const size = 12 + Math.round(ratio * 24);
-      const weight = ratio > 0.6 ? 700 : ratio > 0.3 ? 600 : 500;
-      const color = ratio > 0.6 ? "#0c4a6e" : ratio > 0.3 ? "#0369a1" : "#525252";
-      return `<span style="font-size:${size}px;font-weight:${weight};color:${color}" title="${w.count} menções">${escapeHtml(w.word)}</span>`;
-    }).join("");
-  } catch (e) { console.error(e); }
-}
-
-async function loadNegativeFeed() {
-  try {
-    const { comments } = await api(`/warroom/negative-feed?limit=15&hours=24`);
-    const container = document.getElementById("negative-feed");
-    if (!comments || comments.length === 0) {
-      container.innerHTML = '<div class="text-sm text-neutral-400 py-8 text-center">Sem comentários negativos nas últimas 24h 🎉</div>';
-      return;
-    }
-    container.innerHTML = comments.map(c => `
-      <div class="border-l-2 border-red-300 pl-3 py-1.5">
-        <div class="flex items-center justify-between text-xs text-neutral-500 mb-1">
-          <span><b>@${escapeHtml(c.commenter_username || "anônimo")}</b> em <b>${escapeHtml(c.politician_name || c.owner_username)}</b></span>
-          <span class="flex items-center gap-1"><i data-lucide="heart" class="w-3 h-3"></i>${c.likes_count || 0}</span>
+      * { font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif; }
+      html { scroll-behavior: smooth; }
+      body {
+        background:
+          radial-gradient(circle at top left, rgba(132, 204, 22, 0.08), transparent 32rem),
+          radial-gradient(circle at top right, rgba(245, 158, 11, 0.08), transparent 28rem),
+          var(--bg);
+        color: var(--text);
+      }
+      .card {
+        background: linear-gradient(180deg, rgba(18, 31, 23, 0.96), rgba(11, 18, 14, 0.96));
+        border: 1px solid var(--border-soft);
+        border-radius: 16px;
+        box-shadow: 0 18px 60px rgba(0, 0, 0, 0.22);
+      }
+      .field {
+        width: 100%;
+        border-radius: 12px;
+        border: 1px solid rgba(148, 163, 160, 0.25);
+        background: rgba(2, 6, 4, 0.6);
+        color: var(--text);
+        padding: 0.7rem 0.85rem;
+        font-size: 0.875rem;
+        outline: none;
+      }
+      .field:focus { border-color: rgba(132, 204, 22, 0.75); box-shadow: 0 0 0 3px rgba(132, 204, 22, 0.12); }
+      .btn-primary {
+        background: linear-gradient(135deg, #365314, #16a34a);
+        color: white;
+        font-weight: 700;
+        border-radius: 12px;
+        transition: transform .15s, filter .15s, opacity .15s;
+      }
+      .btn-primary:hover { filter: brightness(1.08); transform: translateY(-1px); }
+      .btn-secondary {
+        background: rgba(255, 255, 255, 0.045);
+        color: var(--text);
+        border: 1px solid var(--border-soft);
+        border-radius: 12px;
+        transition: all .15s;
+      }
+      .btn-secondary:hover { border-color: rgba(132, 204, 22, 0.5); background: rgba(132, 204, 22, 0.08); }
+      .btn-danger {
+        background: rgba(239, 68, 68, 0.12);
+        border: 1px solid rgba(239, 68, 68, 0.28);
+        color: #fecaca;
+        border-radius: 12px;
+      }
+      .btn-danger:hover { background: rgba(239, 68, 68, 0.2); }
+      .chip { border: 1px solid var(--border-soft); background: rgba(255,255,255,.045); border-radius: 999px; }
+      .nav-btn { color: var(--muted); border: 1px solid transparent; }
+      .nav-btn.active, .nav-btn:hover { color: var(--text); background: rgba(132,204,22,.08); border-color: rgba(132,204,22,.2); }
+      .profile-btn.active { background: rgba(132, 204, 22, .1); border-color: rgba(132, 204, 22, .35); }
+      .scrollbar-thin::-webkit-scrollbar { width: 6px; height: 6px; }
+      .scrollbar-thin::-webkit-scrollbar-thumb { background: rgba(148, 163, 160, 0.35); border-radius: 999px; }
+      .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+      .toast { animation: slideIn .25s ease-out; }
+      @keyframes slideIn { from { transform: translateX(110%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+      .scanline::before {
+        content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 60;
+        background: linear-gradient(rgba(255,255,255,0.02) 50%, rgba(0,0,0,0.03) 50%);
+        background-size: 100% 4px; opacity: .35;
+      }
+      .heatmap-cell { aspect-ratio: 1; border-radius: 4px; transition: transform .12s; cursor: default; }
+      .heatmap-cell:hover { transform: scale(1.25); z-index: 10; position: relative; outline: 1px solid rgba(255,255,255,.65); }
+      .word-cloud span { display: inline-block; transition: transform .15s, color .15s; cursor: default; }
+      .word-cloud span:hover { transform: translateY(-2px) scale(1.04); color: #bef264 !important; }
+      .defcon-1 { color:#fecaca; border-color:rgba(239,68,68,.45); background:rgba(127,29,29,.45); }
+      .defcon-2 { color:#fed7aa; border-color:rgba(249,115,22,.45); background:rgba(124,45,18,.45); }
+      .defcon-3 { color:#fde68a; border-color:rgba(245,158,11,.45); background:rgba(113,63,18,.45); }
+      .defcon-4 { color:#d9f99d; border-color:rgba(132,204,22,.45); background:rgba(54,83,20,.45); }
+      .defcon-5 { color:#bbf7d0; border-color:rgba(34,197,94,.45); background:rgba(20,83,45,.45); }
+      .modal-backdrop { background: rgba(0, 0, 0, .72); backdrop-filter: blur(8px); }
+      .skeleton { background: linear-gradient(90deg, rgba(255,255,255,.05), rgba(255,255,255,.1), rgba(255,255,255,.05)); background-size: 200% 100%; animation: skeleton 1.4s infinite; }
+      @keyframes skeleton { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+      @media (max-width: 1024px) { #shell { flex-direction: column; } #sidebar { width: 100%; min-height: auto; position: static; } }
+    </style>
+  </head>
+  <body class="scanline min-h-screen">
+    <div id="login-screen" class="min-h-screen flex items-center justify-center px-4 py-10">
+      <div class="w-full max-w-md card p-7 border-l-4 border-l-lime-500">
+        <div class="flex items-center gap-3 mb-8">
+          <div class="w-12 h-12 rounded-2xl bg-lime-500/15 border border-lime-400/30 flex items-center justify-center">
+            <i data-lucide="radar" class="w-6 h-6 text-lime-300"></i>
+          </div>
+          <div>
+            <div class="text-xs uppercase tracking-[0.35em] text-lime-300 font-bold">Pulse</div>
+            <h1 class="text-xl font-extrabold">Inteligência Política</h1>
+          </div>
         </div>
-        <p class="text-sm text-neutral-700">${escapeHtml(c.text || "")}</p>
+        <div class="mb-6">
+          <h2 class="text-2xl font-bold">Acesso operacional</h2>
+          <p class="text-sm text-slate-400 mt-1">Autenticação JWT multi-tenant para o painel da campanha.</p>
+        </div>
+        <form id="login-form" class="space-y-4">
+          <div>
+            <label class="block text-sm font-semibold mb-1.5 text-slate-200">Email</label>
+            <input id="login-email" type="email" required class="field" placeholder="voce@email.com" autocomplete="email" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold mb-1.5 text-slate-200">Senha</label>
+            <input id="login-password" type="password" required class="field" placeholder="••••••••" autocomplete="current-password" />
+          </div>
+          <div id="login-error" class="hidden rounded-xl border border-red-400/30 bg-red-500/10 px-3 py-2 text-sm text-red-200"></div>
+          <button id="login-btn" type="submit" class="btn-primary w-full py-3 flex items-center justify-center gap-2">
+            <i data-lucide="shield-check" class="w-4 h-4"></i> Entrar
+          </button>
+        </form>
       </div>
-    `).join("");
-    lucide.createIcons();
-  } catch (e) { console.error(e); }
-}
+    </div>
 
-function chartOpts() {
-  return {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: { legend: { position: "bottom", labels: { font: { size: 11 }, boxWidth: 12, padding: 12 } } },
-    scales: {
-      x: { grid: { display: false }, ticks: { font: { size: 10 }, color: "#a3a3a3" } },
-      y: { grid: { color: "#f5f5f5" }, ticks: { font: { size: 10 }, color: "#a3a3a3" } },
-    },
-  };
-}
+    <div id="dashboard" class="hidden min-h-screen">
+      <header class="sticky top-0 z-40 border-b border-white/10 bg-[#070b08]/90 backdrop-blur px-4 lg:px-6 py-3">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-2xl bg-lime-500/15 border border-lime-400/30 flex items-center justify-center">
+              <i data-lucide="radar" class="w-5 h-5 text-lime-300"></i>
+            </div>
+            <div>
+              <div class="font-extrabold leading-tight">Pulse</div>
+              <div class="text-[11px] text-slate-400 uppercase tracking-widest">Political Ops Dashboard</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 sm:gap-3">
+            <div id="threat-badge" class="hidden chip px-3 py-1.5 text-xs font-bold items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-current"></span><span id="threat-label">—</span>
+            </div>
+            <div class="chip px-3 py-1.5 text-xs sm:text-sm">
+              <span class="text-slate-400">Operador:</span> <strong id="user-name">—</strong>
+            </div>
+            <button id="logout-btn" class="btn-secondary px-3 py-2 text-sm flex items-center gap-2">
+              <i data-lucide="log-out" class="w-4 h-4"></i><span class="hidden sm:inline">Sair</span>
+            </button>
+          </div>
+        </div>
+      </header>
 
-// ═══════════════════════════════════════════════════════════════
-// COLETAR / ANALISAR
-// ═══════════════════════════════════════════════════════════════
-async function collectData() {
-  const p = state.selectedProfile;
-  if (!p) return;
-  const btn = document.getElementById("collect-btn");
-  btn.disabled = true;
-  btn.innerHTML = '<i data-lucide="loader" class="w-4 h-4 animate-spin"></i> Coletando...';
-  lucide.createIcons();
-  try {
-    if (p.platform === "instagram") {
-      await api(`/collect/instagram/${p.platform_id}?limit=30`, { method: "POST" });
-      await api(`/collect/comments/${p.platform_id}?posts_limit=10&comments_per_post=20`, { method: "POST" });
-    } else {
-      await api(`/collect/youtube/${p.platform_id}?days=30`, { method: "POST" });
-    }
-    toast("Dados coletados!", "success");
-    loadProfileData(p.platform_id);
-  } catch (e) {
-    toast(e.message, "error");
-  } finally {
-    btn.disabled = false;
-    btn.innerHTML = '<i data-lucide="download-cloud" class="w-4 h-4"></i> Coletar dados';
-    lucide.createIcons();
-  }
-}
+      <div id="shell" class="flex">
+        <aside id="sidebar" class="w-72 lg:sticky lg:top-[65px] lg:h-[calc(100vh-65px)] overflow-y-auto scrollbar-thin border-r border-white/10 bg-black/20 p-4">
+          <nav class="space-y-1 mb-5">
+            <button data-view="overview" class="nav-btn active w-full rounded-xl px-3 py-2.5 text-sm text-left flex items-center gap-2"><i data-lucide="layout-dashboard" class="w-4 h-4"></i> Visão do perfil</button>
+            <button data-view="warroom" class="nav-btn w-full rounded-xl px-3 py-2.5 text-sm text-left flex items-center gap-2"><i data-lucide="shield-alert" class="w-4 h-4"></i> War Room</button>
+            <button data-view="simulator" class="nav-btn w-full rounded-xl px-3 py-2.5 text-sm text-left flex items-center gap-2"><i data-lucide="brain-circuit" class="w-4 h-4"></i> Simulador</button>
+            <button data-view="mentions" class="nav-btn w-full rounded-xl px-3 py-2.5 text-sm text-left flex items-center gap-2"><i data-lucide="search" class="w-4 h-4"></i> Menções</button>
+            <button data-view="reports" class="nav-btn w-full rounded-xl px-3 py-2.5 text-sm text-left flex items-center gap-2"><i data-lucide="file-bar-chart" class="w-4 h-4"></i> Relatórios</button>
+          </nav>
 
-async function analyzeProfile() {
-  const p = state.selectedProfile;
-  if (!p) return;
-  const btn = document.getElementById("analyze-btn");
-  btn.disabled = true;
-  btn.innerHTML = '<i data-lucide="loader" class="w-4 h-4 animate-spin"></i> Analisando...';
-  lucide.createIcons();
-  try {
-    if (p.platform === "instagram") {
-      await api(`/analyze/comments/${p.platform_id}`, { method: "POST" });
-    } else {
-      await api(`/analyze/youtube/${p.platform_id}?name=${encodeURIComponent(p.name)}`, { method: "POST" });
-    }
-    toast("Análise concluída!", "success");
-    loadProfileData(p.platform_id);
-    loadThreatLevel();
-  } catch (e) {
-    toast(e.message, "error");
-  } finally {
-    btn.disabled = false;
-    btn.innerHTML = '<i data-lucide="sparkles" class="w-4 h-4"></i> Analisar';
-    lucide.createIcons();
-  }
-}
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-xs font-extrabold uppercase tracking-[0.22em] text-slate-400">Perfis</h3>
+            <button id="add-profile-btn" class="btn-secondary w-8 h-8 flex items-center justify-center" title="Adicionar perfil"><i data-lucide="plus" class="w-4 h-4"></i></button>
+          </div>
+          <div id="profiles-list" class="space-y-2"><div class="text-sm text-slate-500">Carregando...</div></div>
+        </aside>
 
-// ═══════════════════════════════════════════════════════════════
-// MODAL ADICIONAR
-// ═══════════════════════════════════════════════════════════════
-function openAddModal() {
-  document.getElementById("add-modal").classList.remove("hidden");
-}
-function closeAddModal() {
-  document.getElementById("add-modal").classList.add("hidden");
-  document.getElementById("add-form").reset();
-}
+        <main class="flex-1 p-4 lg:p-6 space-y-6">
+          <section id="view-overview" class="view-section space-y-6">
+            <div id="empty-state" class="hidden card p-10 text-center">
+              <i data-lucide="inbox" class="w-14 h-14 mx-auto text-slate-500 mb-4"></i>
+              <h2 class="text-xl font-bold">Nenhum perfil monitorado</h2>
+              <p class="text-sm text-slate-400 mt-1 mb-5">Adicione Instagram ou YouTube para iniciar coleta, análise e resposta tática.</p>
+              <button onclick="document.getElementById('add-profile-btn').click()" class="btn-primary px-5 py-3">Adicionar perfil</button>
+            </div>
 
-// ═══════════════════════════════════════════════════════════════
-// UTILS
-// ═══════════════════════════════════════════════════════════════
-function escapeHtml(s) {
-  if (!s) return "";
-  return String(s).replace(/[&<>"']/g, m => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[m]));
-}
+            <div id="profile-view" class="hidden space-y-6">
+              <div class="flex flex-col xl:flex-row xl:items-center justify-between gap-4">
+                <div>
+                  <div class="text-xs uppercase tracking-[0.25em] text-lime-300 font-bold mb-1">Alvo monitorado</div>
+                  <h2 id="profile-name" class="text-3xl font-extrabold">—</h2>
+                  <p id="profile-username" class="text-sm text-slate-400">—</p>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                  <button id="collect-btn" class="btn-secondary px-4 py-2.5 text-sm flex items-center gap-2"><i data-lucide="download-cloud" class="w-4 h-4"></i> Coletar</button>
+                  <button id="analyze-btn" class="btn-primary px-4 py-2.5 text-sm flex items-center gap-2"><i data-lucide="sparkles" class="w-4 h-4"></i> Analisar</button>
+                  <button id="refresh-profile-btn" class="btn-secondary px-4 py-2.5 text-sm flex items-center gap-2"><i data-lucide="refresh-cw" class="w-4 h-4"></i> Atualizar</button>
+                  <button id="delete-profile-btn" class="btn-danger px-4 py-2.5 text-sm flex items-center gap-2"><i data-lucide="trash-2" class="w-4 h-4"></i> Remover</button>
+                </div>
+              </div>
 
-// ═══════════════════════════════════════════════════════════════
-// EVENT LISTENERS
-// ═══════════════════════════════════════════════════════════════
-document.getElementById("login-form").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const btn = document.getElementById("login-btn");
-  const err = document.getElementById("login-error");
-  err.classList.add("hidden");
-  btn.disabled = true;
-  btn.textContent = "Entrando...";
-  try {
-    await login(
-      document.getElementById("login-email").value,
-      document.getElementById("login-password").value
-    );
-    showDashboard();
-  } catch (e) {
-    err.textContent = e.message;
-    err.classList.remove("hidden");
-  } finally {
-    btn.disabled = false;
-    btn.textContent = "Entrar";
-  }
-});
+              <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+                <div class="card p-4"><div class="text-xs text-slate-400 uppercase tracking-widest mb-1">DEFCON</div><div class="flex items-baseline gap-2"><span id="kpi-defcon" class="text-3xl font-extrabold">—</span><span id="kpi-defcon-label" class="text-sm text-slate-400">—</span></div></div>
+                <div class="card p-4"><div class="text-xs text-slate-400 uppercase tracking-widest mb-1">Comentários 24h</div><div id="kpi-comments-24h" class="text-3xl font-extrabold">—</div></div>
+                <div class="card p-4"><div class="text-xs text-slate-400 uppercase tracking-widest mb-1">% Negativo</div><div id="kpi-negative-pct" class="text-3xl font-extrabold">—</div></div>
+                <div class="card p-4"><div class="text-xs text-slate-400 uppercase tracking-widest mb-1">Spike Factor</div><div id="kpi-spike" class="text-3xl font-extrabold">—</div></div>
+              </div>
 
-document.getElementById("logout-btn").addEventListener("click", logout);
-document.getElementById("add-profile-btn").addEventListener("click", openAddModal);
-document.getElementById("collect-btn").addEventListener("click", collectData);
-document.getElementById("analyze-btn").addEventListener("click", analyzeProfile);
+              <div class="grid grid-cols-1 2xl:grid-cols-2 gap-4">
+                <div class="card p-5 min-h-[320px]"><div class="flex items-center justify-between mb-4"><h3 class="font-bold">Sentiment Timeline</h3><span class="text-xs text-slate-400">últimos 30 dias</span></div><div class="h-[250px]"><canvas id="chart-timeline"></canvas></div></div>
+                <div class="card p-5 min-h-[320px]"><div class="flex items-center justify-between mb-4"><h3 class="font-bold">Engagement by Post Type</h3><span class="text-xs text-slate-400">médias por tipo</span></div><div class="h-[250px]"><canvas id="chart-engagement"></canvas></div></div>
+                <div class="card p-5 overflow-x-auto"><div class="flex items-center justify-between mb-4"><h3 class="font-bold">Peak Hours Heatmap</h3><span class="text-xs text-slate-400">7 dias × 24h</span></div><div id="heatmap" class="min-w-[760px]"></div></div>
+                <div class="card p-5"><div class="flex items-center justify-between mb-4"><h3 class="font-bold">Word Cloud de Temas</h3><span class="text-xs text-slate-400">temas em alta</span></div><div id="word-cloud" class="word-cloud min-h-[250px] flex flex-wrap gap-3 items-center justify-center text-center"></div></div>
+              </div>
 
-document.getElementById("add-form").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  try {
-    await api("/profiles", {
-      method: "POST",
-      body: JSON.stringify({
-        name: document.getElementById("add-name").value,
-        platform: document.getElementById("add-platform").value,
-        platform_id: document.getElementById("add-platform-id").value.replace(/^@/, ""),
-      }),
-    });
-    toast("Perfil adicionado!", "success");
-    closeAddModal();
-    loadProfiles();
-  } catch (e) {
-    toast(e.message, "error");
-  }
-});
+              <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
+                <div class="card p-5">
+                  <div class="flex items-center justify-between mb-4"><h3 class="font-bold flex items-center gap-2"><i data-lucide="instagram" class="w-4 h-4 text-lime-300"></i> Posts recentes</h3><span class="text-xs text-slate-400">Instagram</span></div>
+                  <div id="instagram-posts" class="space-y-3 max-h-[420px] overflow-y-auto scrollbar-thin"></div>
+                </div>
+                <div class="card p-5">
+                  <div class="flex items-center justify-between mb-4"><h3 class="font-bold flex items-center gap-2"><i data-lucide="message-square-warning" class="w-4 h-4 text-amber-300"></i> Comentários negativos</h3><span class="text-xs text-slate-400">últimas 24h</span></div>
+                  <div id="negative-feed" class="space-y-3 max-h-[420px] overflow-y-auto scrollbar-thin"></div>
+                </div>
+              </div>
+            </div>
+          </section>
 
-// Click fora do modal fecha
-document.getElementById("add-modal").addEventListener("click", (e) => {
-  if (e.target.id === "add-modal") closeAddModal();
-});
+          <section id="view-warroom" class="view-section hidden space-y-6">
+            <div class="flex flex-col xl:flex-row xl:items-end justify-between gap-4">
+              <div><div class="text-xs uppercase tracking-[0.25em] text-red-300 font-bold">War Room</div><h2 class="text-3xl font-extrabold">Resposta estratégica a ataques</h2><p class="text-sm text-slate-400 mt-1">Gere respostas com simulação de risco eleitoral.</p></div>
+              <button id="reload-warroom-btn" class="btn-secondary px-4 py-2.5 text-sm flex items-center gap-2"><i data-lucide="refresh-cw" class="w-4 h-4"></i> Atualizar War Room</button>
+            </div>
+            <div id="warroom-summary" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-4"></div>
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
+              <div class="card p-5">
+                <h3 class="font-bold mb-4">Gerar resposta tática</h3>
+                <form id="warroom-form" class="space-y-3">
+                  <textarea id="warroom-attack" class="field min-h-[120px]" required placeholder="Cole aqui o ataque, acusação ou narrativa adversária..."></textarea>
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <input id="warroom-politician" class="field" placeholder="Nome político/candidato" />
+                    <input id="warroom-context" class="field" placeholder="Contexto opcional" />
+                  </div>
+                  <label class="flex items-center gap-2 text-sm text-slate-300"><input id="warroom-simulate" type="checkbox" checked class="accent-lime-500" /> Simular reação do eleitorado</label>
+                  <button id="warroom-generate-btn" class="btn-primary px-4 py-3 w-full flex items-center justify-center gap-2"><i data-lucide="radio-tower" class="w-4 h-4"></i> Gerar resposta</button>
+                </form>
+              </div>
+              <div class="card p-5">
+                <h3 class="font-bold mb-4">Respostas sugeridas</h3>
+                <div id="warroom-responses" class="space-y-3 max-h-[520px] overflow-y-auto scrollbar-thin"><div class="text-sm text-slate-500">Aguardando geração...</div></div>
+              </div>
+            </div>
+            <div class="card p-5"><h3 class="font-bold mb-4">Feed negativo global</h3><div id="warroom-negative-feed" class="space-y-3 max-h-[520px] overflow-y-auto scrollbar-thin"></div></div>
+          </section>
 
-// ═══════════════════════════════════════════════════════════════
-// INIT
-// ═══════════════════════════════════════════════════════════════
-if (state.token && state.user) {
-  showDashboard();
-} else {
-  showLogin();
-}
-lucide.createIcons();
-</script>
-</body>
+          <section id="view-simulator" class="view-section hidden space-y-6">
+            <div><div class="text-xs uppercase tracking-[0.25em] text-lime-300 font-bold">Simulador Multi-agente</div><h2 class="text-3xl font-extrabold">Forecast de reação do eleitorado</h2><p class="text-sm text-slate-400 mt-1">Teste narrativas antes de publicar.</p></div>
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
+              <div class="card p-5">
+                <form id="sim-form" class="space-y-3">
+                  <textarea id="sim-content" class="field min-h-[150px]" required placeholder="Cole o conteúdo/narrativa/cenário que será testado..."></textarea>
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <input id="sim-agents" type="number" min="1" max="500" class="field" value="80" placeholder="Nº agentes" />
+                    <input id="sim-context" class="field" placeholder="Contexto opcional" />
+                  </div>
+                  <input id="sim-filters" class="field" placeholder='Filtros JSON opcional. Ex: {"estado":"RJ"}' />
+                  <button id="sim-run-btn" class="btn-primary px-4 py-3 w-full flex items-center justify-center gap-2"><i data-lucide="play" class="w-4 h-4"></i> Rodar simulação</button>
+                </form>
+              </div>
+              <div class="card p-5"><h3 class="font-bold mb-4">Resultado</h3><div id="sim-result" class="space-y-3"><div class="text-sm text-slate-500">Nenhuma simulação executada.</div></div></div>
+            </div>
+            <div class="card p-5"><div class="flex items-center justify-between mb-4"><h3 class="font-bold">Histórico do perfil selecionado</h3><button id="sim-history-btn" class="btn-secondary px-3 py-2 text-sm">Carregar histórico</button></div><div id="sim-history" class="space-y-2"></div></div>
+          </section>
+
+          <section id="view-mentions" class="view-section hidden space-y-6">
+            <div><div class="text-xs uppercase tracking-[0.25em] text-lime-300 font-bold">Radar externo</div><h2 class="text-3xl font-extrabold">Busca de menções</h2><p class="text-sm text-slate-400 mt-1">Pesquise menções públicas relacionadas a termo, pessoa ou pauta.</p></div>
+            <div class="card p-5">
+              <form id="mentions-form" class="flex flex-col sm:flex-row gap-3">
+                <input id="mentions-query" class="field flex-1" required placeholder="Ex: nome do candidato, crise, pauta..." />
+                <input id="mentions-limit" type="number" min="1" max="50" value="10" class="field sm:w-32" />
+                <button id="mentions-btn" class="btn-primary px-5 py-3 flex items-center justify-center gap-2"><i data-lucide="search" class="w-4 h-4"></i> Buscar</button>
+              </form>
+            </div>
+            <div id="mentions-results" class="space-y-3"></div>
+          </section>
+
+          <section id="view-reports" class="view-section hidden space-y-6">
+            <div><div class="text-xs uppercase tracking-[0.25em] text-lime-300 font-bold">Reports YouTube</div><h2 class="text-3xl font-extrabold">Relatórios e snapshots</h2><p class="text-sm text-slate-400 mt-1">Use o perfil YouTube selecionado ou carregue os últimos relatórios globais.</p></div>
+            <div class="flex flex-wrap gap-2">
+              <button id="load-profile-reports-btn" class="btn-primary px-4 py-2.5 text-sm flex items-center gap-2"><i data-lucide="file-text" class="w-4 h-4"></i> Relatórios do perfil</button>
+              <button id="load-latest-reports-btn" class="btn-secondary px-4 py-2.5 text-sm flex items-center gap-2"><i data-lucide="newspaper" class="w-4 h-4"></i> Últimos relatórios</button>
+              <button id="load-snapshots-btn" class="btn-secondary px-4 py-2.5 text-sm flex items-center gap-2"><i data-lucide="camera" class="w-4 h-4"></i> Snapshots do perfil</button>
+            </div>
+            <div id="reports-output" class="space-y-3"></div>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <div id="add-modal" class="hidden fixed inset-0 z-50 modal-backdrop flex items-center justify-center px-4">
+      <div class="card w-full max-w-md p-6">
+        <div class="flex items-center justify-between mb-5"><h3 class="text-xl font-bold">Adicionar perfil</h3><button onclick="closeAddModal()" class="btn-secondary w-9 h-9 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4"></i></button></div>
+        <form id="add-form" class="space-y-4">
+          <div><label class="block text-sm font-semibold mb-1.5">Nome</label><input id="add-name" class="field" required placeholder="Ex: Candidato Oficial" /></div>
+          <div><label class="block text-sm font-semibold mb-1.5">Plataforma</label><select id="add-platform" class="field"><option value="instagram">Instagram</option><option value="youtube">YouTube</option></select></div>
+          <div><label class="block text-sm font-semibold mb-1.5">Identificador</label><input id="add-platform-id" class="field" required placeholder="username sem @ ou channel ID" /><p class="text-xs text-slate-500 mt-1">Instagram: <code>usuario</code>. YouTube: <code>UCxxxx</code>.</p></div>
+          <div id="add-error" class="hidden rounded-xl border border-red-400/30 bg-red-500/10 px-3 py-2 text-sm text-red-200"></div>
+          <div class="flex gap-2 pt-2"><button type="button" onclick="closeAddModal()" class="btn-secondary flex-1 py-2.5">Cancelar</button><button id="add-submit-btn" class="btn-primary flex-1 py-2.5">Adicionar</button></div>
+        </form>
+      </div>
+    </div>
+
+    <div id="toast-container" class="fixed top-4 right-4 z-[70] space-y-2 w-[calc(100vw-2rem)] max-w-md"></div>
+
+    <script>
+      const API_BASE = "https://web-production-5d7201.up.railway.app";
+      const rawFetch = window.fetch.bind(window);
+      const state = {
+        token: localStorage.getItem("pulse_token"),
+        user: safeJson(localStorage.getItem("pulse_user"), null),
+        profiles: [],
+        selectedProfile: null,
+        currentView: "overview",
+        charts: {},
+      };
+
+      window.fetch = function interceptedFetch(input, init = {}) {
+        const url = typeof input === "string" ? input : input?.url;
+        const shouldAuth = state.token && url && (url.startsWith(API_BASE) || url.startsWith("/"));
+        if (!shouldAuth) return rawFetch(input, init);
+        const headers = new Headers(init.headers || {});
+        headers.set("Authorization", `Bearer ${state.token}`);
+        if (!headers.has("Content-Type") && init.body) headers.set("Content-Type", "application/json");
+        return rawFetch(input, { ...init, headers });
+      };
+
+      async function api(path, opts = {}) {
+        const url = path.startsWith("http") ? path : `${API_BASE}${path}`;
+        const headers = new Headers(opts.headers || {});
+        if (opts.body && !headers.has("Content-Type")) headers.set("Content-Type", "application/json");
+        const res = await fetch(url, { ...opts, headers });
+        if (res.status === 401) { logout("Sessão expirada. Faça login novamente."); throw new Error("Sessão expirada"); }
+        const text = await res.text();
+        const data = text ? safeJson(text, { raw: text }) : {};
+        if (!res.ok) throw new Error(data.error || data.message || data.detail || `HTTP ${res.status}`);
+        return data;
+      }
+
+      function safeJson(value, fallback) { try { return JSON.parse(value); } catch { return fallback; } }
+      function escapeHtml(s) { return String(s ?? "").replace(/[&<>"']/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m])); }
+      function fmtPct(v) { if (v === null || v === undefined || v === "") return "—"; const n = Number(v); return Number.isFinite(n) ? `${n.toFixed(n % 1 ? 1 : 0)}%` : `${v}%`; }
+      function fmtNum(v) { if (v === null || v === undefined || v === "") return "—"; const n = Number(v); return Number.isFinite(n) ? n.toLocaleString("pt-BR") : escapeHtml(v); }
+      function asArray(data, keys = []) { if (Array.isArray(data)) return data; for (const k of keys) if (Array.isArray(data?.[k])) return data[k]; return []; }
+      function selectedUsername() { return state.selectedProfile?.platform_id || ""; }
+      function renderIcons() { if (window.lucide) lucide.createIcons(); }
+
+      function toast(msg, type = "info") {
+        const classes = { info: "border-slate-500/30 bg-slate-900 text-slate-100", success: "border-lime-400/30 bg-lime-950 text-lime-100", error: "border-red-400/30 bg-red-950 text-red-100", warn: "border-amber-400/30 bg-amber-950 text-amber-100" };
+        const el = document.createElement("div");
+        el.className = `toast border ${classes[type] || classes.info} rounded-xl px-4 py-3 shadow-2xl text-sm`;
+        el.textContent = msg;
+        document.getElementById("toast-container").appendChild(el);
+        setTimeout(() => el.remove(), 4200);
+      }
+
+      function setBusy(button, busy, label, icon = "loader") {
+        if (!button) return;
+        if (busy) {
+          button.dataset.oldHtml = button.innerHTML;
+          button.disabled = true;
+          button.innerHTML = `<i data-lucide="${icon}" class="w-4 h-4 animate-spin"></i> ${label}`;
+        } else {
+          button.disabled = false;
+          if (button.dataset.oldHtml) button.innerHTML = button.dataset.oldHtml;
+        }
+        renderIcons();
+      }
+
+      function renderLoading(el, label = "Carregando...") { el.innerHTML = `<div class="skeleton rounded-xl h-20 flex items-center px-4 text-sm text-slate-400">${label}</div>`; }
+      function renderError(el, msg) { el.innerHTML = `<div class="rounded-xl border border-red-400/25 bg-red-500/10 p-4 text-sm text-red-200">${escapeHtml(msg)}</div>`; }
+      function renderEmpty(el, msg) { el.innerHTML = `<div class="rounded-xl border border-white/10 bg-white/5 p-5 text-center text-sm text-slate-400">${escapeHtml(msg)}</div>`; }
+
+      async function login(email, password) {
+        const data = await api("/auth/login", { method: "POST", body: JSON.stringify({ email, password }) });
+        state.token = data.token;
+        state.user = data.user || { email };
+        localStorage.setItem("pulse_token", data.token);
+        localStorage.setItem("pulse_user", JSON.stringify(state.user));
+      }
+
+      function logout(message) {
+        state.token = null;
+        state.user = null;
+        state.selectedProfile = null;
+        Object.values(state.charts).forEach(chart => chart?.destroy?.());
+        state.charts = {};
+        localStorage.removeItem("pulse_token");
+        localStorage.removeItem("pulse_user");
+        showLogin();
+        if (message) toast(message, "warn");
+      }
+
+      function showLogin() {
+        document.getElementById("login-screen").classList.remove("hidden");
+        document.getElementById("dashboard").classList.add("hidden");
+        renderIcons();
+      }
+      function showDashboard() {
+        document.getElementById("login-screen").classList.add("hidden");
+        document.getElementById("dashboard").classList.remove("hidden");
+        document.getElementById("user-name").textContent = state.user?.name || state.user?.email || "—";
+        switchView(state.currentView || "overview");
+        loadProfiles();
+        loadThreatLevel();
+        renderIcons();
+      }
+
+      async function verifySession() {
+        if (!state.token) return showLogin();
+        try {
+          const me = await api("/auth/me");
+          state.user = me.user || me;
+          localStorage.setItem("pulse_user", JSON.stringify(state.user));
+          showDashboard();
+        } catch (e) { showLogin(); }
+      }
+
+      function switchView(view) {
+        state.currentView = view;
+        document.querySelectorAll(".view-section").forEach(s => s.classList.add("hidden"));
+        document.getElementById(`view-${view}`)?.classList.remove("hidden");
+        document.querySelectorAll("[data-view]").forEach(btn => btn.classList.toggle("active", btn.dataset.view === view));
+        if (view === "warroom") loadWarRoom();
+        renderIcons();
+      }
+
+      async function loadProfiles() {
+        const el = document.getElementById("profiles-list");
+        renderLoading(el, "Carregando perfis...");
+        try {
+          const data = await api("/profiles");
+          state.profiles = asArray(data, ["profiles", "items", "data"]);
+          renderProfilesList();
+          if (!state.profiles.length) {
+            document.getElementById("empty-state").classList.remove("hidden");
+            document.getElementById("profile-view").classList.add("hidden");
+            return;
+          }
+          const stillExists = state.profiles.find(p => p.id === state.selectedProfile?.id);
+          selectProfile(stillExists || state.profiles[0], false);
+        } catch (e) { renderError(el, e.message); toast(e.message, "error"); }
+      }
+
+      function renderProfilesList() {
+        const el = document.getElementById("profiles-list");
+        if (!state.profiles.length) return renderEmpty(el, "Nenhum perfil ainda.");
+        el.innerHTML = state.profiles.map((p, idx) => `
+          <button type="button" data-profile-index="${idx}" class="profile-btn w-full rounded-xl border border-white/10 p-3 text-left hover:bg-lime-500/10 ${state.selectedProfile?.id === p.id ? "active" : ""}">
+            <div class="flex items-center justify-between gap-2">
+              <strong class="truncate text-sm">${escapeHtml(p.name || p.platform_id)}</strong>
+              <span class="text-[10px] uppercase tracking-wider text-lime-300">${escapeHtml(p.platform || "-")}</span>
+            </div>
+            <div class="truncate text-xs text-slate-400 mt-1">@${escapeHtml(p.platform_id || "")}</div>
+          </button>
+        `).join("");
+        el.querySelectorAll("[data-profile-index]").forEach(btn => btn.addEventListener("click", () => selectProfile(state.profiles[Number(btn.dataset.profileIndex)])));
+      }
+
+      function selectProfile(profile, reload = true) {
+        state.selectedProfile = profile;
+        document.getElementById("empty-state").classList.add("hidden");
+        document.getElementById("profile-view").classList.remove("hidden");
+        document.getElementById("profile-name").textContent = profile.name || profile.platform_id || "—";
+        document.getElementById("profile-username").textContent = `@${profile.platform_id || "—"} · ${profile.platform || "—"}`;
+        renderProfilesList();
+        if (reload) loadProfileData(profile);
+        renderIcons();
+      }
+
+      async function loadProfileData(profile = state.selectedProfile) {
+        if (!profile) return;
+        await Promise.allSettled([
+          loadThreatLevel(), loadTimeline(profile.platform_id), loadEngagement(profile.platform_id), loadPeakHours(profile.platform_id), loadThemes(profile.platform_id), loadNegativeFeed("negative-feed", 15, 24), loadInstagramPosts(profile)
+        ]);
+      }
+
+      async function loadThreatLevel() {
+        try {
+          const data = await api("/warroom/threat-level");
+          const badge = document.getElementById("threat-badge");
+          badge.className = `chip px-3 py-1.5 text-xs font-bold flex items-center gap-2 defcon-${data.defcon || 5}`;
+          badge.classList.remove("hidden");
+          document.getElementById("threat-label").textContent = `DEFCON ${data.defcon ?? "—"} · ${data.label || "Operacional"}`;
+          document.getElementById("kpi-defcon").textContent = data.defcon ?? "—";
+          document.getElementById("kpi-defcon-label").textContent = data.label || "—";
+          document.getElementById("kpi-comments-24h").textContent = fmtNum(data.comments_24h);
+          document.getElementById("kpi-negative-pct").textContent = fmtPct(data.negative_pct_24h);
+          document.getElementById("kpi-spike").textContent = data.spike_factor !== undefined ? `${data.spike_factor}x` : "—";
+          return data;
+        } catch (e) { console.warn(e); return null; }
+      }
+
+      function chartOpts() {
+        return { responsive: true, maintainAspectRatio: false, interaction: { mode: "index", intersect: false }, plugins: { legend: { position: "bottom", labels: { color: "#cbd5d1", boxWidth: 12, padding: 14 } } }, scales: { x: { grid: { color: "rgba(255,255,255,.06)" }, ticks: { color: "#94a3a0", maxRotation: 0 } }, y: { grid: { color: "rgba(255,255,255,.06)" }, ticks: { color: "#94a3a0" } } } };
+      }
+      function destroyChart(key) { if (state.charts[key]) { state.charts[key].destroy(); delete state.charts[key]; } }
+
+      async function loadTimeline(username) {
+        const canvas = document.getElementById("chart-timeline");
+        try {
+          const data = await api(`/charts/sentiment-timeline/${encodeURIComponent(username)}?days=30`);
+          const timeline = asArray(data, ["timeline"]);
+          destroyChart("timeline");
+          state.charts.timeline = new Chart(canvas, { type: "line", data: { labels: timeline.map(t => String(t.date || "").slice(5) || "—"), datasets: [
+            { label: "Positivo", data: timeline.map(t => Number(t.positive || 0)), borderColor: "#22c55e", backgroundColor: "rgba(34,197,94,.13)", fill: true, tension: .35 },
+            { label: "Negativo", data: timeline.map(t => Number(t.negative || 0)), borderColor: "#ef4444", backgroundColor: "rgba(239,68,68,.13)", fill: true, tension: .35 },
+            { label: "Neutro", data: timeline.map(t => Number(t.neutral || 0)), borderColor: "#94a3a0", backgroundColor: "rgba(148,163,160,.08)", fill: true, tension: .35 }
+          ] }, options: chartOpts() });
+        } catch (e) { destroyChart("timeline"); console.warn("timeline", e); }
+      }
+
+      async function loadEngagement(username) {
+        const canvas = document.getElementById("chart-engagement");
+        try {
+          const data = await api(`/charts/engagement-by-type/${encodeURIComponent(username)}`);
+          const breakdown = asArray(data, ["breakdown"]);
+          destroyChart("engagement");
+          state.charts.engagement = new Chart(canvas, { type: "bar", data: { labels: breakdown.map(b => b.post_type || "post"), datasets: [
+            { label: "Likes médios", data: breakdown.map(b => Number(b.avg_likes || 0)), backgroundColor: "rgba(132,204,22,.75)", borderColor: "#bef264", borderWidth: 1 },
+            { label: "Comentários médios", data: breakdown.map(b => Number(b.avg_comments || 0)), backgroundColor: "rgba(56,189,248,.65)", borderColor: "#7dd3fc", borderWidth: 1 }
+          ] }, options: chartOpts() });
+        } catch (e) { destroyChart("engagement"); console.warn("engagement", e); }
+      }
+
+      async function loadPeakHours(username) {
+        const el = document.getElementById("heatmap");
+        renderLoading(el, "Carregando heatmap...");
+        try {
+          const data = await api(`/charts/peak-hours/${encodeURIComponent(username)}`);
+          const heatmap = asArray(data, ["heatmap"]);
+          if (!heatmap.length) return renderEmpty(el, "Sem dados de horário ainda.");
+          const max = Math.max(...heatmap.map(h => Number(h.count || h.likes || 0)), 1);
+          const labels = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"];
+          const matrix = {};
+          heatmap.forEach(h => matrix[`${Number(h.weekday)}-${Number(h.hour)}`] = h);
+          let html = '<div class="grid grid-cols-[36px_repeat(24,minmax(22px,1fr))] gap-1 items-center">';
+          html += '<div></div>' + Array.from({ length: 24 }, (_, h) => `<div class="text-[10px] text-center text-slate-500 ${h % 3 ? "opacity-20" : ""}">${h}</div>`).join("");
+          for (let d = 0; d < 7; d++) {
+            html += `<div class="text-xs text-slate-400">${labels[d]}</div>`;
+            for (let h = 0; h < 24; h++) {
+              const cell = matrix[`${d}-${h}`] || { count: 0, likes: 0 };
+              const value = Number(cell.count || 0);
+              const intensity = value / max;
+              const bg = intensity === 0 ? "rgba(255,255,255,.045)" : `rgba(132,204,22,${0.12 + intensity * 0.78})`;
+              html += `<div class="heatmap-cell" style="background:${bg}" title="${labels[d]} ${h}h · ${value} posts/comentários · likes ${fmtNum(cell.likes || 0)}"></div>`;
+            }
+          }
+          html += "</div>";
+          el.innerHTML = html;
+        } catch (e) { renderError(el, e.message); }
+      }
+
+      async function loadThemes(username) {
+        const el = document.getElementById("word-cloud");
+        renderLoading(el, "Carregando temas...");
+        try {
+          const data = await api(`/charts/themes/${encodeURIComponent(username)}?days=30`);
+          const words = asArray(data, ["word_cloud", "top_themes"]).slice(0, 45);
+          if (!words.length) return renderEmpty(el, "Sem temas detectados ainda.");
+          const max = Math.max(...words.map(w => Number(w.count || 1)), 1);
+          el.innerHTML = words.map(w => {
+            const label = w.word || w.theme || "tema";
+            const count = Number(w.count || 1);
+            const ratio = count / max;
+            const size = 12 + Math.round(ratio * 28);
+            const color = ratio > .66 ? "#bef264" : ratio > .33 ? "#84cc16" : "#cbd5d1";
+            return `<span style="font-size:${size}px;font-weight:${ratio > .5 ? 800 : 600};color:${color}" title="${count} ocorrências">${escapeHtml(label)}</span>`;
+          }).join("");
+        } catch (e) { renderError(el, e.message); }
+      }
+
+      async function loadInstagramPosts(profile) {
+        const el = document.getElementById("instagram-posts");
+        if (!profile || profile.platform !== "instagram") return renderEmpty(el, "Posts recentes aparecem somente para perfis Instagram.");
+        renderLoading(el, "Carregando posts...");
+        try {
+          const data = await api(`/instagram/posts/${encodeURIComponent(profile.platform_id)}?limit=20`);
+          const posts = asArray(data, ["posts", "data", "items"]);
+          if (!posts.length) return renderEmpty(el, "Nenhum post encontrado.");
+          el.innerHTML = posts.map(p => `
+            <div class="rounded-xl border border-white/10 bg-white/5 p-3">
+              <div class="flex items-center justify-between gap-2 text-xs text-slate-400 mb-2"><span>${escapeHtml(p.post_type || p.type || "post")}</span><span>${escapeHtml(p.timestamp || p.date || "")}</span></div>
+              <p class="text-sm text-slate-200 line-clamp-3">${escapeHtml(p.caption || p.text || p.title || "Sem legenda")}</p>
+              <div class="flex flex-wrap gap-3 mt-3 text-xs text-slate-400"><span>❤ ${fmtNum(p.likes_count || p.likes || 0)}</span><span>💬 ${fmtNum(p.comments_count || p.comments || 0)}</span><span>Score ${escapeHtml(p.sentiment || p.score || "—")}</span></div>
+            </div>`).join("");
+        } catch (e) { renderError(el, e.message); }
+      }
+
+      async function loadNegativeFeed(targetId = "negative-feed", limit = 15, hours = 24) {
+        const el = document.getElementById(targetId);
+        renderLoading(el, "Carregando feed negativo...");
+        try {
+          const data = await api(`/warroom/negative-feed?limit=${limit}&hours=${hours}`);
+          const comments = asArray(data, ["comments"]);
+          if (!comments.length) return renderEmpty(el, "Sem comentários negativos no período.");
+          el.innerHTML = comments.map(c => `
+            <div class="rounded-xl border-l-4 border-red-400 bg-red-500/7 p-3">
+              <div class="flex items-center justify-between gap-2 text-xs text-slate-400 mb-1"><span><strong>@${escapeHtml(c.commenter_username || "anônimo")}</strong> em <strong>${escapeHtml(c.politician_name || c.owner_username || "perfil")}</strong></span><span>❤ ${fmtNum(c.likes_count || 0)}</span></div>
+              <p class="text-sm text-slate-200">${escapeHtml(c.text || "")}</p>
+              <div class="text-[11px] text-slate-500 mt-2">${escapeHtml(c.timestamp || "")}</div>
+            </div>`).join("");
+        } catch (e) { renderError(el, e.message); }
+      }
+
+      async function collectData() {
+        const p = state.selectedProfile; if (!p) return toast("Selecione um perfil.", "warn");
+        const btn = document.getElementById("collect-btn"); setBusy(btn, true, "Coletando...");
+        try {
+          if (p.platform === "instagram") {
+            await api(`/collect/instagram/${encodeURIComponent(p.platform_id)}?limit=50`, { method: "POST" });
+            await api(`/collect/comments/${encodeURIComponent(p.platform_id)}?posts_limit=10&comments_per_post=20`, { method: "POST" });
+          } else {
+            await api(`/collect/youtube/${encodeURIComponent(p.platform_id)}?days=30`, { method: "POST" });
+          }
+          toast("Coleta concluída.", "success"); await loadProfileData(p);
+        } catch (e) { toast(e.message, "error"); } finally { setBusy(btn, false); }
+      }
+      async function analyzeProfile() {
+        const p = state.selectedProfile; if (!p) return toast("Selecione um perfil.", "warn");
+        const btn = document.getElementById("analyze-btn"); setBusy(btn, true, "Analisando...");
+        try {
+          if (p.platform === "instagram") {
+            await api(`/analyze/instagram/${encodeURIComponent(p.platform_id)}`, { method: "POST" }).catch(() => api(`/analyze/comments/${encodeURIComponent(p.platform_id)}`, { method: "POST" }));
+          } else {
+            await api(`/analyze/youtube/${encodeURIComponent(p.platform_id)}?days=30&name=${encodeURIComponent(p.name || p.platform_id)}`, { method: "POST" });
+          }
+          toast("Análise concluída.", "success"); await loadProfileData(p);
+        } catch (e) { toast(e.message, "error"); } finally { setBusy(btn, false); }
+      }
+      async function deleteSelectedProfile() {
+        const p = state.selectedProfile; if (!p) return;
+        if (!confirm(`Remover o perfil "${p.name || p.platform_id}"?`)) return;
+        try { await api(`/profiles/${encodeURIComponent(p.id)}`, { method: "DELETE" }); toast("Perfil removido.", "success"); state.selectedProfile = null; await loadProfiles(); }
+        catch (e) { toast(e.message, "error"); }
+      }
+
+      async function loadWarRoom() {
+        const summary = document.getElementById("warroom-summary"); renderLoading(summary, "Carregando status tático...");
+        try {
+          const t = await loadThreatLevel();
+          summary.innerHTML = [
+            ["DEFCON", t?.defcon ?? "—"], ["Ameaça", t?.threat_score ?? "—"], ["Negativo 24h", fmtPct(t?.negative_pct_24h)], ["Comentários 24h", fmtNum(t?.comments_24h)], ["Spike", t?.spike_factor !== undefined ? `${t.spike_factor}x` : "—"]
+          ].map(([k, v]) => `<div class="card p-4"><div class="text-xs text-slate-400 uppercase tracking-widest">${k}</div><div class="text-2xl font-extrabold mt-1">${v}</div></div>`).join("");
+          await loadNegativeFeed("warroom-negative-feed", 30, 24);
+        } catch (e) { renderError(summary, e.message); }
+      }
+
+      async function generateWarRoomResponse(e) {
+        e.preventDefault();
+        const btn = document.getElementById("warroom-generate-btn"); const out = document.getElementById("warroom-responses");
+        setBusy(btn, true, "Gerando..."); renderLoading(out, "Gerando respostas estratégicas...");
+        try {
+          const payload = { attack: document.getElementById("warroom-attack").value, username: selectedUsername() || undefined, politician_name: document.getElementById("warroom-politician").value || state.selectedProfile?.name || undefined, context: document.getElementById("warroom-context").value || undefined, simulate: document.getElementById("warroom-simulate").checked };
+          const data = await api("/warroom/generate-response", { method: "POST", body: JSON.stringify(payload) });
+          const responses = asArray(data, ["respostas", "responses"]);
+          if (!responses.length) return renderEmpty(out, "Nenhuma resposta retornada.");
+          out.innerHTML = responses.map(r => `<div class="rounded-xl border border-lime-400/20 bg-lime-500/7 p-4"><div class="flex flex-wrap gap-2 mb-3"><span class="chip px-2 py-1 text-xs">${escapeHtml(r.estrategia || "Estratégia")}</span><span class="chip px-2 py-1 text-xs">Tom: ${escapeHtml(r.tom || "—")}</span><span class="chip px-2 py-1 text-xs">Risco: ${escapeHtml(r.risco || "—")}</span></div><p class="text-sm whitespace-pre-wrap">${escapeHtml(r.texto || r.response || "")}</p>${r.simulation ? `<div class="mt-3 text-xs text-slate-400">Crisis score: ${escapeHtml(r.simulation.crisis_score ?? "—")} · Viral risk: ${escapeHtml(r.simulation.viral_risk ?? "—")} · Share: ${escapeHtml(r.simulation.share_pct ?? "—")}</div>` : ""}</div>`).join("");
+        } catch (err) { renderError(out, err.message); } finally { setBusy(btn, false); }
+      }
+
+      async function runSimulation(e) {
+        e.preventDefault();
+        const btn = document.getElementById("sim-run-btn"); const out = document.getElementById("sim-result");
+        setBusy(btn, true, "Simulando..."); renderLoading(out, "Executando multi-agente...");
+        try {
+          const filtersRaw = document.getElementById("sim-filters").value.trim();
+          const payload = { conteudo: document.getElementById("sim-content").value, n_agentes: Number(document.getElementById("sim-agents").value || 80), contexto: document.getElementById("sim-context").value || undefined, username: selectedUsername() || undefined, filtros: filtersRaw ? safeJson(filtersRaw, {}) : undefined };
+          const data = await api("/simulate/scenario", { method: "POST", body: JSON.stringify(payload) });
+          renderSimulation(out, data);
+        } catch (err) { renderError(out, err.message); } finally { setBusy(btn, false); }
+      }
+      function renderSimulation(el, data) {
+        const dist = data.sentimento_distribuicao || data.sentiment_distribution || {};
+        el.innerHTML = `<div class="grid grid-cols-1 sm:grid-cols-3 gap-3"><div class="card p-3"><div class="text-xs text-slate-400">Crisis Score</div><div class="text-2xl font-bold">${escapeHtml(data.crisis_score ?? "—")}</div></div><div class="card p-3"><div class="text-xs text-slate-400">Engajamento</div><div class="text-2xl font-bold">${escapeHtml(data.engajamento ?? data.engagement ?? "—")}</div></div><div class="card p-3"><div class="text-xs text-slate-400">ID</div><div class="text-sm font-bold truncate">${escapeHtml(data.simulacao_id ?? data.id ?? "—")}</div></div></div><pre class="mt-3 rounded-xl border border-white/10 bg-black/35 p-3 text-xs overflow-auto max-h-[360px]">${escapeHtml(JSON.stringify(data, null, 2))}</pre>`;
+      }
+      async function loadSimulationHistory() {
+        const out = document.getElementById("sim-history");
+        if (!selectedUsername()) return renderEmpty(out, "Selecione um perfil para carregar histórico.");
+        renderLoading(out, "Carregando histórico...");
+        try {
+          const data = await api(`/simulate/history/${encodeURIComponent(selectedUsername())}?limit=20`);
+          const items = asArray(data, ["history", "simulations", "items", "data"]);
+          if (!items.length) return renderEmpty(out, "Sem histórico para este perfil.");
+          out.innerHTML = items.map(item => `<button class="w-full text-left rounded-xl border border-white/10 bg-white/5 p-3 hover:bg-white/10" data-sim-id="${escapeHtml(item.simulacao_id || item.id || "")}"><div class="font-semibold truncate">${escapeHtml(item.titulo || item.conteudo || item.content || "Simulação")}</div><div class="text-xs text-slate-400 mt-1">${escapeHtml(item.created_at || item.date || "")} · score ${escapeHtml(item.crisis_score ?? "—")}</div></button>`).join("");
+          out.querySelectorAll("[data-sim-id]").forEach(btn => btn.addEventListener("click", async () => { if (!btn.dataset.simId) return; const data = await api(`/simulate/${encodeURIComponent(btn.dataset.simId)}`); renderSimulation(document.getElementById("sim-result"), data); }));
+        } catch (e) { renderError(out, e.message); }
+      }
+
+      async function searchMentions(e) {
+        e.preventDefault();
+        const btn = document.getElementById("mentions-btn"); const out = document.getElementById("mentions-results");
+        const q = document.getElementById("mentions-query").value.trim(); const limit = document.getElementById("mentions-limit").value || 10;
+        setBusy(btn, true, "Buscando..."); renderLoading(out, "Buscando menções...");
+        try {
+          const data = await api(`/search/mentions?q=${encodeURIComponent(q)}&limit=${encodeURIComponent(limit)}`);
+          const mentions = asArray(data, ["mentions"]);
+          if (!mentions.length) return renderEmpty(out, "Nenhuma menção encontrada.");
+          out.innerHTML = mentions.map(m => `<article class="card p-4"><div class="flex flex-wrap items-center justify-between gap-2 mb-2"><h3 class="font-bold">${escapeHtml(m.title || "Menção")}</h3><span class="chip px-2 py-1 text-xs">${escapeHtml(m.sentiment || "—")} · ${escapeHtml(m.score ?? "—")}</span></div><p class="text-sm text-slate-300">${escapeHtml(m.snippet || "")}</p><div class="flex flex-wrap gap-3 mt-3 text-xs text-slate-400"><span>${escapeHtml(m.source || "")}</span><span>${escapeHtml(m.date || "")}</span>${m.url ? `<a class="text-lime-300 hover:underline" href="${escapeHtml(m.url)}" target="_blank" rel="noopener">abrir fonte</a>` : ""}</div></article>`).join("");
+        } catch (err) { renderError(out, err.message); } finally { setBusy(btn, false); }
+      }
+
+      async function loadReports(kind) {
+        const out = document.getElementById("reports-output"); renderLoading(out, "Carregando relatórios...");
+        try {
+          let data;
+          if (kind === "latest") data = await api("/reports/latest");
+          else {
+            const p = state.selectedProfile;
+            if (!p || p.platform !== "youtube") return renderEmpty(out, "Selecione um perfil YouTube para esta opção.");
+            data = await api(kind === "snapshots" ? `/snapshots/${encodeURIComponent(p.platform_id)}?limit=30` : `/reports/${encodeURIComponent(p.platform_id)}?limit=10`);
+          }
+          const items = asArray(data, ["reports", "snapshots", "items", "data"]);
+          if (!items.length) return renderEmpty(out, "Nenhum dado retornado.");
+          out.innerHTML = items.map(item => `<article class="card p-4"><div class="font-bold mb-2">${escapeHtml(item.title || item.name || item.channel_name || "Registro")}</div><pre class="rounded-xl border border-white/10 bg-black/35 p-3 text-xs overflow-auto max-h-72">${escapeHtml(JSON.stringify(item, null, 2))}</pre></article>`).join("");
+        } catch (e) { renderError(out, e.message); }
+      }
+
+      function openAddModal() { document.getElementById("add-error").classList.add("hidden"); document.getElementById("add-modal").classList.remove("hidden"); renderIcons(); }
+      function closeAddModal() { document.getElementById("add-modal").classList.add("hidden"); document.getElementById("add-form").reset(); }
+
+      document.getElementById("login-form").addEventListener("submit", async e => {
+        e.preventDefault();
+        const btn = document.getElementById("login-btn"); const err = document.getElementById("login-error");
+        err.classList.add("hidden"); setBusy(btn, true, "Entrando...");
+        try { await login(document.getElementById("login-email").value, document.getElementById("login-password").value); showDashboard(); }
+        catch (error) { err.textContent = error.message; err.classList.remove("hidden"); }
+        finally { setBusy(btn, false); }
+      });
+      document.getElementById("logout-btn").addEventListener("click", () => logout());
+      document.querySelectorAll("[data-view]").forEach(btn => btn.addEventListener("click", () => switchView(btn.dataset.view)));
+      document.getElementById("add-profile-btn").addEventListener("click", openAddModal);
+      document.getElementById("collect-btn").addEventListener("click", collectData);
+      document.getElementById("analyze-btn").addEventListener("click", analyzeProfile);
+      document.getElementById("refresh-profile-btn").addEventListener("click", () => loadProfileData());
+      document.getElementById("delete-profile-btn").addEventListener("click", deleteSelectedProfile);
+      document.getElementById("reload-warroom-btn").addEventListener("click", loadWarRoom);
+      document.getElementById("warroom-form").addEventListener("submit", generateWarRoomResponse);
+      document.getElementById("sim-form").addEventListener("submit", runSimulation);
+      document.getElementById("sim-history-btn").addEventListener("click", loadSimulationHistory);
+      document.getElementById("mentions-form").addEventListener("submit", searchMentions);
+      document.getElementById("load-profile-reports-btn").addEventListener("click", () => loadReports("profile"));
+      document.getElementById("load-latest-reports-btn").addEventListener("click", () => loadReports("latest"));
+      document.getElementById("load-snapshots-btn").addEventListener("click", () => loadReports("snapshots"));
+      document.getElementById("add-modal").addEventListener("click", e => { if (e.target.id === "add-modal") closeAddModal(); });
+      document.getElementById("add-form").addEventListener("submit", async e => {
+        e.preventDefault();
+        const btn = document.getElementById("add-submit-btn"); const err = document.getElementById("add-error");
+        err.classList.add("hidden"); setBusy(btn, true, "Adicionando...");
+        try {
+          await api("/profiles", { method: "POST", body: JSON.stringify({ name: document.getElementById("add-name").value.trim(), platform: document.getElementById("add-platform").value, platform_id: document.getElementById("add-platform-id").value.trim().replace(/^@/, "") }) });
+          toast("Perfil adicionado.", "success"); closeAddModal(); await loadProfiles();
+        } catch (error) { err.textContent = error.message; err.classList.remove("hidden"); }
+        finally { setBusy(btn, false); }
+      });
+
+      verifySession();
+      renderIcons();
+    </script>
+  </body>
 </html>
