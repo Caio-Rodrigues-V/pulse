@@ -212,23 +212,34 @@
               </div>
 
               <div class="grid grid-cols-1 2xl:grid-cols-2 gap-4">
-                <div class="card p-5 min-h-[320px]"><div class="flex items-center justify-between mb-4"><h3 class="font-bold">Sentiment Timeline</h3><span class="text-xs text-slate-400">últimos 30 dias</span></div><div class="h-[250px]"><canvas id="chart-timeline"></canvas></div></div>
-                <div class="card p-5 min-h-[320px]"><div class="flex items-center justify-between mb-4"><h3 class="font-bold">Engagement by Post Type</h3><span class="text-xs text-slate-400">médias por tipo</span></div><div class="h-[250px]"><canvas id="chart-engagement"></canvas></div></div>
-                <div class="card p-5 overflow-x-auto"><div class="flex items-center justify-between mb-4"><h3 class="font-bold">Peak Hours Heatmap</h3><span class="text-xs text-slate-400">7 dias × 24h</span></div><div id="heatmap" class="min-w-[760px]"></div></div>
-                <div class="card p-5"><div class="flex items-center justify-between mb-4"><h3 class="font-bold">Word Cloud de Temas</h3><span class="text-xs text-slate-400">temas em alta</span></div><div id="word-cloud" class="word-cloud min-h-[250px] flex flex-wrap gap-3 items-center justify-center text-center"></div></div>
-              </div>
+  <div data-ig-only class="card p-5 min-h-[320px]">
+    <div class="flex items-center justify-between mb-4"><h3 class="font-bold">Sentiment Timeline</h3><span class="text-xs text-slate-400">últimos 30 dias</span></div>
+    <div class="h-[250px]"><canvas id="chart-timeline"></canvas></div>
+  </div>
+  <div data-ig-only class="card p-5 min-h-[320px]">
+    <div class="flex items-center justify-between mb-4"><h3 class="font-bold">Engagement by Post Type</h3><span class="text-xs text-slate-400">médias por tipo</span></div>
+    <div class="h-[250px]"><canvas id="chart-engagement"></canvas></div>
+  </div>
+  <div data-ig-only class="card p-5 overflow-x-auto">
+    <div class="flex items-center justify-between mb-4"><h3 class="font-bold">Peak Hours Heatmap</h3><span class="text-xs text-slate-400">7 dias × 24h</span></div>
+    <div id="heatmap" class="min-w-[760px]"></div>
+  </div>
+  <div data-ig-only class="card p-5">
+    <div class="flex items-center justify-between mb-4"><h3 class="font-bold">Word Cloud de Temas</h3><span class="text-xs text-slate-400">temas em alta</span></div>
+    <div id="word-cloud" class="word-cloud min-h-[250px] flex flex-wrap gap-3 items-center justify-center text-center"></div>
+  </div>
+</div>
 
-              <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
-                <div class="card p-5">
-                  <div class="flex items-center justify-between mb-4"><h3 class="font-bold flex items-center gap-2"><i data-lucide="instagram" class="w-4 h-4 text-lime-300"></i> Posts recentes</h3><span class="text-xs text-slate-400">Instagram</span></div>
-                  <div id="instagram-posts" class="space-y-3 max-h-[420px] overflow-y-auto scrollbar-thin"></div>
-                </div>
-                <div class="card p-5">
-                  <div class="flex items-center justify-between mb-4"><h3 class="font-bold flex items-center gap-2"><i data-lucide="message-square-warning" class="w-4 h-4 text-amber-300"></i> Comentários negativos</h3><span class="text-xs text-slate-400">últimas 24h</span></div>
-                  <div id="negative-feed" class="space-y-3 max-h-[420px] overflow-y-auto scrollbar-thin"></div>
-                </div>
-              </div>
-            </div>
+<div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
+  <div data-ig-only class="card p-5">
+    <div class="flex items-center justify-between mb-4"><h3 class="font-bold flex items-center gap-2"><i data-lucide="instagram" class="w-4 h-4 text-lime-300"></i> Posts recentes</h3><span class="text-xs text-slate-400">Instagram</span></div>
+    <div id="instagram-posts" class="space-y-3 max-h-[420px] overflow-y-auto scrollbar-thin"></div>
+  </div>
+  <div class="card p-5">
+    <div class="flex items-center justify-between mb-4"><h3 class="font-bold flex items-center gap-2"><i data-lucide="message-square-warning" class="w-4 h-4 text-amber-300"></i> Comentários negativos</h3><span class="text-xs text-slate-400">últimas 24h</span></div>
+    <div id="negative-feed" class="space-y-3 max-h-[420px] overflow-y-auto scrollbar-thin"></div>
+  </div>
+</div>
           </section>
 
           <section id="view-warroom" class="view-section hidden space-y-6">
@@ -472,15 +483,22 @@
       }
 
       function selectProfile(profile, reload = true) {
-        state.selectedProfile = profile;
-        document.getElementById("empty-state").classList.add("hidden");
-        document.getElementById("profile-view").classList.remove("hidden");
-        document.getElementById("profile-name").textContent = profile.name || profile.platform_id || "—";
-        document.getElementById("profile-username").textContent = `@${profile.platform_id || "—"} · ${profile.platform || "—"}`;
-        renderProfilesList();
-        if (reload) loadProfileData(profile);
-        renderIcons();
-      }
+  state.selectedProfile = profile;
+  document.getElementById("empty-state").classList.add("hidden");
+  document.getElementById("profile-view").classList.remove("hidden");
+  document.getElementById("profile-name").textContent = profile.name || profile.platform_id || "—";
+  document.getElementById("profile-username").textContent = `@${profile.platform_id || "—"} · ${profile.platform || "—"}`;
+
+  // Esconde cards exclusivos do Instagram quando perfil for YouTube
+  const isIG = profile.platform === "instagram";
+  document.querySelectorAll("[data-ig-only]").forEach(el => {
+    el.classList.toggle("hidden", !isIG);
+  });
+
+  renderProfilesList();
+  if (reload) loadProfileData(profile);
+  renderIcons();
+}
 
       async function loadProfileData(profile = state.selectedProfile) {
         if (!profile) return;
@@ -631,17 +649,31 @@
         } catch (e) { toast(e.message, "error"); } finally { setBusy(btn, false); }
       }
       async function analyzeProfile() {
-        const p = state.selectedProfile; if (!p) return toast("Selecione um perfil.", "warn");
-        const btn = document.getElementById("analyze-btn"); setBusy(btn, true, "Analisando...");
-        try {
-          if (p.platform === "instagram") {
-            await api(`/analyze/instagram/${encodeURIComponent(p.platform_id)}`, { method: "POST" }).catch(() => api(`/analyze/comments/${encodeURIComponent(p.platform_id)}`, { method: "POST" }));
-          } else {
-            await api(`/analyze/youtube/${encodeURIComponent(p.platform_id)}?days=30&name=${encodeURIComponent(p.name || p.platform_id)}`, { method: "POST" });
-          }
-          toast("Análise concluída.", "success"); await loadProfileData(p);
-        } catch (e) { toast(e.message, "error"); } finally { setBusy(btn, false); }
-      }
+  const p = state.selectedProfile;
+  if (!p) return toast("Selecione um perfil.", "warn");
+  const btn = document.getElementById("analyze-btn");
+  setBusy(btn, true, "Analisando...");
+  try {
+    if (p.platform === "instagram") {
+      // tenta analisar captions (posts) E comentários — ambos são úteis
+      const results = await Promise.allSettled([
+        api(`/analyze/instagram/${encodeURIComponent(p.platform_id)}`, { method: "POST" }),
+        api(`/analyze/comments/${encodeURIComponent(p.platform_id)}`, { method: "POST" }),
+      ]);
+      const failed = results.filter(r => r.status === "rejected");
+      if (failed.length === results.length) throw new Error(failed[0].reason?.message || "Falha em ambas análises");
+      if (failed.length) toast(`Análise parcial: ${failed[0].reason?.message}`, "warn");
+    } else {
+      await api(`/analyze/youtube/${encodeURIComponent(p.platform_id)}?days=30&name=${encodeURIComponent(p.name || p.platform_id)}`, { method: "POST" });
+    }
+    toast("Análise concluída.", "success");
+    await loadProfileData(p);
+  } catch (e) {
+    toast(e.message, "error");
+  } finally {
+    setBusy(btn, false);
+  }
+}
       async function deleteSelectedProfile() {
         const p = state.selectedProfile; if (!p) return;
         if (!confirm(`Remover o perfil "${p.name || p.platform_id}"?`)) return;
