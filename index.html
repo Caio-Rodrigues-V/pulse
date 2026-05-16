@@ -341,14 +341,14 @@
       };
 
       window.fetch = function interceptedFetch(input, init = {}) {
-        const url = typeof input === "string" ? input : input?.url;
-        const shouldAuth = state.token && url && (url.startsWith(API_BASE) || url.startsWith("/"));
-        if (!shouldAuth) return rawFetch(input, init);
-        const headers = new Headers(init.headers || {});
-        headers.set("Authorization", `Bearer ${state.token}`);
-        if (!headers.has("Content-Type") && init.body) headers.set("Content-Type", "application/json");
-        return rawFetch(input, { ...init, headers });
-      };
+  const url = typeof input === "string" ? input : input?.url;
+  const shouldAuth = state.token && url && url.startsWith(API_BASE);
+  if (!shouldAuth) return rawFetch(input, init);
+  const headers = new Headers(init.headers || {});
+  headers.set("Authorization", `Bearer ${state.token}`);
+  if (!headers.has("Content-Type") && init.body) headers.set("Content-Type", "application/json");
+  return rawFetch(input, { ...init, headers });
+};
 
       async function api(path, opts = {}) {
         const url = path.startsWith("http") ? path : `${API_BASE}${path}`;
@@ -432,14 +432,17 @@
       }
 
       async function verifySession() {
-        if (!state.token) return showLogin();
-        try {
-          const me = await api("/auth/me");
-          state.user = me.user || me;
-          localStorage.setItem("pulse_user", JSON.stringify(state.user));
-          showDashboard();
-        } catch (e) { showLogin(); }
-      }
+  if (!state.token) return showLogin();
+  try {
+    const me = await api("/auth/me");
+    // /auth/me retorna o user direto (id, email, name, role, created_at, last_login)
+    state.user = me;
+    localStorage.setItem("pulse_user", JSON.stringify(state.user));
+    showDashboard();
+  } catch (e) {
+    showLogin();
+  }
+}
 
       function switchView(view) {
         state.currentView = view;
@@ -501,11 +504,19 @@
 }
 
       async function loadProfileData(profile = state.selectedProfile) {
-        if (!profile) return;
-        await Promise.allSettled([
-          loadThreatLevel(), loadTimeline(profile.platform_id), loadEngagement(profile.platform_id), loadPeakHours(profile.platform_id), loadThemes(profile.platform_id), loadNegativeFeed("negative-feed", 15, 24), loadInstagramPosts(profile)
-        ]);
-      }
+  if (!profile) return;
+  const tasks = [loadNegativeFeed("negative-feed", 15, 24)];
+  if (profile.platform === "instagram") {
+    tasks.push(
+      loadTimeline(profile.platform_id),
+      loadEngagement(profile.platform_id),
+      loadPeakHours(profile.platform_id),
+      loadThemes(profile.platform_id),
+      loadInstagramPosts(profile)
+    );
+  }
+  await Promise.allSettled(tasks);
+}
 
       async function loadThreatLevel() {
         try {
@@ -894,18 +905,38 @@
   renderIcons();
 }
       async function loadSimulationHistory() {
-        const out = document.getElementById("sim-history");
-        if (!selectedUsername()) return renderEmpty(out, "Selecione um perfil para carregar histórico.");
-        renderLoading(out, "Carregando histórico...");
-        try {
-          const data = await api(`/simulate/history/${encodeURIComponent(selectedUsername())}?limit=20`);
-          const items = asArray(data, ["history", "simulations", "items", "data"]);
-          if (!items.length) return renderEmpty(out, "Sem histórico para este perfil.");
-          out.innerHTML = items.map(item => `<button class="w-full text-left rounded-xl border border-white/10 bg-white/5 p-3 hover:bg-white/10" data-sim-id="${escapeHtml(item.simulacao_id || item.id || "")}"><div class="font-semibold truncate">${escapeHtml(item.titulo || item.conteudo || item.content || "Simulação")}</div><div class="text-xs text-slate-400 mt-1">${escapeHtml(item.created_at || item.date || "")} · score ${escapeHtml(item.crisis_score ?? "—")}</div></button>`).join("");
-          out.querySelectorAll("[data-sim-id]").forEach(btn => btn.addEventListener("click", async () => { if (!btn.dataset.simId) return; const data = await api(`/simulate/${encodeURIComponent(btn.dataset.simId)}`); renderSimulation(document.getElementById("sim-result"), data); }));
-        } catch (e) { renderError(out, e.message); }
+  const out = document.getElementById("sim-history");
+  if (!selectedUsername()) return renderEmpty(out, "Selecione um perfil para carregar histórico.");
+  renderLoading(out, "Carregando histórico...");
+  try {
+    const data = await api(`/simulate/history/${encodeURIComponent(selectedUsername())}?limit=20`);
+    const items = asArray(data, ["history", "simulations", "items", "data"]);
+    if (!items.length) return renderEmpty(out, "Sem histórico para este perfil.");
+    out.innerHTML = items.map(item => {
+      const forecast = item.forecast || {};
+      const crisisScore = forecast.crisis_score ?? item.crisis_score ?? "—";
+      const conteudo = item.conteudo || item.content || forecast.conteudo_testado || "Simulação";
+      const createdAt = item.created_at ? new Date(item.created_at).toLocaleString("pt-BR") : "";
+      return `
+        <button class="w-full text-left rounded-xl border border-white/10 bg-white/5 p-3 hover:bg-white/10 transition" data-sim-id="${escapeHtml(item.id || "")}">
+          <div class="font-semibold truncate">${escapeHtml(conteudo)}</div>
+          <div class="text-xs text-slate-400 mt-1">${escapeHtml(createdAt)} · score <strong class="text-slate-200">${escapeHtml(crisisScore)}</strong></div>
+        </button>`;
+    }).join("");
+    out.querySelectorAll("[data-sim-id]").forEach(btn => btn.addEventListener("click", async () => {
+      if (!btn.dataset.simId) return;
+      try {
+        const sim = await api(`/simulate/${encodeURIComponent(btn.dataset.simId)}`);
+        renderSimulation(document.getElementById("sim-result"), sim.forecast || sim);
+        document.getElementById("sim-result").scrollIntoView({ behavior: "smooth", block: "start" });
+      } catch (err) {
+        toast(err.message, "error");
       }
-
+    }));
+  } catch (e) {
+    renderError(out, e.message);
+  }
+}
       async function searchMentions(e) {
         e.preventDefault();
         const btn = document.getElementById("mentions-btn"); const out = document.getElementById("mentions-results");
