@@ -9,7 +9,10 @@
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <style>
       :root {
         --bg: #070b08;
@@ -26,17 +29,37 @@
         --red: #ef4444;
         --blue: #38bdf8;
       }
-      * { font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif; }
-      html { scroll-behavior: smooth; }
+      * {
+        font-family:
+          "Inter",
+          -apple-system,
+          BlinkMacSystemFont,
+          sans-serif;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
       body {
         background:
-          radial-gradient(circle at top left, rgba(132, 204, 22, 0.08), transparent 32rem),
-          radial-gradient(circle at top right, rgba(245, 158, 11, 0.08), transparent 28rem),
+          radial-gradient(
+            circle at top left,
+            rgba(132, 204, 22, 0.08),
+            transparent 32rem
+          ),
+          radial-gradient(
+            circle at top right,
+            rgba(245, 158, 11, 0.08),
+            transparent 28rem
+          ),
           var(--bg);
         color: var(--text);
       }
       .card {
-        background: linear-gradient(180deg, rgba(18, 31, 23, 0.96), rgba(11, 18, 14, 0.96));
+        background: linear-gradient(
+          180deg,
+          rgba(18, 31, 23, 0.96),
+          rgba(11, 18, 14, 0.96)
+        );
         border: 1px solid var(--border-soft);
         border-radius: 16px;
         box-shadow: 0 18px 60px rgba(0, 0, 0, 0.22);
@@ -51,86 +74,245 @@
         font-size: 0.875rem;
         outline: none;
       }
-      .field:focus { border-color: rgba(132, 204, 22, 0.75); box-shadow: 0 0 0 3px rgba(132, 204, 22, 0.12); }
+      .field:focus {
+        border-color: rgba(132, 204, 22, 0.75);
+        box-shadow: 0 0 0 3px rgba(132, 204, 22, 0.12);
+      }
       .btn-primary {
         background: linear-gradient(135deg, #365314, #16a34a);
         color: white;
         font-weight: 700;
         border-radius: 12px;
-        transition: transform .15s, filter .15s, opacity .15s;
+        transition:
+          transform 0.15s,
+          filter 0.15s,
+          opacity 0.15s;
       }
-      .btn-primary:hover { filter: brightness(1.08); transform: translateY(-1px); }
+      .btn-primary:hover {
+        filter: brightness(1.08);
+        transform: translateY(-1px);
+      }
       .btn-secondary {
         background: rgba(255, 255, 255, 0.045);
         color: var(--text);
         border: 1px solid var(--border-soft);
         border-radius: 12px;
-        transition: all .15s;
+        transition: all 0.15s;
       }
-      .btn-secondary:hover { border-color: rgba(132, 204, 22, 0.5); background: rgba(132, 204, 22, 0.08); }
+      .btn-secondary:hover {
+        border-color: rgba(132, 204, 22, 0.5);
+        background: rgba(132, 204, 22, 0.08);
+      }
       .btn-danger {
         background: rgba(239, 68, 68, 0.12);
         border: 1px solid rgba(239, 68, 68, 0.28);
         color: #fecaca;
         border-radius: 12px;
       }
-      .btn-danger:hover { background: rgba(239, 68, 68, 0.2); }
-      .chip { border: 1px solid var(--border-soft); background: rgba(255,255,255,.045); border-radius: 999px; }
-      .nav-btn { color: var(--muted); border: 1px solid transparent; }
-      .nav-btn.active, .nav-btn:hover { color: var(--text); background: rgba(132,204,22,.08); border-color: rgba(132,204,22,.2); }
-      .profile-btn.active { background: rgba(132, 204, 22, .1); border-color: rgba(132, 204, 22, .35); }
-      .scrollbar-thin::-webkit-scrollbar { width: 6px; height: 6px; }
-      .scrollbar-thin::-webkit-scrollbar-thumb { background: rgba(148, 163, 160, 0.35); border-radius: 999px; }
-      .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
-      .toast { animation: slideIn .25s ease-out; }
-      @keyframes slideIn { from { transform: translateX(110%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-      .scanline::before {
-        content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 60;
-        background: linear-gradient(rgba(255,255,255,0.02) 50%, rgba(0,0,0,0.03) 50%);
-        background-size: 100% 4px; opacity: .35;
+      .btn-danger:hover {
+        background: rgba(239, 68, 68, 0.2);
       }
-      .heatmap-cell { aspect-ratio: 1; border-radius: 4px; transition: transform .12s; cursor: default; }
-      .heatmap-cell:hover { transform: scale(1.25); z-index: 10; position: relative; outline: 1px solid rgba(255,255,255,.65); }
-      .word-cloud span { display: inline-block; transition: transform .15s, color .15s; cursor: default; }
-      .word-cloud span:hover { transform: translateY(-2px) scale(1.04); color: #bef264 !important; }
-      .defcon-1 { color:#fecaca; border-color:rgba(239,68,68,.45); background:rgba(127,29,29,.45); }
-      .defcon-2 { color:#fed7aa; border-color:rgba(249,115,22,.45); background:rgba(124,45,18,.45); }
-      .defcon-3 { color:#fde68a; border-color:rgba(245,158,11,.45); background:rgba(113,63,18,.45); }
-      .defcon-4 { color:#d9f99d; border-color:rgba(132,204,22,.45); background:rgba(54,83,20,.45); }
-      .defcon-5 { color:#bbf7d0; border-color:rgba(34,197,94,.45); background:rgba(20,83,45,.45); }
-      .modal-backdrop { background: rgba(0, 0, 0, .72); backdrop-filter: blur(8px); }
-      .skeleton { background: linear-gradient(90deg, rgba(255,255,255,.05), rgba(255,255,255,.1), rgba(255,255,255,.05)); background-size: 200% 100%; animation: skeleton 1.4s infinite; }
-      @keyframes skeleton { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-      @media (max-width: 1024px) { #shell { flex-direction: column; } #sidebar { width: 100%; min-height: auto; position: static; } }
+      .chip {
+        border: 1px solid var(--border-soft);
+        background: rgba(255, 255, 255, 0.045);
+        border-radius: 999px;
+      }
+      .nav-btn {
+        color: var(--muted);
+        border: 1px solid transparent;
+      }
+      .nav-btn.active,
+      .nav-btn:hover {
+        color: var(--text);
+        background: rgba(132, 204, 22, 0.08);
+        border-color: rgba(132, 204, 22, 0.2);
+      }
+      .profile-btn.active {
+        background: rgba(132, 204, 22, 0.1);
+        border-color: rgba(132, 204, 22, 0.35);
+      }
+      .scrollbar-thin::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      .scrollbar-thin::-webkit-scrollbar-thumb {
+        background: rgba(148, 163, 160, 0.35);
+        border-radius: 999px;
+      }
+      .scrollbar-thin::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .toast {
+        animation: slideIn 0.25s ease-out;
+      }
+      @keyframes slideIn {
+        from {
+          transform: translateX(110%);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+      .scanline::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 60;
+        background: linear-gradient(
+          rgba(255, 255, 255, 0.02) 50%,
+          rgba(0, 0, 0, 0.03) 50%
+        );
+        background-size: 100% 4px;
+        opacity: 0.35;
+      }
+      .heatmap-cell {
+        aspect-ratio: 1;
+        border-radius: 4px;
+        transition: transform 0.12s;
+        cursor: default;
+      }
+      .heatmap-cell:hover {
+        transform: scale(1.25);
+        z-index: 10;
+        position: relative;
+        outline: 1px solid rgba(255, 255, 255, 0.65);
+      }
+      .word-cloud span {
+        display: inline-block;
+        transition:
+          transform 0.15s,
+          color 0.15s;
+        cursor: default;
+      }
+      .word-cloud span:hover {
+        transform: translateY(-2px) scale(1.04);
+        color: #bef264 !important;
+      }
+      .defcon-1 {
+        color: #fecaca;
+        border-color: rgba(239, 68, 68, 0.45);
+        background: rgba(127, 29, 29, 0.45);
+      }
+      .defcon-2 {
+        color: #fed7aa;
+        border-color: rgba(249, 115, 22, 0.45);
+        background: rgba(124, 45, 18, 0.45);
+      }
+      .defcon-3 {
+        color: #fde68a;
+        border-color: rgba(245, 158, 11, 0.45);
+        background: rgba(113, 63, 18, 0.45);
+      }
+      .defcon-4 {
+        color: #d9f99d;
+        border-color: rgba(132, 204, 22, 0.45);
+        background: rgba(54, 83, 20, 0.45);
+      }
+      .defcon-5 {
+        color: #bbf7d0;
+        border-color: rgba(34, 197, 94, 0.45);
+        background: rgba(20, 83, 45, 0.45);
+      }
+      .modal-backdrop {
+        background: rgba(0, 0, 0, 0.72);
+        backdrop-filter: blur(8px);
+      }
+      .skeleton {
+        background: linear-gradient(
+          90deg,
+          rgba(255, 255, 255, 0.05),
+          rgba(255, 255, 255, 0.1),
+          rgba(255, 255, 255, 0.05)
+        );
+        background-size: 200% 100%;
+        animation: skeleton 1.4s infinite;
+      }
+      @keyframes skeleton {
+        0% {
+          background-position: 200% 0;
+        }
+        100% {
+          background-position: -200% 0;
+        }
+      }
+      @media (max-width: 1024px) {
+        #shell {
+          flex-direction: column;
+        }
+        #sidebar {
+          width: 100%;
+          min-height: auto;
+          position: static;
+        }
+      }
     </style>
   </head>
   <body class="scanline min-h-screen">
-    <div id="login-screen" class="min-h-screen flex items-center justify-center px-4 py-10">
+    <div
+      id="login-screen"
+      class="min-h-screen flex items-center justify-center px-4 py-10"
+    >
       <div class="w-full max-w-md card p-7 border-l-4 border-l-lime-500">
         <div class="flex items-center gap-3 mb-8">
-          <div class="w-12 h-12 rounded-2xl bg-lime-500/15 border border-lime-400/30 flex items-center justify-center">
+          <div
+            class="w-12 h-12 rounded-2xl bg-lime-500/15 border border-lime-400/30 flex items-center justify-center"
+          >
             <i data-lucide="radar" class="w-6 h-6 text-lime-300"></i>
           </div>
           <div>
-            <div class="text-xs uppercase tracking-[0.35em] text-lime-300 font-bold">Pulse</div>
+            <div
+              class="text-xs uppercase tracking-[0.35em] text-lime-300 font-bold"
+            >
+              Pulse
+            </div>
             <h1 class="text-xl font-extrabold">Inteligência Política</h1>
           </div>
         </div>
         <div class="mb-6">
           <h2 class="text-2xl font-bold">Acesso operacional</h2>
-          <p class="text-sm text-slate-400 mt-1">Autenticação JWT multi-tenant para o painel da campanha.</p>
+          <p class="text-sm text-slate-400 mt-1">
+            Autenticação JWT multi-tenant para o painel da campanha.
+          </p>
         </div>
         <form id="login-form" class="space-y-4">
           <div>
-            <label class="block text-sm font-semibold mb-1.5 text-slate-200">Email</label>
-            <input id="login-email" type="email" required class="field" placeholder="voce@email.com" autocomplete="email" />
+            <label class="block text-sm font-semibold mb-1.5 text-slate-200"
+              >Email</label
+            >
+            <input
+              id="login-email"
+              type="email"
+              required
+              class="field"
+              placeholder="voce@email.com"
+              autocomplete="email"
+            />
           </div>
           <div>
-            <label class="block text-sm font-semibold mb-1.5 text-slate-200">Senha</label>
-            <input id="login-password" type="password" required class="field" placeholder="••••••••" autocomplete="current-password" />
+            <label class="block text-sm font-semibold mb-1.5 text-slate-200"
+              >Senha</label
+            >
+            <input
+              id="login-password"
+              type="password"
+              required
+              class="field"
+              placeholder="••••••••"
+              autocomplete="current-password"
+            />
           </div>
-          <div id="login-error" class="hidden rounded-xl border border-red-400/30 bg-red-500/10 px-3 py-2 text-sm text-red-200"></div>
-          <button id="login-btn" type="submit" class="btn-primary w-full py-3 flex items-center justify-center gap-2">
+          <div
+            id="login-error"
+            class="hidden rounded-xl border border-red-400/30 bg-red-500/10 px-3 py-2 text-sm text-red-200"
+          ></div>
+          <button
+            id="login-btn"
+            type="submit"
+            class="btn-primary w-full py-3 flex items-center justify-center gap-2"
+          >
             <i data-lucide="shield-check" class="w-4 h-4"></i> Entrar
           </button>
         </form>
@@ -138,175 +320,523 @@
     </div>
 
     <div id="dashboard" class="hidden min-h-screen">
-      <header class="sticky top-0 z-40 border-b border-white/10 bg-[#070b08]/90 backdrop-blur px-4 lg:px-6 py-3">
+      <header
+        class="sticky top-0 z-40 border-b border-white/10 bg-[#070b08]/90 backdrop-blur px-4 lg:px-6 py-3"
+      >
         <div class="flex flex-wrap items-center justify-between gap-3">
           <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-2xl bg-lime-500/15 border border-lime-400/30 flex items-center justify-center">
+            <div
+              class="w-10 h-10 rounded-2xl bg-lime-500/15 border border-lime-400/30 flex items-center justify-center"
+            >
               <i data-lucide="radar" class="w-5 h-5 text-lime-300"></i>
             </div>
             <div>
               <div class="font-extrabold leading-tight">Pulse</div>
-              <div class="text-[11px] text-slate-400 uppercase tracking-widest">Political Ops Dashboard</div>
+              <div class="text-[11px] text-slate-400 uppercase tracking-widest">
+                Political Ops Dashboard
+              </div>
             </div>
           </div>
           <div class="flex items-center gap-2 sm:gap-3">
-            <div id="threat-badge" class="hidden chip px-3 py-1.5 text-xs font-bold items-center gap-2">
-              <span class="w-2 h-2 rounded-full bg-current"></span><span id="threat-label">—</span>
+            <div
+              id="threat-badge"
+              class="hidden chip px-3 py-1.5 text-xs font-bold items-center gap-2"
+            >
+              <span class="w-2 h-2 rounded-full bg-current"></span
+              ><span id="threat-label">—</span>
             </div>
             <div class="chip px-3 py-1.5 text-xs sm:text-sm">
-              <span class="text-slate-400">Operador:</span> <strong id="user-name">—</strong>
+              <span class="text-slate-400">Operador:</span>
+              <strong id="user-name">—</strong>
             </div>
-            <button id="logout-btn" class="btn-secondary px-3 py-2 text-sm flex items-center gap-2">
-              <i data-lucide="log-out" class="w-4 h-4"></i><span class="hidden sm:inline">Sair</span>
+            <button
+              id="logout-btn"
+              class="btn-secondary px-3 py-2 text-sm flex items-center gap-2"
+            >
+              <i data-lucide="log-out" class="w-4 h-4"></i
+              ><span class="hidden sm:inline">Sair</span>
             </button>
           </div>
         </div>
       </header>
 
       <div id="shell" class="flex">
-        <aside id="sidebar" class="w-72 lg:sticky lg:top-[65px] lg:h-[calc(100vh-65px)] overflow-y-auto scrollbar-thin border-r border-white/10 bg-black/20 p-4">
+        <aside
+          id="sidebar"
+          class="w-72 lg:sticky lg:top-[65px] lg:h-[calc(100vh-65px)] overflow-y-auto scrollbar-thin border-r border-white/10 bg-black/20 p-4"
+        >
           <nav class="space-y-1 mb-5">
-            <button data-view="overview" class="nav-btn active w-full rounded-xl px-3 py-2.5 text-sm text-left flex items-center gap-2"><i data-lucide="layout-dashboard" class="w-4 h-4"></i> Visão do perfil</button>
-            <button data-view="warroom" class="nav-btn w-full rounded-xl px-3 py-2.5 text-sm text-left flex items-center gap-2"><i data-lucide="shield-alert" class="w-4 h-4"></i> War Room</button>
-            <button data-view="simulator" class="nav-btn w-full rounded-xl px-3 py-2.5 text-sm text-left flex items-center gap-2"><i data-lucide="brain-circuit" class="w-4 h-4"></i> Simulador</button>
-            <button data-view="mentions" class="nav-btn w-full rounded-xl px-3 py-2.5 text-sm text-left flex items-center gap-2"><i data-lucide="search" class="w-4 h-4"></i> Menções</button>
-            <button data-view="reports" class="nav-btn w-full rounded-xl px-3 py-2.5 text-sm text-left flex items-center gap-2"><i data-lucide="file-bar-chart" class="w-4 h-4"></i> Relatórios</button>
+            <button
+              data-view="overview"
+              class="nav-btn active w-full rounded-xl px-3 py-2.5 text-sm text-left flex items-center gap-2"
+            >
+              <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Visão do
+              perfil
+            </button>
+            <button
+              data-view="warroom"
+              class="nav-btn w-full rounded-xl px-3 py-2.5 text-sm text-left flex items-center gap-2"
+            >
+              <i data-lucide="shield-alert" class="w-4 h-4"></i> War Room
+            </button>
+            <button
+              data-view="simulator"
+              class="nav-btn w-full rounded-xl px-3 py-2.5 text-sm text-left flex items-center gap-2"
+            >
+              <i data-lucide="brain-circuit" class="w-4 h-4"></i> Simulador
+            </button>
+            <button
+              data-view="mentions"
+              class="nav-btn w-full rounded-xl px-3 py-2.5 text-sm text-left flex items-center gap-2"
+            >
+              <i data-lucide="search" class="w-4 h-4"></i> Menções
+            </button>
+            <button
+              data-view="reports"
+              class="nav-btn w-full rounded-xl px-3 py-2.5 text-sm text-left flex items-center gap-2"
+            >
+              <i data-lucide="file-bar-chart" class="w-4 h-4"></i> Relatórios
+            </button>
           </nav>
 
           <div class="flex items-center justify-between mb-3">
-            <h3 class="text-xs font-extrabold uppercase tracking-[0.22em] text-slate-400">Perfis</h3>
-            <button id="add-profile-btn" class="btn-secondary w-8 h-8 flex items-center justify-center" title="Adicionar perfil"><i data-lucide="plus" class="w-4 h-4"></i></button>
+            <h3
+              class="text-xs font-extrabold uppercase tracking-[0.22em] text-slate-400"
+            >
+              Perfis
+            </h3>
+            <button
+              id="add-profile-btn"
+              class="btn-secondary w-8 h-8 flex items-center justify-center"
+              title="Adicionar perfil"
+            >
+              <i data-lucide="plus" class="w-4 h-4"></i>
+            </button>
           </div>
-          <div id="profiles-list" class="space-y-2"><div class="text-sm text-slate-500">Carregando...</div></div>
+          <div id="profiles-list" class="space-y-2">
+            <div class="text-sm text-slate-500">Carregando...</div>
+          </div>
         </aside>
 
         <main class="flex-1 p-4 lg:p-6 space-y-6">
           <section id="view-overview" class="view-section space-y-6">
             <div id="empty-state" class="hidden card p-10 text-center">
-              <i data-lucide="inbox" class="w-14 h-14 mx-auto text-slate-500 mb-4"></i>
+              <i
+                data-lucide="inbox"
+                class="w-14 h-14 mx-auto text-slate-500 mb-4"
+              ></i>
               <h2 class="text-xl font-bold">Nenhum perfil monitorado</h2>
-              <p class="text-sm text-slate-400 mt-1 mb-5">Adicione Instagram ou YouTube para iniciar coleta, análise e resposta tática.</p>
-              <button onclick="document.getElementById('add-profile-btn').click()" class="btn-primary px-5 py-3">Adicionar perfil</button>
+              <p class="text-sm text-slate-400 mt-1 mb-5">
+                Adicione Instagram ou YouTube para iniciar coleta, análise e
+                resposta tática.
+              </p>
+              <button
+                onclick="document.getElementById('add-profile-btn').click()"
+                class="btn-primary px-5 py-3"
+              >
+                Adicionar perfil
+              </button>
             </div>
 
             <div id="profile-view" class="hidden space-y-6">
-              <div class="flex flex-col xl:flex-row xl:items-center justify-between gap-4">
+              <div
+                class="flex flex-col xl:flex-row xl:items-center justify-between gap-4"
+              >
                 <div>
-                  <div class="text-xs uppercase tracking-[0.25em] text-lime-300 font-bold mb-1">Alvo monitorado</div>
+                  <div
+                    class="text-xs uppercase tracking-[0.25em] text-lime-300 font-bold mb-1"
+                  >
+                    Alvo monitorado
+                  </div>
                   <h2 id="profile-name" class="text-3xl font-extrabold">—</h2>
                   <p id="profile-username" class="text-sm text-slate-400">—</p>
                 </div>
                 <div class="flex flex-wrap gap-2">
-                  <button id="collect-btn" class="btn-secondary px-4 py-2.5 text-sm flex items-center gap-2"><i data-lucide="download-cloud" class="w-4 h-4"></i> Coletar</button>
-                  <button id="analyze-btn" class="btn-primary px-4 py-2.5 text-sm flex items-center gap-2"><i data-lucide="sparkles" class="w-4 h-4"></i> Analisar</button>
-                  <button id="refresh-profile-btn" class="btn-secondary px-4 py-2.5 text-sm flex items-center gap-2"><i data-lucide="refresh-cw" class="w-4 h-4"></i> Atualizar</button>
-                  <button id="delete-profile-btn" class="btn-danger px-4 py-2.5 text-sm flex items-center gap-2"><i data-lucide="trash-2" class="w-4 h-4"></i> Remover</button>
+                  <button
+                    id="collect-btn"
+                    class="btn-secondary px-4 py-2.5 text-sm flex items-center gap-2"
+                  >
+                    <i data-lucide="download-cloud" class="w-4 h-4"></i> Coletar
+                  </button>
+                  <button
+                    id="analyze-btn"
+                    class="btn-primary px-4 py-2.5 text-sm flex items-center gap-2"
+                  >
+                    <i data-lucide="sparkles" class="w-4 h-4"></i> Analisar
+                  </button>
+                  <button
+                    id="refresh-profile-btn"
+                    class="btn-secondary px-4 py-2.5 text-sm flex items-center gap-2"
+                  >
+                    <i data-lucide="refresh-cw" class="w-4 h-4"></i> Atualizar
+                  </button>
+                  <button
+                    id="delete-profile-btn"
+                    class="btn-danger px-4 py-2.5 text-sm flex items-center gap-2"
+                  >
+                    <i data-lucide="trash-2" class="w-4 h-4"></i> Remover
+                  </button>
                 </div>
               </div>
 
               <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-                <div class="card p-4"><div class="text-xs text-slate-400 uppercase tracking-widest mb-1">DEFCON</div><div class="flex items-baseline gap-2"><span id="kpi-defcon" class="text-3xl font-extrabold">—</span><span id="kpi-defcon-label" class="text-sm text-slate-400">—</span></div></div>
-                <div class="card p-4"><div class="text-xs text-slate-400 uppercase tracking-widest mb-1">Comentários 24h</div><div id="kpi-comments-24h" class="text-3xl font-extrabold">—</div></div>
-                <div class="card p-4"><div class="text-xs text-slate-400 uppercase tracking-widest mb-1">% Negativo</div><div id="kpi-negative-pct" class="text-3xl font-extrabold">—</div></div>
-                <div class="card p-4"><div class="text-xs text-slate-400 uppercase tracking-widest mb-1">Spike Factor</div><div id="kpi-spike" class="text-3xl font-extrabold">—</div></div>
+                <div class="card p-4">
+                  <div
+                    class="text-xs text-slate-400 uppercase tracking-widest mb-1"
+                  >
+                    DEFCON
+                  </div>
+                  <div class="flex items-baseline gap-2">
+                    <span id="kpi-defcon" class="text-3xl font-extrabold"
+                      >—</span
+                    ><span id="kpi-defcon-label" class="text-sm text-slate-400"
+                      >—</span
+                    >
+                  </div>
+                </div>
+                <div class="card p-4">
+                  <div
+                    class="text-xs text-slate-400 uppercase tracking-widest mb-1"
+                  >
+                    Comentários 24h
+                  </div>
+                  <div id="kpi-comments-24h" class="text-3xl font-extrabold">
+                    —
+                  </div>
+                </div>
+                <div class="card p-4">
+                  <div
+                    class="text-xs text-slate-400 uppercase tracking-widest mb-1"
+                  >
+                    % Negativo
+                  </div>
+                  <div id="kpi-negative-pct" class="text-3xl font-extrabold">
+                    —
+                  </div>
+                </div>
+                <div class="card p-4">
+                  <div
+                    class="text-xs text-slate-400 uppercase tracking-widest mb-1"
+                  >
+                    Spike Factor
+                  </div>
+                  <div id="kpi-spike" class="text-3xl font-extrabold">—</div>
+                </div>
               </div>
 
               <div class="grid grid-cols-1 2xl:grid-cols-2 gap-4">
                 <div data-ig-only class="card p-5 min-h-[320px]">
-                  <div class="flex items-center justify-between mb-4"><h3 class="font-bold">Sentiment Timeline</h3><span class="text-xs text-slate-400">últimos 30 dias</span></div>
-                  <div class="h-[250px]"><canvas id="chart-timeline"></canvas></div>
+                  <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-bold">Sentiment Timeline</h3>
+                    <span class="text-xs text-slate-400">últimos 30 dias</span>
+                  </div>
+                  <div class="h-[250px]">
+                    <canvas id="chart-timeline"></canvas>
+                  </div>
                 </div>
                 <div data-ig-only class="card p-5 min-h-[320px]">
-                  <div class="flex items-center justify-between mb-4"><h3 class="font-bold">Engagement by Post Type</h3><span class="text-xs text-slate-400">médias por tipo</span></div>
-                  <div class="h-[250px]"><canvas id="chart-engagement"></canvas></div>
+                  <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-bold">Engagement by Post Type</h3>
+                    <span class="text-xs text-slate-400">médias por tipo</span>
+                  </div>
+                  <div class="h-[250px]">
+                    <canvas id="chart-engagement"></canvas>
+                  </div>
                 </div>
                 <div data-ig-only class="card p-5 overflow-x-auto">
-                  <div class="flex items-center justify-between mb-4"><h3 class="font-bold">Peak Hours Heatmap</h3><span class="text-xs text-slate-400">7 dias × 24h</span></div>
+                  <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-bold">Peak Hours Heatmap</h3>
+                    <span class="text-xs text-slate-400">7 dias × 24h</span>
+                  </div>
                   <div id="heatmap" class="min-w-[760px]"></div>
                 </div>
                 <div data-ig-only class="card p-5">
-                  <div class="flex items-center justify-between mb-4"><h3 class="font-bold">Word Cloud de Temas</h3><span class="text-xs text-slate-400">temas em alta</span></div>
-                  <div id="word-cloud" class="word-cloud min-h-[250px] flex flex-wrap gap-3 items-center justify-center text-center"></div>
+                  <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-bold">Word Cloud de Temas</h3>
+                    <span class="text-xs text-slate-400">temas em alta</span>
+                  </div>
+                  <div
+                    id="word-cloud"
+                    class="word-cloud min-h-[250px] flex flex-wrap gap-3 items-center justify-center text-center"
+                  ></div>
                 </div>
               </div>
 
               <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
                 <div data-ig-only class="card p-5">
-                  <div class="flex items-center justify-between mb-4"><h3 class="font-bold flex items-center gap-2"><i data-lucide="instagram" class="w-4 h-4 text-lime-300"></i> Posts recentes</h3><span class="text-xs text-slate-400">Instagram</span></div>
-                  <div id="instagram-posts" class="space-y-3 max-h-[420px] overflow-y-auto scrollbar-thin"></div>
+                  <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-bold flex items-center gap-2">
+                      <i
+                        data-lucide="instagram"
+                        class="w-4 h-4 text-lime-300"
+                      ></i>
+                      Posts recentes
+                    </h3>
+                    <span class="text-xs text-slate-400">Instagram</span>
+                  </div>
+                  <div
+                    id="instagram-posts"
+                    class="space-y-3 max-h-[420px] overflow-y-auto scrollbar-thin"
+                  ></div>
                 </div>
                 <div class="card p-5">
-                  <div class="flex items-center justify-between mb-4"><h3 class="font-bold flex items-center gap-2"><i data-lucide="message-square-warning" class="w-4 h-4 text-amber-300"></i> Comentários negativos</h3><span class="text-xs text-slate-400">últimas 24h</span></div>
-                  <div id="negative-feed" class="space-y-3 max-h-[420px] overflow-y-auto scrollbar-thin"></div>
+                  <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-bold flex items-center gap-2">
+                      <i
+                        data-lucide="message-square-warning"
+                        class="w-4 h-4 text-amber-300"
+                      ></i>
+                      Comentários negativos
+                    </h3>
+                    <span class="text-xs text-slate-400">últimas 24h</span>
+                  </div>
+                  <div
+                    id="negative-feed"
+                    class="space-y-3 max-h-[420px] overflow-y-auto scrollbar-thin"
+                  ></div>
                 </div>
               </div>
             </div>
           </section>
 
           <section id="view-warroom" class="view-section hidden space-y-6">
-            <div class="flex flex-col xl:flex-row xl:items-end justify-between gap-4">
-              <div><div class="text-xs uppercase tracking-[0.25em] text-red-300 font-bold">War Room</div><h2 class="text-3xl font-extrabold">Resposta estratégica a ataques</h2><p class="text-sm text-slate-400 mt-1">Gere respostas com simulação de risco eleitoral.</p></div>
-              <button id="reload-warroom-btn" class="btn-secondary px-4 py-2.5 text-sm flex items-center gap-2"><i data-lucide="refresh-cw" class="w-4 h-4"></i> Atualizar War Room</button>
+            <div
+              class="flex flex-col xl:flex-row xl:items-end justify-between gap-4"
+            >
+              <div>
+                <div
+                  class="text-xs uppercase tracking-[0.25em] text-red-300 font-bold"
+                >
+                  War Room
+                </div>
+                <h2 class="text-3xl font-extrabold">
+                  Resposta estratégica a ataques
+                </h2>
+                <p class="text-sm text-slate-400 mt-1">
+                  Gere respostas com simulação de risco eleitoral.
+                </p>
+              </div>
+              <button
+                id="reload-warroom-btn"
+                class="btn-secondary px-4 py-2.5 text-sm flex items-center gap-2"
+              >
+                <i data-lucide="refresh-cw" class="w-4 h-4"></i> Atualizar War
+                Room
+              </button>
             </div>
-            <div id="warroom-summary" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-4"></div>
+            <div
+              id="warroom-summary"
+              class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-4"
+            ></div>
             <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
               <div class="card p-5">
                 <h3 class="font-bold mb-4">Gerar resposta tática</h3>
                 <form id="warroom-form" class="space-y-3">
-                  <textarea id="warroom-attack" class="field min-h-[120px]" required placeholder="Cole aqui o ataque, acusação ou narrativa adversária..."></textarea>
+                  <textarea
+                    id="warroom-attack"
+                    class="field min-h-[120px]"
+                    required
+                    placeholder="Cole aqui o ataque, acusação ou narrativa adversária..."
+                  ></textarea>
                   <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <input id="warroom-politician" class="field" placeholder="Nome político/candidato" />
-                    <input id="warroom-context" class="field" placeholder="Contexto opcional" />
+                    <input
+                      id="warroom-politician"
+                      class="field"
+                      placeholder="Nome político/candidato"
+                    />
+                    <input
+                      id="warroom-context"
+                      class="field"
+                      placeholder="Contexto opcional"
+                    />
                   </div>
-                  <label class="flex items-center gap-2 text-sm text-slate-300"><input id="warroom-simulate" type="checkbox" checked class="accent-lime-500" /> Simular reação do eleitorado</label>
-                  <button id="warroom-generate-btn" class="btn-primary px-4 py-3 w-full flex items-center justify-center gap-2"><i data-lucide="radio-tower" class="w-4 h-4"></i> Gerar resposta</button>
+                  <label class="flex items-center gap-2 text-sm text-slate-300"
+                    ><input
+                      id="warroom-simulate"
+                      type="checkbox"
+                      checked
+                      class="accent-lime-500"
+                    />
+                    Simular reação do eleitorado</label
+                  >
+                  <button
+                    id="warroom-generate-btn"
+                    class="btn-primary px-4 py-3 w-full flex items-center justify-center gap-2"
+                  >
+                    <i data-lucide="radio-tower" class="w-4 h-4"></i> Gerar
+                    resposta
+                  </button>
                 </form>
               </div>
               <div class="card p-5">
                 <h3 class="font-bold mb-4">Respostas sugeridas</h3>
-                <div id="warroom-responses" class="space-y-3 max-h-[520px] overflow-y-auto scrollbar-thin"><div class="text-sm text-slate-500">Aguardando geração...</div></div>
+                <div
+                  id="warroom-responses"
+                  class="space-y-3 max-h-[520px] overflow-y-auto scrollbar-thin"
+                >
+                  <div class="text-sm text-slate-500">
+                    Aguardando geração...
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="card p-5"><h3 class="font-bold mb-4">Feed negativo global</h3><div id="warroom-negative-feed" class="space-y-3 max-h-[520px] overflow-y-auto scrollbar-thin"></div></div>
+            <div class="card p-5">
+              <h3 class="font-bold mb-4">Feed negativo global</h3>
+              <div
+                id="warroom-negative-feed"
+                class="space-y-3 max-h-[520px] overflow-y-auto scrollbar-thin"
+              ></div>
+            </div>
           </section>
 
           <section id="view-simulator" class="view-section hidden space-y-6">
-            <div><div class="text-xs uppercase tracking-[0.25em] text-lime-300 font-bold">Simulador Multi-agente</div><h2 class="text-3xl font-extrabold">Forecast de reação do eleitorado</h2><p class="text-sm text-slate-400 mt-1">Teste narrativas antes de publicar.</p></div>
+            <div>
+              <div
+                class="text-xs uppercase tracking-[0.25em] text-lime-300 font-bold"
+              >
+                Simulador Multi-agente
+              </div>
+              <h2 class="text-3xl font-extrabold">
+                Forecast de reação do eleitorado
+              </h2>
+              <p class="text-sm text-slate-400 mt-1">
+                Teste narrativas antes de publicar.
+              </p>
+            </div>
             <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
               <div class="card p-5">
                 <form id="sim-form" class="space-y-3">
-                  <textarea id="sim-content" class="field min-h-[150px]" required placeholder="Cole o conteúdo/narrativa/cenário que será testado..."></textarea>
+                  <textarea
+                    id="sim-content"
+                    class="field min-h-[150px]"
+                    required
+                    placeholder="Cole o conteúdo/narrativa/cenário que será testado..."
+                  ></textarea>
                   <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <input id="sim-agents" type="number" min="1" max="500" class="field" value="80" placeholder="Nº agentes" />
-                    <input id="sim-context" class="field" placeholder="Contexto opcional" />
+                    <input
+                      id="sim-agents"
+                      type="number"
+                      min="1"
+                      max="500"
+                      class="field"
+                      value="80"
+                      placeholder="Nº agentes"
+                    />
+                    <input
+                      id="sim-context"
+                      class="field"
+                      placeholder="Contexto opcional"
+                    />
                   </div>
-                  <input id="sim-filters" class="field" placeholder='Filtros JSON opcional. Ex: {"estado":"RJ"}' />
-                  <button id="sim-run-btn" class="btn-primary px-4 py-3 w-full flex items-center justify-center gap-2"><i data-lucide="play" class="w-4 h-4"></i> Rodar simulação</button>
+                  <input
+                    id="sim-filters"
+                    class="field"
+                    placeholder='Filtros JSON opcional. Ex: {"estado":"RJ"}'
+                  />
+                  <button
+                    id="sim-run-btn"
+                    class="btn-primary px-4 py-3 w-full flex items-center justify-center gap-2"
+                  >
+                    <i data-lucide="play" class="w-4 h-4"></i> Rodar simulação
+                  </button>
                 </form>
               </div>
-              <div class="card p-5"><h3 class="font-bold mb-4">Resultado</h3><div id="sim-result" class="space-y-3"><div class="text-sm text-slate-500">Nenhuma simulação executada.</div></div></div>
+              <div class="card p-5">
+                <h3 class="font-bold mb-4">Resultado</h3>
+                <div id="sim-result" class="space-y-3">
+                  <div class="text-sm text-slate-500">
+                    Nenhuma simulação executada.
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="card p-5"><div class="flex items-center justify-between mb-4"><h3 class="font-bold">Histórico do perfil selecionado</h3><button id="sim-history-btn" class="btn-secondary px-3 py-2 text-sm">Carregar histórico</button></div><div id="sim-history" class="space-y-2"></div></div>
+            <div class="card p-5">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="font-bold">Histórico do perfil selecionado</h3>
+                <button
+                  id="sim-history-btn"
+                  class="btn-secondary px-3 py-2 text-sm"
+                >
+                  Carregar histórico
+                </button>
+              </div>
+              <div id="sim-history" class="space-y-2"></div>
+            </div>
           </section>
 
           <section id="view-mentions" class="view-section hidden space-y-6">
-            <div><div class="text-xs uppercase tracking-[0.25em] text-lime-300 font-bold">Radar externo</div><h2 class="text-3xl font-extrabold">Busca de menções</h2><p class="text-sm text-slate-400 mt-1">Pesquise menções públicas relacionadas a termo, pessoa ou pauta.</p></div>
+            <div>
+              <div
+                class="text-xs uppercase tracking-[0.25em] text-lime-300 font-bold"
+              >
+                Radar externo
+              </div>
+              <h2 class="text-3xl font-extrabold">Busca de menções</h2>
+              <p class="text-sm text-slate-400 mt-1">
+                Pesquise menções públicas relacionadas a termo, pessoa ou pauta.
+              </p>
+            </div>
             <div class="card p-5">
               <form id="mentions-form" class="flex flex-col sm:flex-row gap-3">
-                <input id="mentions-query" class="field flex-1" required placeholder="Ex: nome do candidato, crise, pauta..." />
-                <input id="mentions-limit" type="number" min="1" max="50" value="10" class="field sm:w-32" />
-                <button id="mentions-btn" class="btn-primary px-5 py-3 flex items-center justify-center gap-2"><i data-lucide="search" class="w-4 h-4"></i> Buscar</button>
+                <input
+                  id="mentions-query"
+                  class="field flex-1"
+                  required
+                  placeholder="Ex: nome do candidato, crise, pauta..."
+                />
+                <input
+                  id="mentions-limit"
+                  type="number"
+                  min="1"
+                  max="50"
+                  value="10"
+                  class="field sm:w-32"
+                />
+                <button
+                  id="mentions-btn"
+                  class="btn-primary px-5 py-3 flex items-center justify-center gap-2"
+                >
+                  <i data-lucide="search" class="w-4 h-4"></i> Buscar
+                </button>
               </form>
             </div>
             <div id="mentions-results" class="space-y-3"></div>
           </section>
 
           <section id="view-reports" class="view-section hidden space-y-6">
-            <div><div class="text-xs uppercase tracking-[0.25em] text-lime-300 font-bold">Reports YouTube</div><h2 class="text-3xl font-extrabold">Relatórios e snapshots</h2><p class="text-sm text-slate-400 mt-1">Use o perfil YouTube selecionado ou carregue os últimos relatórios globais.</p></div>
+            <div>
+              <div
+                class="text-xs uppercase tracking-[0.25em] text-lime-300 font-bold"
+              >
+                Reports YouTube
+              </div>
+              <h2 class="text-3xl font-extrabold">Relatórios e snapshots</h2>
+              <p class="text-sm text-slate-400 mt-1">
+                Use o perfil YouTube selecionado ou carregue os últimos
+                relatórios globais.
+              </p>
+            </div>
             <div class="flex flex-wrap gap-2">
-              <button id="load-profile-reports-btn" class="btn-primary px-4 py-2.5 text-sm flex items-center gap-2"><i data-lucide="file-text" class="w-4 h-4"></i> Relatórios do perfil</button>
-              <button id="load-latest-reports-btn" class="btn-secondary px-4 py-2.5 text-sm flex items-center gap-2"><i data-lucide="newspaper" class="w-4 h-4"></i> Últimos relatórios</button>
-              <button id="load-snapshots-btn" class="btn-secondary px-4 py-2.5 text-sm flex items-center gap-2"><i data-lucide="camera" class="w-4 h-4"></i> Snapshots do perfil</button>
+              <button
+                id="load-profile-reports-btn"
+                class="btn-primary px-4 py-2.5 text-sm flex items-center gap-2"
+              >
+                <i data-lucide="file-text" class="w-4 h-4"></i> Relatórios do
+                perfil
+              </button>
+              <button
+                id="load-latest-reports-btn"
+                class="btn-secondary px-4 py-2.5 text-sm flex items-center gap-2"
+              >
+                <i data-lucide="newspaper" class="w-4 h-4"></i> Últimos
+                relatórios
+              </button>
+              <button
+                id="load-snapshots-btn"
+                class="btn-secondary px-4 py-2.5 text-sm flex items-center gap-2"
+              >
+                <i data-lucide="camera" class="w-4 h-4"></i> Snapshots do perfil
+              </button>
             </div>
             <div id="reports-output" class="space-y-3"></div>
           </section>
@@ -314,20 +844,73 @@
       </div>
     </div>
 
-    <div id="add-modal" class="hidden fixed inset-0 z-50 modal-backdrop flex items-center justify-center px-4">
+    <div
+      id="add-modal"
+      class="hidden fixed inset-0 z-50 modal-backdrop flex items-center justify-center px-4"
+    >
       <div class="card w-full max-w-md p-6">
-        <div class="flex items-center justify-between mb-5"><h3 class="text-xl font-bold">Adicionar perfil</h3><button onclick="closeAddModal()" class="btn-secondary w-9 h-9 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4"></i></button></div>
+        <div class="flex items-center justify-between mb-5">
+          <h3 class="text-xl font-bold">Adicionar perfil</h3>
+          <button
+            onclick="closeAddModal()"
+            class="btn-secondary w-9 h-9 flex items-center justify-center"
+          >
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
         <form id="add-form" class="space-y-4">
-          <div><label class="block text-sm font-semibold mb-1.5">Nome</label><input id="add-name" class="field" required placeholder="Ex: Candidato Oficial" /></div>
-          <div><label class="block text-sm font-semibold mb-1.5">Plataforma</label><select id="add-platform" class="field"><option value="instagram">Instagram</option><option value="youtube">YouTube</option></select></div>
-          <div><label class="block text-sm font-semibold mb-1.5">Identificador</label><input id="add-platform-id" class="field" required placeholder="username sem @ ou channel ID" /><p class="text-xs text-slate-500 mt-1">Instagram: <code>usuario</code>. YouTube: <code>UCxxxx</code>.</p></div>
-          <div id="add-error" class="hidden rounded-xl border border-red-400/30 bg-red-500/10 px-3 py-2 text-sm text-red-200"></div>
-          <div class="flex gap-2 pt-2"><button type="button" onclick="closeAddModal()" class="btn-secondary flex-1 py-2.5">Cancelar</button><button id="add-submit-btn" class="btn-primary flex-1 py-2.5">Adicionar</button></div>
+          <div>
+            <label class="block text-sm font-semibold mb-1.5">Nome</label
+            ><input
+              id="add-name"
+              class="field"
+              required
+              placeholder="Ex: Candidato Oficial"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold mb-1.5">Plataforma</label
+            ><select id="add-platform" class="field">
+              <option value="instagram">Instagram</option>
+              <option value="youtube">YouTube</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold mb-1.5"
+              >Identificador</label
+            ><input
+              id="add-platform-id"
+              class="field"
+              required
+              placeholder="username sem @ ou channel ID"
+            />
+            <p class="text-xs text-slate-500 mt-1">
+              Instagram: <code>usuario</code>. YouTube: <code>UCxxxx</code>.
+            </p>
+          </div>
+          <div
+            id="add-error"
+            class="hidden rounded-xl border border-red-400/30 bg-red-500/10 px-3 py-2 text-sm text-red-200"
+          ></div>
+          <div class="flex gap-2 pt-2">
+            <button
+              type="button"
+              onclick="closeAddModal()"
+              class="btn-secondary flex-1 py-2.5"
+            >
+              Cancelar</button
+            ><button id="add-submit-btn" class="btn-primary flex-1 py-2.5">
+              Adicionar
+            </button>
+          </div>
         </form>
       </div>
     </div>
 
-    <div id="toast-container" class="fixed top-4 right-4 z-[70] space-y-2 w-[calc(100vw-2rem)] max-w-md"></div>
+    <div
+      id="toast-container"
+      class="fixed top-4 right-4 z-[70] space-y-2 w-[calc(100vw-2rem)] max-w-md"
+    ></div>
 
     <script>
       const API_BASE = "https://web-production-5d7201.up.railway.app";
@@ -347,32 +930,79 @@
         if (!shouldAuth) return rawFetch(input, init);
         const headers = new Headers(init.headers || {});
         headers.set("Authorization", `Bearer ${state.token}`);
-        if (!headers.has("Content-Type") && init.body) headers.set("Content-Type", "application/json");
+        if (!headers.has("Content-Type") && init.body)
+          headers.set("Content-Type", "application/json");
         return rawFetch(input, { ...init, headers });
       };
 
       async function api(path, opts = {}) {
         const url = path.startsWith("http") ? path : `${API_BASE}${path}`;
         const headers = new Headers(opts.headers || {});
-        if (opts.body && !headers.has("Content-Type")) headers.set("Content-Type", "application/json");
+        if (opts.body && !headers.has("Content-Type"))
+          headers.set("Content-Type", "application/json");
         const res = await fetch(url, { ...opts, headers });
-        if (res.status === 401) { logout("Sessão expirada. Faça login novamente."); throw new Error("Sessão expirada"); }
+        if (res.status === 401) {
+          logout("Sessão expirada. Faça login novamente.");
+          throw new Error("Sessão expirada");
+        }
         const text = await res.text();
         const data = text ? safeJson(text, { raw: text }) : {};
-        if (!res.ok) throw new Error(data.error || data.message || data.detail || `HTTP ${res.status}`);
+        if (!res.ok)
+          throw new Error(
+            data.error || data.message || data.detail || `HTTP ${res.status}`,
+          );
         return data;
       }
 
-      function safeJson(value, fallback) { try { return JSON.parse(value); } catch { return fallback; } }
-      function escapeHtml(s) { return String(s ?? "").replace(/[&<>"']/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m])); }
-      function fmtPct(v) { if (v === null || v === undefined || v === "") return "—"; const n = Number(v); return Number.isFinite(n) ? `${n.toFixed(n % 1 ? 1 : 0)}%` : `${v}%`; }
-      function fmtNum(v) { if (v === null || v === undefined || v === "") return "—"; const n = Number(v); return Number.isFinite(n) ? n.toLocaleString("pt-BR") : escapeHtml(v); }
-      function asArray(data, keys = []) { if (Array.isArray(data)) return data; for (const k of keys) if (Array.isArray(data?.[k])) return data[k]; return []; }
-      function selectedUsername() { return state.selectedProfile?.platform_id || ""; }
-      function renderIcons() { if (window.lucide) lucide.createIcons(); }
+      function safeJson(value, fallback) {
+        try {
+          return JSON.parse(value);
+        } catch {
+          return fallback;
+        }
+      }
+      function escapeHtml(s) {
+        return String(s ?? "").replace(
+          /[&<>"']/g,
+          (m) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#039;",
+            })[m],
+        );
+      }
+      function fmtPct(v) {
+        if (v === null || v === undefined || v === "") return "—";
+        const n = Number(v);
+        return Number.isFinite(n) ? `${n.toFixed(n % 1 ? 1 : 0)}%` : `${v}%`;
+      }
+      function fmtNum(v) {
+        if (v === null || v === undefined || v === "") return "—";
+        const n = Number(v);
+        return Number.isFinite(n) ? n.toLocaleString("pt-BR") : escapeHtml(v);
+      }
+      function asArray(data, keys = []) {
+        if (Array.isArray(data)) return data;
+        for (const k of keys) if (Array.isArray(data?.[k])) return data[k];
+        return [];
+      }
+      function selectedUsername() {
+        return state.selectedProfile?.platform_id || "";
+      }
+      function renderIcons() {
+        if (window.lucide) lucide.createIcons();
+      }
 
       function toast(msg, type = "info") {
-        const classes = { info: "border-slate-500/30 bg-slate-900 text-slate-100", success: "border-lime-400/30 bg-lime-950 text-lime-100", error: "border-red-400/30 bg-red-950 text-red-100", warn: "border-amber-400/30 bg-amber-950 text-amber-100" };
+        const classes = {
+          info: "border-slate-500/30 bg-slate-900 text-slate-100",
+          success: "border-lime-400/30 bg-lime-950 text-lime-100",
+          error: "border-red-400/30 bg-red-950 text-red-100",
+          warn: "border-amber-400/30 bg-amber-950 text-amber-100",
+        };
         const el = document.createElement("div");
         el.className = `toast border ${classes[type] || classes.info} rounded-xl px-4 py-3 shadow-2xl text-sm`;
         el.textContent = msg;
@@ -393,12 +1023,21 @@
         renderIcons();
       }
 
-      function renderLoading(el, label = "Carregando...") { el.innerHTML = `<div class="skeleton rounded-xl h-20 flex items-center px-4 text-sm text-slate-400">${label}</div>`; }
-      function renderError(el, msg) { el.innerHTML = `<div class="rounded-xl border border-red-400/25 bg-red-500/10 p-4 text-sm text-red-200">${escapeHtml(msg)}</div>`; }
-      function renderEmpty(el, msg) { el.innerHTML = `<div class="rounded-xl border border-white/10 bg-white/5 p-5 text-center text-sm text-slate-400">${escapeHtml(msg)}</div>`; }
+      function renderLoading(el, label = "Carregando...") {
+        el.innerHTML = `<div class="skeleton rounded-xl h-20 flex items-center px-4 text-sm text-slate-400">${label}</div>`;
+      }
+      function renderError(el, msg) {
+        el.innerHTML = `<div class="rounded-xl border border-red-400/25 bg-red-500/10 p-4 text-sm text-red-200">${escapeHtml(msg)}</div>`;
+      }
+      function renderEmpty(el, msg) {
+        el.innerHTML = `<div class="rounded-xl border border-white/10 bg-white/5 p-5 text-center text-sm text-slate-400">${escapeHtml(msg)}</div>`;
+      }
 
       async function login(email, password) {
-        const data = await api("/auth/login", { method: "POST", body: JSON.stringify({ email, password }) });
+        const data = await api("/auth/login", {
+          method: "POST",
+          body: JSON.stringify({ email, password }),
+        });
         state.token = data.token;
         state.user = data.user || { email };
         localStorage.setItem("pulse_token", data.token);
@@ -409,7 +1048,7 @@
         state.token = null;
         state.user = null;
         state.selectedProfile = null;
-        Object.values(state.charts).forEach(chart => chart?.destroy?.());
+        Object.values(state.charts).forEach((chart) => chart?.destroy?.());
         state.charts = {};
         localStorage.removeItem("pulse_token");
         localStorage.removeItem("pulse_user");
@@ -425,7 +1064,8 @@
       function showDashboard() {
         document.getElementById("login-screen").classList.add("hidden");
         document.getElementById("dashboard").classList.remove("hidden");
-        document.getElementById("user-name").textContent = state.user?.name || state.user?.email || "—";
+        document.getElementById("user-name").textContent =
+          state.user?.name || state.user?.email || "—";
         switchView(state.currentView || "overview");
         loadProfiles();
         loadThreatLevel();
@@ -446,9 +1086,15 @@
 
       function switchView(view) {
         state.currentView = view;
-        document.querySelectorAll(".view-section").forEach(s => s.classList.add("hidden"));
+        document
+          .querySelectorAll(".view-section")
+          .forEach((s) => s.classList.add("hidden"));
         document.getElementById(`view-${view}`)?.classList.remove("hidden");
-        document.querySelectorAll("[data-view]").forEach(btn => btn.classList.toggle("active", btn.dataset.view === view));
+        document
+          .querySelectorAll("[data-view]")
+          .forEach((btn) =>
+            btn.classList.toggle("active", btn.dataset.view === view),
+          );
         if (view === "warroom") loadWarRoom();
         renderIcons();
       }
@@ -465,15 +1111,23 @@
             document.getElementById("profile-view").classList.add("hidden");
             return;
           }
-          const stillExists = state.profiles.find(p => p.id === state.selectedProfile?.id);
+          const stillExists = state.profiles.find(
+            (p) => p.id === state.selectedProfile?.id,
+          );
           selectProfile(stillExists || state.profiles[0], false);
-        } catch (e) { renderError(el, e.message); toast(e.message, "error"); }
+        } catch (e) {
+          renderError(el, e.message);
+          toast(e.message, "error");
+        }
       }
 
       function renderProfilesList() {
         const el = document.getElementById("profiles-list");
-        if (!state.profiles.length) return renderEmpty(el, "Nenhum perfil ainda.");
-        el.innerHTML = state.profiles.map((p, idx) => `
+        if (!state.profiles.length)
+          return renderEmpty(el, "Nenhum perfil ainda.");
+        el.innerHTML = state.profiles
+          .map(
+            (p, idx) => `
           <button type="button" data-profile-index="${idx}" class="profile-btn w-full rounded-xl border border-white/10 p-3 text-left hover:bg-lime-500/10 ${state.selectedProfile?.id === p.id ? "active" : ""}">
             <div class="flex items-center justify-between gap-2">
               <strong class="truncate text-sm">${escapeHtml(p.name || p.platform_id)}</strong>
@@ -481,18 +1135,28 @@
             </div>
             <div class="truncate text-xs text-slate-400 mt-1">@${escapeHtml(p.platform_id || "")}</div>
           </button>
-        `).join("");
-        el.querySelectorAll("[data-profile-index]").forEach(btn => btn.addEventListener("click", () => selectProfile(state.profiles[Number(btn.dataset.profileIndex)])));
+        `,
+          )
+          .join("");
+        el.querySelectorAll("[data-profile-index]").forEach((btn) =>
+          btn.addEventListener("click", () =>
+            selectProfile(state.profiles[Number(btn.dataset.profileIndex)]),
+          ),
+        );
       }
 
       function selectProfile(profile, reload = true) {
         state.selectedProfile = profile;
         document.getElementById("empty-state").classList.add("hidden");
         document.getElementById("profile-view").classList.remove("hidden");
-        document.getElementById("profile-name").textContent = profile.name || profile.platform_id || "—";
-        document.getElementById("profile-username").textContent = `@${profile.platform_id || "—"} · ${profile.platform || "—"}`;
+        document.getElementById("profile-name").textContent =
+          profile.name || profile.platform_id || "—";
+        document.getElementById("profile-username").textContent =
+          `@${profile.platform_id || "—"} · ${profile.platform || "—"}`;
         const isIG = profile.platform === "instagram";
-        document.querySelectorAll("[data-ig-only]").forEach(el => el.classList.toggle("hidden", !isIG));
+        document
+          .querySelectorAll("[data-ig-only]")
+          .forEach((el) => el.classList.toggle("hidden", !isIG));
         renderProfilesList();
         if (reload) loadProfileData(profile);
         renderIcons();
@@ -507,7 +1171,7 @@
             loadEngagement(profile.platform_id),
             loadPeakHours(profile.platform_id),
             loadThemes(profile.platform_id),
-            loadInstagramPosts(profile)
+            loadInstagramPosts(profile),
           );
         }
         await Promise.allSettled(tasks);
@@ -519,140 +1183,305 @@
           const badge = document.getElementById("threat-badge");
           badge.className = `chip px-3 py-1.5 text-xs font-bold flex items-center gap-2 defcon-${data.defcon || 5}`;
           badge.classList.remove("hidden");
-          document.getElementById("threat-label").textContent = `DEFCON ${data.defcon ?? "—"} · ${data.label || "Operacional"}`;
-          document.getElementById("kpi-defcon").textContent = data.defcon ?? "—";
-          document.getElementById("kpi-defcon-label").textContent = data.label || "—";
-          document.getElementById("kpi-comments-24h").textContent = fmtNum(data.comments_24h);
-          document.getElementById("kpi-negative-pct").textContent = fmtPct(data.negative_pct_24h);
-          document.getElementById("kpi-spike").textContent = data.spike_factor !== undefined ? `${data.spike_factor}x` : "—";
+          document.getElementById("threat-label").textContent =
+            `DEFCON ${data.defcon ?? "—"} · ${data.label || "Operacional"}`;
+          document.getElementById("kpi-defcon").textContent =
+            data.defcon ?? "—";
+          document.getElementById("kpi-defcon-label").textContent =
+            data.label || "—";
+          document.getElementById("kpi-comments-24h").textContent = fmtNum(
+            data.comments_24h,
+          );
+          document.getElementById("kpi-negative-pct").textContent = fmtPct(
+            data.negative_pct_24h,
+          );
+          document.getElementById("kpi-spike").textContent =
+            data.spike_factor !== undefined ? `${data.spike_factor}x` : "—";
           return data;
-        } catch (e) { console.warn(e); return null; }
+        } catch (e) {
+          console.warn(e);
+          return null;
+        }
       }
 
       function chartOpts() {
-        return { responsive: true, maintainAspectRatio: false, interaction: { mode: "index", intersect: false }, plugins: { legend: { position: "bottom", labels: { color: "#cbd5d1", boxWidth: 12, padding: 14 } } }, scales: { x: { grid: { color: "rgba(255,255,255,.06)" }, ticks: { color: "#94a3a0", maxRotation: 0 } }, y: { grid: { color: "rgba(255,255,255,.06)" }, ticks: { color: "#94a3a0" } } } };
+        return {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: "index", intersect: false },
+          plugins: {
+            legend: {
+              position: "bottom",
+              labels: { color: "#cbd5d1", boxWidth: 12, padding: 14 },
+            },
+          },
+          scales: {
+            x: {
+              grid: { color: "rgba(255,255,255,.06)" },
+              ticks: { color: "#94a3a0", maxRotation: 0 },
+            },
+            y: {
+              grid: { color: "rgba(255,255,255,.06)" },
+              ticks: { color: "#94a3a0" },
+            },
+          },
+        };
       }
-      function destroyChart(key) { if (state.charts[key]) { state.charts[key].destroy(); delete state.charts[key]; } }
+      function destroyChart(key) {
+        if (state.charts[key]) {
+          state.charts[key].destroy();
+          delete state.charts[key];
+        }
+      }
 
       async function loadTimeline(username) {
         const canvas = document.getElementById("chart-timeline");
         try {
-          const data = await api(`/charts/sentiment-timeline/${encodeURIComponent(username)}?days=30`);
+          const data = await api(
+            `/charts/sentiment-timeline/${encodeURIComponent(username)}?days=30`,
+          );
           const timeline = asArray(data, ["timeline"]);
           destroyChart("timeline");
-          state.charts.timeline = new Chart(canvas, { type: "line", data: { labels: timeline.map(t => String(t.date || "").slice(5) || "—"), datasets: [
-            { label: "Positivo", data: timeline.map(t => Number(t.positive || 0)), borderColor: "#22c55e", backgroundColor: "rgba(34,197,94,.13)", fill: true, tension: .35 },
-            { label: "Negativo", data: timeline.map(t => Number(t.negative || 0)), borderColor: "#ef4444", backgroundColor: "rgba(239,68,68,.13)", fill: true, tension: .35 },
-            { label: "Neutro", data: timeline.map(t => Number(t.neutral || 0)), borderColor: "#94a3a0", backgroundColor: "rgba(148,163,160,.08)", fill: true, tension: .35 }
-          ] }, options: chartOpts() });
-        } catch (e) { destroyChart("timeline"); console.warn("timeline", e); }
+          state.charts.timeline = new Chart(canvas, {
+            type: "line",
+            data: {
+              labels: timeline.map((t) => String(t.date || "").slice(5) || "—"),
+              datasets: [
+                {
+                  label: "Positivo",
+                  data: timeline.map((t) => Number(t.positive || 0)),
+                  borderColor: "#22c55e",
+                  backgroundColor: "rgba(34,197,94,.13)",
+                  fill: true,
+                  tension: 0.35,
+                },
+                {
+                  label: "Negativo",
+                  data: timeline.map((t) => Number(t.negative || 0)),
+                  borderColor: "#ef4444",
+                  backgroundColor: "rgba(239,68,68,.13)",
+                  fill: true,
+                  tension: 0.35,
+                },
+                {
+                  label: "Neutro",
+                  data: timeline.map((t) => Number(t.neutral || 0)),
+                  borderColor: "#94a3a0",
+                  backgroundColor: "rgba(148,163,160,.08)",
+                  fill: true,
+                  tension: 0.35,
+                },
+              ],
+            },
+            options: chartOpts(),
+          });
+        } catch (e) {
+          destroyChart("timeline");
+          console.warn("timeline", e);
+        }
       }
 
       async function loadEngagement(username) {
         const canvas = document.getElementById("chart-engagement");
         try {
-          const data = await api(`/charts/engagement-by-type/${encodeURIComponent(username)}`);
+          const data = await api(
+            `/charts/engagement-by-type/${encodeURIComponent(username)}`,
+          );
           const breakdown = asArray(data, ["breakdown"]);
           destroyChart("engagement");
-          state.charts.engagement = new Chart(canvas, { type: "bar", data: { labels: breakdown.map(b => b.post_type || "post"), datasets: [
-            { label: "Likes médios", data: breakdown.map(b => Number(b.avg_likes || 0)), backgroundColor: "rgba(132,204,22,.75)", borderColor: "#bef264", borderWidth: 1 },
-            { label: "Comentários médios", data: breakdown.map(b => Number(b.avg_comments || 0)), backgroundColor: "rgba(56,189,248,.65)", borderColor: "#7dd3fc", borderWidth: 1 }
-          ] }, options: chartOpts() });
-        } catch (e) { destroyChart("engagement"); console.warn("engagement", e); }
+          state.charts.engagement = new Chart(canvas, {
+            type: "bar",
+            data: {
+              labels: breakdown.map((b) => b.post_type || "post"),
+              datasets: [
+                {
+                  label: "Likes médios",
+                  data: breakdown.map((b) => Number(b.avg_likes || 0)),
+                  backgroundColor: "rgba(132,204,22,.75)",
+                  borderColor: "#bef264",
+                  borderWidth: 1,
+                },
+                {
+                  label: "Comentários médios",
+                  data: breakdown.map((b) => Number(b.avg_comments || 0)),
+                  backgroundColor: "rgba(56,189,248,.65)",
+                  borderColor: "#7dd3fc",
+                  borderWidth: 1,
+                },
+              ],
+            },
+            options: chartOpts(),
+          });
+        } catch (e) {
+          destroyChart("engagement");
+          console.warn("engagement", e);
+        }
       }
 
       async function loadPeakHours(username) {
         const el = document.getElementById("heatmap");
         renderLoading(el, "Carregando heatmap...");
         try {
-          const data = await api(`/charts/peak-hours/${encodeURIComponent(username)}`);
+          const data = await api(
+            `/charts/peak-hours/${encodeURIComponent(username)}`,
+          );
           const heatmap = asArray(data, ["heatmap"]);
-          if (!heatmap.length) return renderEmpty(el, "Sem dados de horário ainda.");
-          const max = Math.max(...heatmap.map(h => Number(h.count || h.likes || 0)), 1);
+          if (!heatmap.length)
+            return renderEmpty(el, "Sem dados de horário ainda.");
+          const max = Math.max(
+            ...heatmap.map((h) => Number(h.count || h.likes || 0)),
+            1,
+          );
           const labels = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"];
           const matrix = {};
-          heatmap.forEach(h => matrix[`${Number(h.weekday)}-${Number(h.hour)}`] = h);
-          let html = '<div class="grid grid-cols-[36px_repeat(24,minmax(22px,1fr))] gap-1 items-center">';
-          html += '<div></div>' + Array.from({ length: 24 }, (_, h) => `<div class="text-[10px] text-center text-slate-500 ${h % 3 ? "opacity-20" : ""}">${h}</div>`).join("");
+          heatmap.forEach(
+            (h) => (matrix[`${Number(h.weekday)}-${Number(h.hour)}`] = h),
+          );
+          let html =
+            '<div class="grid grid-cols-[36px_repeat(24,minmax(22px,1fr))] gap-1 items-center">';
+          html +=
+            "<div></div>" +
+            Array.from(
+              { length: 24 },
+              (_, h) =>
+                `<div class="text-[10px] text-center text-slate-500 ${h % 3 ? "opacity-20" : ""}">${h}</div>`,
+            ).join("");
           for (let d = 0; d < 7; d++) {
             html += `<div class="text-xs text-slate-400">${labels[d]}</div>`;
             for (let h = 0; h < 24; h++) {
               const cell = matrix[`${d}-${h}`] || { count: 0, likes: 0 };
               const value = Number(cell.count || 0);
               const intensity = value / max;
-              const bg = intensity === 0 ? "rgba(255,255,255,.045)" : `rgba(132,204,22,${0.12 + intensity * 0.78})`;
+              const bg =
+                intensity === 0
+                  ? "rgba(255,255,255,.045)"
+                  : `rgba(132,204,22,${0.12 + intensity * 0.78})`;
               html += `<div class="heatmap-cell" style="background:${bg}" title="${labels[d]} ${h}h · ${value} posts/comentários · likes ${fmtNum(cell.likes || 0)}"></div>`;
             }
           }
           html += "</div>";
           el.innerHTML = html;
-        } catch (e) { renderError(el, e.message); }
+        } catch (e) {
+          renderError(el, e.message);
+        }
       }
 
       async function loadThemes(username) {
         const el = document.getElementById("word-cloud");
         renderLoading(el, "Carregando temas...");
         try {
-          const data = await api(`/charts/themes/${encodeURIComponent(username)}?days=30`);
-          const words = asArray(data, ["word_cloud", "top_themes"]).slice(0, 45);
-          if (!words.length) return renderEmpty(el, "Sem temas detectados ainda.");
-          const max = Math.max(...words.map(w => Number(w.count || 1)), 1);
-          el.innerHTML = words.map(w => {
-            const label = w.word || w.theme || "tema";
-            const count = Number(w.count || 1);
-            const ratio = count / max;
-            const size = 12 + Math.round(ratio * 28);
-            const color = ratio > .66 ? "#bef264" : ratio > .33 ? "#84cc16" : "#cbd5d1";
-            return `<span style="font-size:${size}px;font-weight:${ratio > .5 ? 800 : 600};color:${color}" title="${count} ocorrências">${escapeHtml(label)}</span>`;
-          }).join("");
-        } catch (e) { renderError(el, e.message); }
+          const data = await api(
+            `/charts/themes/${encodeURIComponent(username)}?days=30`,
+          );
+          const words = asArray(data, ["word_cloud", "top_themes"]).slice(
+            0,
+            45,
+          );
+          if (!words.length)
+            return renderEmpty(el, "Sem temas detectados ainda.");
+          const max = Math.max(...words.map((w) => Number(w.count || 1)), 1);
+          el.innerHTML = words
+            .map((w) => {
+              const label = w.word || w.theme || "tema";
+              const count = Number(w.count || 1);
+              const ratio = count / max;
+              const size = 12 + Math.round(ratio * 28);
+              const color =
+                ratio > 0.66 ? "#bef264" : ratio > 0.33 ? "#84cc16" : "#cbd5d1";
+              return `<span style="font-size:${size}px;font-weight:${ratio > 0.5 ? 800 : 600};color:${color}" title="${count} ocorrências">${escapeHtml(label)}</span>`;
+            })
+            .join("");
+        } catch (e) {
+          renderError(el, e.message);
+        }
       }
 
       async function loadInstagramPosts(profile) {
         const el = document.getElementById("instagram-posts");
-        if (!profile || profile.platform !== "instagram") return renderEmpty(el, "Posts recentes aparecem somente para perfis Instagram.");
+        if (!profile || profile.platform !== "instagram")
+          return renderEmpty(
+            el,
+            "Posts recentes aparecem somente para perfis Instagram.",
+          );
         renderLoading(el, "Carregando posts...");
         try {
-          const data = await api(`/instagram/posts/${encodeURIComponent(profile.platform_id)}?limit=20`);
+          const data = await api(
+            `/instagram/posts/${encodeURIComponent(profile.platform_id)}?limit=20`,
+          );
           const posts = asArray(data, ["posts", "data", "items"]);
           if (!posts.length) return renderEmpty(el, "Nenhum post encontrado.");
-          el.innerHTML = posts.map(p => `
+          el.innerHTML = posts
+            .map(
+              (p) => `
             <div class="rounded-xl border border-white/10 bg-white/5 p-3">
               <div class="flex items-center justify-between gap-2 text-xs text-slate-400 mb-2"><span>${escapeHtml(p.post_type || p.type || "post")}</span><span>${escapeHtml(p.timestamp || p.date || "")}</span></div>
               <p class="text-sm text-slate-200 line-clamp-3">${escapeHtml(p.caption || p.text || p.title || "Sem legenda")}</p>
               <div class="flex flex-wrap gap-3 mt-3 text-xs text-slate-400"><span>❤ ${fmtNum(p.likes_count || p.likes || 0)}</span><span>💬 ${fmtNum(p.comments_count || p.comments || 0)}</span><span>Score ${escapeHtml(p.sentiment || p.score || "—")}</span></div>
-            </div>`).join("");
-        } catch (e) { renderError(el, e.message); }
+            </div>`,
+            )
+            .join("");
+        } catch (e) {
+          renderError(el, e.message);
+        }
       }
 
-      async function loadNegativeFeed(targetId = "negative-feed", limit = 15, hours = 24) {
+      async function loadNegativeFeed(
+        targetId = "negative-feed",
+        limit = 15,
+        hours = 24,
+      ) {
         const el = document.getElementById(targetId);
         renderLoading(el, "Carregando feed negativo...");
         try {
-          const data = await api(`/warroom/negative-feed?limit=${limit}&hours=${hours}`);
+          const data = await api(
+            `/warroom/negative-feed?limit=${limit}&hours=${hours}`,
+          );
           const comments = asArray(data, ["comments"]);
-          if (!comments.length) return renderEmpty(el, "Sem comentários negativos no período.");
-          el.innerHTML = comments.map(c => `
+          if (!comments.length)
+            return renderEmpty(el, "Sem comentários negativos no período.");
+          el.innerHTML = comments
+            .map(
+              (c) => `
             <div class="rounded-xl border-l-4 border-red-400 bg-red-500/7 p-3">
               <div class="flex items-center justify-between gap-2 text-xs text-slate-400 mb-1"><span><strong>@${escapeHtml(c.commenter_username || "anônimo")}</strong> em <strong>${escapeHtml(c.politician_name || c.owner_username || "perfil")}</strong></span><span>❤ ${fmtNum(c.likes_count || 0)}</span></div>
               <p class="text-sm text-slate-200">${escapeHtml(c.text || "")}</p>
               <div class="text-[11px] text-slate-500 mt-2">${escapeHtml(c.timestamp || "")}</div>
-            </div>`).join("");
-        } catch (e) { renderError(el, e.message); }
+            </div>`,
+            )
+            .join("");
+        } catch (e) {
+          renderError(el, e.message);
+        }
       }
 
       async function collectData() {
-        const p = state.selectedProfile; if (!p) return toast("Selecione um perfil.", "warn");
-        const btn = document.getElementById("collect-btn"); setBusy(btn, true, "Coletando...");
+        const p = state.selectedProfile;
+        if (!p) return toast("Selecione um perfil.", "warn");
+        const btn = document.getElementById("collect-btn");
+        setBusy(btn, true, "Coletando...");
         try {
           if (p.platform === "instagram") {
-            await api(`/collect/instagram/${encodeURIComponent(p.platform_id)}?limit=50`, { method: "POST" });
-            await api(`/collect/comments/${encodeURIComponent(p.platform_id)}?posts_limit=10&comments_per_post=20`, { method: "POST" });
+            await api(
+              `/collect/instagram/${encodeURIComponent(p.platform_id)}?limit=50`,
+              { method: "POST" },
+            );
+            await api(
+              `/collect/comments/${encodeURIComponent(p.platform_id)}?posts_limit=10&comments_per_post=20`,
+              { method: "POST" },
+            );
           } else {
-            await api(`/collect/youtube/${encodeURIComponent(p.platform_id)}?days=30`, { method: "POST" });
+            await api(
+              `/collect/youtube/${encodeURIComponent(p.platform_id)}?days=30`,
+              { method: "POST" },
+            );
           }
-          toast("Coleta concluída.", "success"); await loadProfileData(p);
-        } catch (e) { toast(e.message, "error"); } finally { setBusy(btn, false); }
+          toast("Coleta concluída.", "success");
+          await loadProfileData(p);
+        } catch (e) {
+          toast(e.message, "error");
+        } finally {
+          setBusy(btn, false);
+        }
       }
 
       async function analyzeProfile() {
@@ -663,14 +1492,25 @@
         try {
           if (p.platform === "instagram") {
             const results = await Promise.allSettled([
-              api(`/analyze/instagram/${encodeURIComponent(p.platform_id)}`, { method: "POST" }),
-              api(`/analyze/comments/${encodeURIComponent(p.platform_id)}`, { method: "POST" }),
+              api(`/analyze/instagram/${encodeURIComponent(p.platform_id)}`, {
+                method: "POST",
+              }),
+              api(`/analyze/comments/${encodeURIComponent(p.platform_id)}`, {
+                method: "POST",
+              }),
             ]);
-            const failed = results.filter(r => r.status === "rejected");
-            if (failed.length === results.length) throw new Error(failed[0].reason?.message || "Falha em ambas análises");
-            if (failed.length) toast(`Análise parcial: ${failed[0].reason?.message}`, "warn");
+            const failed = results.filter((r) => r.status === "rejected");
+            if (failed.length === results.length)
+              throw new Error(
+                failed[0].reason?.message || "Falha em ambas análises",
+              );
+            if (failed.length)
+              toast(`Análise parcial: ${failed[0].reason?.message}`, "warn");
           } else {
-            await api(`/analyze/youtube/${encodeURIComponent(p.platform_id)}?days=30&name=${encodeURIComponent(p.name || p.platform_id)}`, { method: "POST" });
+            await api(
+              `/analyze/youtube/${encodeURIComponent(p.platform_id)}?days=30&name=${encodeURIComponent(p.name || p.platform_id)}`,
+              { method: "POST" },
+            );
           }
           toast("Análise concluída.", "success");
           await loadProfileData(p);
@@ -682,46 +1522,114 @@
       }
 
       async function deleteSelectedProfile() {
-        const p = state.selectedProfile; if (!p) return;
+        const p = state.selectedProfile;
+        if (!p) return;
         if (!confirm(`Remover o perfil "${p.name || p.platform_id}"?`)) return;
-        try { await api(`/profiles/${encodeURIComponent(p.id)}`, { method: "DELETE" }); toast("Perfil removido.", "success"); state.selectedProfile = null; await loadProfiles(); }
-        catch (e) { toast(e.message, "error"); }
+        try {
+          await api(`/profiles/${encodeURIComponent(p.id)}`, {
+            method: "DELETE",
+          });
+          toast("Perfil removido.", "success");
+          state.selectedProfile = null;
+          await loadProfiles();
+        } catch (e) {
+          toast(e.message, "error");
+        }
       }
 
       async function loadWarRoom() {
-        const summary = document.getElementById("warroom-summary"); renderLoading(summary, "Carregando status tático...");
+        const summary = document.getElementById("warroom-summary");
+        renderLoading(summary, "Carregando status tático...");
         try {
           const t = await loadThreatLevel();
           summary.innerHTML = [
-            ["DEFCON", t?.defcon ?? "—"], ["Ameaça", t?.threat_score ?? "—"], ["Negativo 24h", fmtPct(t?.negative_pct_24h)], ["Comentários 24h", fmtNum(t?.comments_24h)], ["Spike", t?.spike_factor !== undefined ? `${t.spike_factor}x` : "—"]
-          ].map(([k, v]) => `<div class="card p-4"><div class="text-xs text-slate-400 uppercase tracking-widest">${k}</div><div class="text-2xl font-extrabold mt-1">${v}</div></div>`).join("");
+            ["DEFCON", t?.defcon ?? "—"],
+            ["Ameaça", t?.threat_score ?? "—"],
+            ["Negativo 24h", fmtPct(t?.negative_pct_24h)],
+            ["Comentários 24h", fmtNum(t?.comments_24h)],
+            [
+              "Spike",
+              t?.spike_factor !== undefined ? `${t.spike_factor}x` : "—",
+            ],
+          ]
+            .map(
+              ([k, v]) =>
+                `<div class="card p-4"><div class="text-xs text-slate-400 uppercase tracking-widest">${k}</div><div class="text-2xl font-extrabold mt-1">${v}</div></div>`,
+            )
+            .join("");
           await loadNegativeFeed("warroom-negative-feed", 30, 24);
-        } catch (e) { renderError(summary, e.message); }
+        } catch (e) {
+          renderError(summary, e.message);
+        }
       }
 
       async function generateWarRoomResponse(e) {
         e.preventDefault();
-        const btn = document.getElementById("warroom-generate-btn"); const out = document.getElementById("warroom-responses");
-        setBusy(btn, true, "Gerando..."); renderLoading(out, "Gerando respostas estratégicas...");
+        const btn = document.getElementById("warroom-generate-btn");
+        const out = document.getElementById("warroom-responses");
+        setBusy(btn, true, "Gerando...");
+        renderLoading(out, "Gerando respostas estratégicas...");
         try {
-          const payload = { attack: document.getElementById("warroom-attack").value, username: selectedUsername() || undefined, politician_name: document.getElementById("warroom-politician").value || state.selectedProfile?.name || undefined, context: document.getElementById("warroom-context").value || undefined, simulate: document.getElementById("warroom-simulate").checked };
-          const data = await api("/warroom/generate-response", { method: "POST", body: JSON.stringify(payload) });
+          const payload = {
+            attack: document.getElementById("warroom-attack").value,
+            username: selectedUsername() || undefined,
+            politician_name:
+              document.getElementById("warroom-politician").value ||
+              state.selectedProfile?.name ||
+              undefined,
+            context:
+              document.getElementById("warroom-context").value || undefined,
+            simulate: document.getElementById("warroom-simulate").checked,
+          };
+          const data = await api("/warroom/generate-response", {
+            method: "POST",
+            body: JSON.stringify(payload),
+          });
           const responses = asArray(data, ["respostas", "responses"]);
-          if (!responses.length) return renderEmpty(out, "Nenhuma resposta retornada.");
-          out.innerHTML = responses.map(r => `<div class="rounded-xl border border-lime-400/20 bg-lime-500/7 p-4"><div class="flex flex-wrap gap-2 mb-3"><span class="chip px-2 py-1 text-xs">${escapeHtml(r.estrategia || "Estratégia")}</span><span class="chip px-2 py-1 text-xs">Tom: ${escapeHtml(r.tom || "—")}</span><span class="chip px-2 py-1 text-xs">Risco: ${escapeHtml(r.risco || "—")}</span></div><p class="text-sm whitespace-pre-wrap">${escapeHtml(r.texto || r.response || "")}</p>${r.simulation ? `<div class="mt-3 text-xs text-slate-400">Crisis score: ${escapeHtml(r.simulation.crisis_score ?? "—")} · Viral risk: ${escapeHtml(r.simulation.viral_risk ?? "—")} · Share: ${escapeHtml(r.simulation.share_pct ?? "—")}</div>` : ""}</div>`).join("");
-        } catch (err) { renderError(out, err.message); } finally { setBusy(btn, false); }
+          if (!responses.length)
+            return renderEmpty(out, "Nenhuma resposta retornada.");
+          out.innerHTML = responses
+            .map(
+              (r) =>
+                `<div class="rounded-xl border border-lime-400/20 bg-lime-500/7 p-4"><div class="flex flex-wrap gap-2 mb-3"><span class="chip px-2 py-1 text-xs">${escapeHtml(r.estrategia || "Estratégia")}</span><span class="chip px-2 py-1 text-xs">Tom: ${escapeHtml(r.tom || "—")}</span><span class="chip px-2 py-1 text-xs">Risco: ${escapeHtml(r.risco || "—")}</span></div><p class="text-sm whitespace-pre-wrap">${escapeHtml(r.texto || r.response || "")}</p>${r.simulation ? `<div class="mt-3 text-xs text-slate-400">Crisis score: ${escapeHtml(r.simulation.crisis_score ?? "—")} · Viral risk: ${escapeHtml(r.simulation.viral_risk ?? "—")} · Share: ${escapeHtml(r.simulation.share_pct ?? "—")}</div>` : ""}</div>`,
+            )
+            .join("");
+        } catch (err) {
+          renderError(out, err.message);
+        } finally {
+          setBusy(btn, false);
+        }
       }
 
       async function runSimulation(e) {
         e.preventDefault();
-        const btn = document.getElementById("sim-run-btn"); const out = document.getElementById("sim-result");
-        setBusy(btn, true, "Simulando..."); renderLoading(out, "Executando multi-agente...");
+        const btn = document.getElementById("sim-run-btn");
+        const out = document.getElementById("sim-result");
+        setBusy(btn, true, "Simulando...");
+        renderLoading(out, "Executando multi-agente...");
         try {
-          const filtersRaw = document.getElementById("sim-filters").value.trim();
-          const payload = { conteudo: document.getElementById("sim-content").value, n_agentes: Number(document.getElementById("sim-agents").value || 80), contexto: document.getElementById("sim-context").value || undefined, username: selectedUsername() || undefined, filtros: filtersRaw ? safeJson(filtersRaw, {}) : undefined };
-          const data = await api("/simulate/scenario", { method: "POST", body: JSON.stringify(payload) });
+          const filtersRaw = document
+            .getElementById("sim-filters")
+            .value.trim();
+          const payload = {
+            conteudo: document.getElementById("sim-content").value,
+            n_agentes: Number(
+              document.getElementById("sim-agents").value || 80,
+            ),
+            contexto: document.getElementById("sim-context").value || undefined,
+            username: selectedUsername() || undefined,
+            filtros: filtersRaw ? safeJson(filtersRaw, {}) : undefined,
+          };
+          const data = await api("/simulate/scenario", {
+            method: "POST",
+            body: JSON.stringify(payload),
+          });
           renderSimulation(out, data);
-        } catch (err) { renderError(out, err.message); } finally { setBusy(btn, false); }
+        } catch (err) {
+          renderError(out, err.message);
+        } finally {
+          setBusy(btn, false);
+        }
       }
 
       function renderSimulation(el, data) {
@@ -735,14 +1643,21 @@
         const conf = data.confiabilidade_geral || {};
 
         const crisis = Number(data.crisis_score || 0);
-        const crisisCor = crisis >= 60 ? "red" : crisis >= 35 ? "amber" : "lime";
-        const crisisLabel = crisis >= 60 ? "CRÍTICO" : crisis >= 35 ? "ATENÇÃO" : "SEGURO";
+        const crisisCor =
+          crisis >= 60 ? "red" : crisis >= 35 ? "amber" : "lime";
+        const crisisLabel =
+          crisis >= 60 ? "CRÍTICO" : crisis >= 35 ? "ATENÇÃO" : "SEGURO";
         const margemCrisis = data.crisis_score_margem_erro || 0;
 
         const sentOrder = Object.entries(dist).sort((a, b) => b[1] - a[1]);
         const sentColors = {
-          apoio: "#22c55e", positivo: "#84cc16", neutro: "#94a3a0",
-          negativo: "#f97316", raiva: "#ef4444", indignacao: "#dc2626", deboche: "#a855f7"
+          apoio: "#22c55e",
+          positivo: "#84cc16",
+          neutro: "#94a3a0",
+          negativo: "#f97316",
+          raiva: "#ef4444",
+          indignacao: "#dc2626",
+          deboche: "#a855f7",
         };
 
         const sharePct = eng.compartilhamento_pct ?? 0;
@@ -750,12 +1665,18 @@
 
         const tribosArr = Object.entries(clusters)
           .map(([nome, d]) => ({ nome, ...d }))
-          .sort((a, b) => (b.intensidade_media || 0) - (a.intensidade_media || 0));
+          .sort(
+            (a, b) => (b.intensidade_media || 0) - (a.intensidade_media || 0),
+          );
 
         const espectroLabels = {
-          esquerda_dura: "Esquerda dura", esquerda_moderada: "Esquerda moderada",
-          centro: "Centro", direita_moderada: "Direita moderada",
-          direita_dura: "Direita dura", abstencionista: "Abstencionista", indeciso: "Indeciso"
+          esquerda_dura: "Esquerda dura",
+          esquerda_moderada: "Esquerda moderada",
+          centro: "Centro",
+          direita_moderada: "Direita moderada",
+          direita_dura: "Direita dura",
+          abstencionista: "Abstencionista",
+          indeciso: "Indeciso",
         };
 
         const viral = Number(data.risco_viralizacao_medio || 0);
@@ -764,14 +1685,20 @@
 
         let veredicto, veredictoIcon, veredictoCor;
         if (crisis >= 60) {
-          veredicto = "NÃO PUBLICAR. Esse conteúdo tem alto potencial de crise reputacional.";
-          veredictoIcon = "shield-x"; veredictoCor = "red";
+          veredicto =
+            "NÃO PUBLICAR. Esse conteúdo tem alto potencial de crise reputacional.";
+          veredictoIcon = "shield-x";
+          veredictoCor = "red";
         } else if (crisis >= 35) {
-          veredicto = "PUBLICAR COM CAUTELA. Revisar o tom e preparar resposta para reações negativas.";
-          veredictoIcon = "shield-alert"; veredictoCor = "amber";
+          veredicto =
+            "PUBLICAR COM CAUTELA. Revisar o tom e preparar resposta para reações negativas.";
+          veredictoIcon = "shield-alert";
+          veredictoCor = "amber";
         } else {
-          veredicto = "SEGURO PARA PUBLICAR. Reação prevista é majoritariamente neutra ou positiva.";
-          veredictoIcon = "shield-check"; veredictoCor = "lime";
+          veredicto =
+            "SEGURO PARA PUBLICAR. Reação prevista é majoritariamente neutra ou positiva.";
+          veredictoIcon = "shield-check";
+          veredictoCor = "lime";
         }
 
         el.innerHTML = `
@@ -812,31 +1739,43 @@
               <span class="text-[10px] text-slate-400">${data.total_agentes} agentes simulados</span>
             </div>
             <div class="flex h-8 rounded-lg overflow-hidden border border-white/10 mb-3">
-              ${sentOrder.map(([sent, pct]) => `
+              ${sentOrder
+                .map(
+                  ([sent, pct]) => `
                 <div style="width:${pct}%;background:${sentColors[sent] || "#64748b"}"
                      title="${sent}: ${pct}%"
                      class="flex items-center justify-center text-[10px] font-bold text-black/70"
                      >${pct >= 8 ? `${Math.round(pct)}%` : ""}</div>
-              `).join("")}
+              `,
+                )
+                .join("")}
             </div>
             <div class="flex flex-wrap gap-2 text-[11px]">
-              ${sentOrder.map(([sent, pct]) => `
+              ${sentOrder
+                .map(
+                  ([sent, pct]) => `
                 <span class="flex items-center gap-1.5">
                   <span class="w-2.5 h-2.5 rounded-sm" style="background:${sentColors[sent] || "#64748b"}"></span>
                   <span class="text-slate-300 capitalize">${sent}</span>
                   <strong class="text-slate-100">${pct}%</strong>
                 </span>
-              `).join("")}
+              `,
+                )
+                .join("")}
             </div>
           </div>
 
-          ${tribosArr.length ? `
+          ${
+            tribosArr.length
+              ? `
           <div class="rounded-xl border border-white/10 bg-white/5 p-4">
             <h4 class="font-bold text-sm mb-3">Reação por tribo política</h4>
             <div class="space-y-2">
-              ${tribosArr.map(t => {
-                const sentCor = sentColors[t.sentimento_dominante] || "#94a3a0";
-                return `
+              ${tribosArr
+                .map((t) => {
+                  const sentCor =
+                    sentColors[t.sentimento_dominante] || "#94a3a0";
+                  return `
                   <div class="flex items-center gap-3 p-2 rounded-lg bg-black/20">
                     <div class="w-1 h-10 rounded-full" style="background:${sentCor}"></div>
                     <div class="flex-1 min-w-0">
@@ -851,35 +1790,55 @@
                     </div>
                   </div>
                 `;
-              }).join("")}
+                })
+                .join("")}
             </div>
-          </div>` : ""}
+          </div>`
+              : ""
+          }
 
-          ${Object.keys(temas).length ? `
+          ${
+            Object.keys(temas).length
+              ? `
           <div class="rounded-xl border border-white/10 bg-white/5 p-4">
             <h4 class="font-bold text-sm mb-2">Como o eleitorado interpreta a mensagem</h4>
             <p class="text-xs text-slate-400 mb-3">Os principais temas que o público entendeu (nem sempre é o que você quis dizer):</p>
             <div class="flex flex-wrap gap-2">
-              ${Object.entries(temas).map(([tema, count]) => `
+              ${Object.entries(temas)
+                .map(
+                  ([tema, count]) => `
                 <span class="chip px-3 py-1.5 text-xs">
                   <strong>${escapeHtml(tema)}</strong>
                   <span class="text-slate-400 ml-1">· ${count}</span>
                 </span>
-              `).join("")}
+              `,
+                )
+                .join("")}
             </div>
-          </div>` : ""}
+          </div>`
+              : ""
+          }
 
-          ${comentarios.length ? `
+          ${
+            comentarios.length
+              ? `
           <div class="rounded-xl border border-white/10 bg-white/5 p-4">
             <h4 class="font-bold text-sm mb-3">Comentários que apareceriam nas redes</h4>
             <div class="space-y-2 max-h-72 overflow-y-auto scrollbar-thin pr-2">
-              ${comentarios.slice(0, 8).map(c => `
+              ${comentarios
+                .slice(0, 8)
+                .map(
+                  (c) => `
                 <div class="text-sm p-2.5 rounded-lg bg-black/25 border-l-2 border-slate-600 italic text-slate-300">
                   "${escapeHtml(c)}"
                 </div>
-              `).join("")}
+              `,
+                )
+                .join("")}
             </div>
-          </div>` : ""}
+          </div>`
+              : ""
+          }
 
           <div class="flex items-center justify-between text-[11px] text-slate-500 px-1">
             <span>Amostra: <strong class="text-slate-300">${conf.label || "—"}</strong> (${data.total_agentes} agentes)</span>
@@ -892,33 +1851,63 @@
 
       async function loadSimulationHistory() {
         const out = document.getElementById("sim-history");
-        if (!selectedUsername()) return renderEmpty(out, "Selecione um perfil para carregar histórico.");
+        if (!selectedUsername())
+          return renderEmpty(
+            out,
+            "Selecione um perfil para carregar histórico.",
+          );
         renderLoading(out, "Carregando histórico...");
         try {
-          const data = await api(`/simulate/history/${encodeURIComponent(selectedUsername())}?limit=20`);
-          const items = asArray(data, ["history", "simulations", "items", "data"]);
-          if (!items.length) return renderEmpty(out, "Sem histórico para este perfil.");
-          out.innerHTML = items.map(item => {
-            const forecast = item.forecast || {};
-            const crisisScore = forecast.crisis_score ?? item.crisis_score ?? "—";
-            const conteudo = item.conteudo || item.content || forecast.conteudo_testado || "Simulação";
-            const createdAt = item.created_at ? new Date(item.created_at).toLocaleString("pt-BR") : "";
-            return `
+          const data = await api(
+            `/simulate/history/${encodeURIComponent(selectedUsername())}?limit=20`,
+          );
+          const items = asArray(data, [
+            "history",
+            "simulations",
+            "items",
+            "data",
+          ]);
+          if (!items.length)
+            return renderEmpty(out, "Sem histórico para este perfil.");
+          out.innerHTML = items
+            .map((item) => {
+              const forecast = item.forecast || {};
+              const crisisScore =
+                forecast.crisis_score ?? item.crisis_score ?? "—";
+              const conteudo =
+                item.conteudo ||
+                item.content ||
+                forecast.conteudo_testado ||
+                "Simulação";
+              const createdAt = item.created_at
+                ? new Date(item.created_at).toLocaleString("pt-BR")
+                : "";
+              return `
               <button class="w-full text-left rounded-xl border border-white/10 bg-white/5 p-3 hover:bg-white/10 transition" data-sim-id="${escapeHtml(item.id || "")}">
                 <div class="font-semibold truncate">${escapeHtml(conteudo)}</div>
                 <div class="text-xs text-slate-400 mt-1">${escapeHtml(createdAt)} · score <strong class="text-slate-200">${escapeHtml(crisisScore)}</strong></div>
               </button>`;
-          }).join("");
-          out.querySelectorAll("[data-sim-id]").forEach(btn => btn.addEventListener("click", async () => {
-            if (!btn.dataset.simId) return;
-            try {
-              const sim = await api(`/simulate/${encodeURIComponent(btn.dataset.simId)}`);
-              renderSimulation(document.getElementById("sim-result"), sim.forecast || sim);
-              document.getElementById("sim-result").scrollIntoView({ behavior: "smooth", block: "start" });
-            } catch (err) {
-              toast(err.message, "error");
-            }
-          }));
+            })
+            .join("");
+          out.querySelectorAll("[data-sim-id]").forEach((btn) =>
+            btn.addEventListener("click", async () => {
+              if (!btn.dataset.simId) return;
+              try {
+                const sim = await api(
+                  `/simulate/${encodeURIComponent(btn.dataset.simId)}`,
+                );
+                renderSimulation(
+                  document.getElementById("sim-result"),
+                  sim.forecast || sim,
+                );
+                document
+                  .getElementById("sim-result")
+                  .scrollIntoView({ behavior: "smooth", block: "start" });
+              } catch (err) {
+                toast(err.message, "error");
+              }
+            }),
+          );
         } catch (e) {
           renderError(out, e.message);
         }
@@ -926,70 +1915,180 @@
 
       async function searchMentions(e) {
         e.preventDefault();
-        const btn = document.getElementById("mentions-btn"); const out = document.getElementById("mentions-results");
-        const q = document.getElementById("mentions-query").value.trim(); const limit = document.getElementById("mentions-limit").value || 10;
-        setBusy(btn, true, "Buscando..."); renderLoading(out, "Buscando menções...");
+        const btn = document.getElementById("mentions-btn");
+        const out = document.getElementById("mentions-results");
+        const q = document.getElementById("mentions-query").value.trim();
+        const limit = document.getElementById("mentions-limit").value || 10;
+        setBusy(btn, true, "Buscando...");
+        renderLoading(out, "Buscando menções...");
         try {
-          const data = await api(`/search/mentions?q=${encodeURIComponent(q)}&limit=${encodeURIComponent(limit)}`);
+          const data = await api(
+            `/search/mentions?q=${encodeURIComponent(q)}&limit=${encodeURIComponent(limit)}`,
+          );
           const mentions = asArray(data, ["mentions"]);
-          if (!mentions.length) return renderEmpty(out, "Nenhuma menção encontrada.");
-          out.innerHTML = mentions.map(m => `<article class="card p-4"><div class="flex flex-wrap items-center justify-between gap-2 mb-2"><h3 class="font-bold">${escapeHtml(m.title || "Menção")}</h3><span class="chip px-2 py-1 text-xs">${escapeHtml(m.sentiment || "—")} · ${escapeHtml(m.score ?? "—")}</span></div><p class="text-sm text-slate-300">${escapeHtml(m.snippet || "")}</p><div class="flex flex-wrap gap-3 mt-3 text-xs text-slate-400"><span>${escapeHtml(m.source || "")}</span><span>${escapeHtml(m.date || "")}</span>${m.url ? `<a class="text-lime-300 hover:underline" href="${escapeHtml(m.url)}" target="_blank" rel="noopener">abrir fonte</a>` : ""}</div></article>`).join("");
-        } catch (err) { renderError(out, err.message); } finally { setBusy(btn, false); }
+          if (!mentions.length)
+            return renderEmpty(out, "Nenhuma menção encontrada.");
+          out.innerHTML = mentions
+            .map(
+              (m) =>
+                `<article class="card p-4"><div class="flex flex-wrap items-center justify-between gap-2 mb-2"><h3 class="font-bold">${escapeHtml(m.title || "Menção")}</h3><span class="chip px-2 py-1 text-xs">${escapeHtml(m.sentiment || "—")} · ${escapeHtml(m.score ?? "—")}</span></div><p class="text-sm text-slate-300">${escapeHtml(m.snippet || "")}</p><div class="flex flex-wrap gap-3 mt-3 text-xs text-slate-400"><span>${escapeHtml(m.source || "")}</span><span>${escapeHtml(m.date || "")}</span>${m.url ? `<a class="text-lime-300 hover:underline" href="${escapeHtml(m.url)}" target="_blank" rel="noopener">abrir fonte</a>` : ""}</div></article>`,
+            )
+            .join("");
+        } catch (err) {
+          renderError(out, err.message);
+        } finally {
+          setBusy(btn, false);
+        }
       }
 
       async function loadReports(kind) {
-        const out = document.getElementById("reports-output"); renderLoading(out, "Carregando relatórios...");
+        const out = document.getElementById("reports-output");
+        renderLoading(out, "Carregando relatórios...");
         try {
           let data;
           if (kind === "latest") data = await api("/reports/latest");
           else {
             const p = state.selectedProfile;
-            if (!p || p.platform !== "youtube") return renderEmpty(out, "Selecione um perfil YouTube para esta opção.");
-            data = await api(kind === "snapshots" ? `/snapshots/${encodeURIComponent(p.platform_id)}?limit=30` : `/reports/${encodeURIComponent(p.platform_id)}?limit=10`);
+            if (!p || p.platform !== "youtube")
+              return renderEmpty(
+                out,
+                "Selecione um perfil YouTube para esta opção.",
+              );
+            data = await api(
+              kind === "snapshots"
+                ? `/snapshots/${encodeURIComponent(p.platform_id)}?limit=30`
+                : `/reports/${encodeURIComponent(p.platform_id)}?limit=10`,
+            );
           }
-          const items = asArray(data, ["reports", "snapshots", "items", "data"]);
+          const items = asArray(data, [
+            "reports",
+            "snapshots",
+            "items",
+            "data",
+          ]);
           if (!items.length) return renderEmpty(out, "Nenhum dado retornado.");
-          out.innerHTML = items.map(item => `<article class="card p-4"><div class="font-bold mb-2">${escapeHtml(item.title || item.name || item.channel_name || "Registro")}</div><pre class="rounded-xl border border-white/10 bg-black/35 p-3 text-xs overflow-auto max-h-72">${escapeHtml(JSON.stringify(item, null, 2))}</pre></article>`).join("");
-        } catch (e) { renderError(out, e.message); }
+          out.innerHTML = items
+            .map(
+              (item) =>
+                `<article class="card p-4"><div class="font-bold mb-2">${escapeHtml(item.title || item.name || item.channel_name || "Registro")}</div><pre class="rounded-xl border border-white/10 bg-black/35 p-3 text-xs overflow-auto max-h-72">${escapeHtml(JSON.stringify(item, null, 2))}</pre></article>`,
+            )
+            .join("");
+        } catch (e) {
+          renderError(out, e.message);
+        }
       }
 
-      function openAddModal() { document.getElementById("add-error").classList.add("hidden"); document.getElementById("add-modal").classList.remove("hidden"); renderIcons(); }
-      function closeAddModal() { document.getElementById("add-modal").classList.add("hidden"); document.getElementById("add-form").reset(); }
+      function openAddModal() {
+        document.getElementById("add-error").classList.add("hidden");
+        document.getElementById("add-modal").classList.remove("hidden");
+        renderIcons();
+      }
+      function closeAddModal() {
+        document.getElementById("add-modal").classList.add("hidden");
+        document.getElementById("add-form").reset();
+      }
 
-      document.getElementById("login-form").addEventListener("submit", async e => {
-        e.preventDefault();
-        const btn = document.getElementById("login-btn"); const err = document.getElementById("login-error");
-        err.classList.add("hidden"); setBusy(btn, true, "Entrando...");
-        try { await login(document.getElementById("login-email").value, document.getElementById("login-password").value); showDashboard(); }
-        catch (error) { err.textContent = error.message; err.classList.remove("hidden"); }
-        finally { setBusy(btn, false); }
+      document
+        .getElementById("login-form")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const btn = document.getElementById("login-btn");
+          const err = document.getElementById("login-error");
+          err.classList.add("hidden");
+          setBusy(btn, true, "Entrando...");
+          try {
+            await login(
+              document.getElementById("login-email").value,
+              document.getElementById("login-password").value,
+            );
+            showDashboard();
+          } catch (error) {
+            err.textContent = error.message;
+            err.classList.remove("hidden");
+          } finally {
+            setBusy(btn, false);
+          }
+        });
+      document
+        .getElementById("logout-btn")
+        .addEventListener("click", () => logout());
+      document
+        .querySelectorAll("[data-view]")
+        .forEach((btn) =>
+          btn.addEventListener("click", () => switchView(btn.dataset.view)),
+        );
+      document
+        .getElementById("add-profile-btn")
+        .addEventListener("click", openAddModal);
+      document
+        .getElementById("collect-btn")
+        .addEventListener("click", collectData);
+      document
+        .getElementById("analyze-btn")
+        .addEventListener("click", analyzeProfile);
+      document
+        .getElementById("refresh-profile-btn")
+        .addEventListener("click", () => loadProfileData());
+      document
+        .getElementById("delete-profile-btn")
+        .addEventListener("click", deleteSelectedProfile);
+      document
+        .getElementById("reload-warroom-btn")
+        .addEventListener("click", loadWarRoom);
+      document
+        .getElementById("warroom-form")
+        .addEventListener("submit", generateWarRoomResponse);
+      document
+        .getElementById("sim-form")
+        .addEventListener("submit", runSimulation);
+      document
+        .getElementById("sim-history-btn")
+        .addEventListener("click", loadSimulationHistory);
+      document
+        .getElementById("mentions-form")
+        .addEventListener("submit", searchMentions);
+      document
+        .getElementById("load-profile-reports-btn")
+        .addEventListener("click", () => loadReports("profile"));
+      document
+        .getElementById("load-latest-reports-btn")
+        .addEventListener("click", () => loadReports("latest"));
+      document
+        .getElementById("load-snapshots-btn")
+        .addEventListener("click", () => loadReports("snapshots"));
+      document.getElementById("add-modal").addEventListener("click", (e) => {
+        if (e.target.id === "add-modal") closeAddModal();
       });
-      document.getElementById("logout-btn").addEventListener("click", () => logout());
-      document.querySelectorAll("[data-view]").forEach(btn => btn.addEventListener("click", () => switchView(btn.dataset.view)));
-      document.getElementById("add-profile-btn").addEventListener("click", openAddModal);
-      document.getElementById("collect-btn").addEventListener("click", collectData);
-      document.getElementById("analyze-btn").addEventListener("click", analyzeProfile);
-      document.getElementById("refresh-profile-btn").addEventListener("click", () => loadProfileData());
-      document.getElementById("delete-profile-btn").addEventListener("click", deleteSelectedProfile);
-      document.getElementById("reload-warroom-btn").addEventListener("click", loadWarRoom);
-      document.getElementById("warroom-form").addEventListener("submit", generateWarRoomResponse);
-      document.getElementById("sim-form").addEventListener("submit", runSimulation);
-      document.getElementById("sim-history-btn").addEventListener("click", loadSimulationHistory);
-      document.getElementById("mentions-form").addEventListener("submit", searchMentions);
-      document.getElementById("load-profile-reports-btn").addEventListener("click", () => loadReports("profile"));
-      document.getElementById("load-latest-reports-btn").addEventListener("click", () => loadReports("latest"));
-      document.getElementById("load-snapshots-btn").addEventListener("click", () => loadReports("snapshots"));
-      document.getElementById("add-modal").addEventListener("click", e => { if (e.target.id === "add-modal") closeAddModal(); });
-      document.getElementById("add-form").addEventListener("submit", async e => {
-        e.preventDefault();
-        const btn = document.getElementById("add-submit-btn"); const err = document.getElementById("add-error");
-        err.classList.add("hidden"); setBusy(btn, true, "Adicionando...");
-        try {
-          await api("/profiles", { method: "POST", body: JSON.stringify({ name: document.getElementById("add-name").value.trim(), platform: document.getElementById("add-platform").value, platform_id: document.getElementById("add-platform-id").value.trim().replace(/^@/, "") }) });
-          toast("Perfil adicionado.", "success"); closeAddModal(); await loadProfiles();
-        } catch (error) { err.textContent = error.message; err.classList.remove("hidden"); }
-        finally { setBusy(btn, false); }
-      });
+      document
+        .getElementById("add-form")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const btn = document.getElementById("add-submit-btn");
+          const err = document.getElementById("add-error");
+          err.classList.add("hidden");
+          setBusy(btn, true, "Adicionando...");
+          try {
+            await api("/profiles", {
+              method: "POST",
+              body: JSON.stringify({
+                name: document.getElementById("add-name").value.trim(),
+                platform: document.getElementById("add-platform").value,
+                platform_id: document
+                  .getElementById("add-platform-id")
+                  .value.trim()
+                  .replace(/^@/, ""),
+              }),
+            });
+            toast("Perfil adicionado.", "success");
+            closeAddModal();
+            await loadProfiles();
+          } catch (error) {
+            err.textContent = error.message;
+            err.classList.remove("hidden");
+          } finally {
+            setBusy(btn, false);
+          }
+        });
 
       verifySession();
       renderIcons();
